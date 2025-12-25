@@ -10,6 +10,8 @@
 .pub/
 build/
 coverage/
+.idea
+.mason
 lib/generated_plugin_registrant.dart
 # For library packages, don’t commit the pubspec.lock file.
 # Regenerating the pubspec.lock file lets you test your package against the latest compatible versions of its dependencies.
@@ -25,6 +27,8 @@ lib/generated_plugin_registrant.dart
 **/android/key.properties
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+android/app/google-services.json
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
