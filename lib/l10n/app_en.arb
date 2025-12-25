@@ -1,0 +1,19 @@
+{
+  "dailyLanguage": "Daily Language",
+  "continueWith": "Continue with",
+  "home": "Home",
+  "diary": "Diary",
+  "profile": "Profile",
+  "words": "Words",
+  "fullName": "Full Name",
+  "email": "Email",
+  "phoneNumber": "Phone Number",
+  "streak": "Streak",
+  "edit": "Edit",
+  "editProfile": "Edit Profile",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "save": "Save",
+  "logOut": "Log Out",
+  "empty": "No data available"
+}

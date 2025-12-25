@@ -1,0 +1,43 @@
+part of 'account_bloc.dart';
+
+sealed class AccountEvent extends Equatable {
+  const AccountEvent();
+  @override
+  List<Object> get props => [];
+}
+
+final class AccountRequested extends AccountEvent {
+  final String uid;
+
+  const AccountRequested({required this.uid});
+
+  @override
+  List<Object> get props => [uid];
+}
+
+final class AccountCreated extends AccountEvent {
+  final CreateAccountUseCaseParams param;
+
+  const AccountCreated({required this.param});
+
+  @override
+  List<Object> get props => [param];
+}
+
+final class AccountUpdated extends AccountEvent {
+  final UpdateAccountUseCaseParams param;
+
+  const AccountUpdated({required this.param});
+
+  @override
+  List<Object> get props => [param];
+}
+
+final class AccountDeleted extends AccountEvent {
+  final String id;
+
+  const AccountDeleted({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
