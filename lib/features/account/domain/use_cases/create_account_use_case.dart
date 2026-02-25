@@ -3,7 +3,8 @@ import 'package:daily_language/core/utils/helper/type_definition.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
-class CreateAccountUseCase implements UseCaseWithParams<void, CreateAccountUseCaseParams> {
+class CreateAccountUseCase
+    implements UseCaseWithParams<void, CreateAccountUseCaseParams> {
   final AccountRepos _repository;
 
   const CreateAccountUseCase(this._repository);
@@ -17,15 +18,22 @@ class CreateAccountUseCaseParams extends Equatable {
   final String uid;
   final String email;
   final String fullName;
+  final String avatarUrl;
 
   const CreateAccountUseCaseParams({
     required this.uid,
     required this.email,
     required this.fullName,
+    required this.avatarUrl,
   });
 
-  const CreateAccountUseCaseParams.empty({this.uid = '', this.email = '', this.fullName = ''});
+  const CreateAccountUseCaseParams.empty({
+    this.uid = '',
+    this.email = '',
+    this.fullName = '',
+    this.avatarUrl = '',
+  });
 
   @override
-  List<Object> get props => [uid, email, fullName];
+  List<Object> get props => [uid, email, fullName, avatarUrl];
 }

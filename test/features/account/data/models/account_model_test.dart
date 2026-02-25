@@ -7,12 +7,24 @@ void main() {
 
   test('should return a valid value when call toJson', () {
     final result = tAccountModel.toJson();
-    final expectedJson = {"uid": '', "fullName": '', "email": '', "phoneNumber": '', "streak": -1};
+    final expectedJson = {
+      'uid': '',
+      'fullName': '',
+      'email': '',
+      'phoneNumber': '',
+      'streak': -1,
+    };
     expect(result, expectedJson);
   });
 
   test('should return a valid value when call fromJson', () {
-    final json = {"uid": '', "fullName": '', "email": '', "phoneNumber": '', "streak": -1};
+    final json = {
+      'uid': '',
+      'fullName': '',
+      'email': '',
+      'phoneNumber': '',
+      'streak': -1,
+    };
     final result = AccountModel.fromJson(json);
     final expectedModel = const AccountModel(
       uid: '',
@@ -31,6 +43,7 @@ void main() {
       email: '',
       phoneNumber: '',
       streak: -1,
+      avatarUrl: '',
     );
     expect(result, expectedEntity);
   });

@@ -45,20 +45,30 @@ void main() {
       'should emit AccountSuccess when successfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => getAccountUseCase(any())).thenAnswer((_) async => const Right(Account.empty()));
+        when(
+          () => getAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(Account.empty()));
       },
       act: (bloc) => bloc.add(const AccountRequested(uid: tId)),
-      expect: () => [AccountInProgress(), AccountSuccess(account: const Account.empty())],
+      expect: () => [
+        AccountInProgress(),
+        const AccountSuccess(account: Account.empty()),
+      ],
     );
 
     blocTest(
       'should emit AccountFailure when unsuccessfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => getAccountUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => getAccountUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(const AccountRequested(uid: tId)),
-      expect: () => [AccountInProgress(), AccountFailure(error: tFailure.message)],
+      expect: () => [
+        AccountInProgress(),
+        AccountFailure(error: tFailure.message),
+      ],
     );
   });
 
@@ -67,15 +77,20 @@ void main() {
       'should emit AccountCreateSuccess when successfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => createAccountUseCase(any())).thenAnswer((_) async => const Right(null));
-        when(() => getAccountUseCase(any())).thenAnswer((_) async => const Right(Account.empty()));
+        when(
+          () => createAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(null));
+        when(
+          () => getAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(Account.empty()));
       },
-      act: (bloc) => bloc.add(const AccountCreated(param: tCreateAccountParams)),
+      act: (bloc) =>
+          bloc.add(const AccountCreated(param: tCreateAccountParams)),
       expect: () => [
         AccountInProgress(),
         AccountCreateSuccess(),
         AccountInProgress(),
-        AccountSuccess(account: const Account.empty()),
+        const AccountSuccess(account: Account.empty()),
       ],
     );
 
@@ -83,10 +98,16 @@ void main() {
       'should emit AccountFailure when unsuccessfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => createAccountUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => createAccountUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
-      act: (bloc) => bloc.add(const AccountCreated(param: tCreateAccountParams)),
-      expect: () => [AccountInProgress(), AccountFailure(error: tFailure.message)],
+      act: (bloc) =>
+          bloc.add(const AccountCreated(param: tCreateAccountParams)),
+      expect: () => [
+        AccountInProgress(),
+        AccountFailure(error: tFailure.message),
+      ],
     );
   });
 
@@ -95,15 +116,20 @@ void main() {
       'should emit AccountUpdateSuccess when successfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => updateAccountUseCase(any())).thenAnswer((_) async => const Right(null));
-        when(() => getAccountUseCase(any())).thenAnswer((_) async => const Right(Account.empty()));
+        when(
+          () => updateAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(null));
+        when(
+          () => getAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(Account.empty()));
       },
-      act: (bloc) => bloc.add(const AccountUpdated(param: tUpdateAccountParams)),
+      act: (bloc) =>
+          bloc.add(const AccountUpdated(param: tUpdateAccountParams)),
       expect: () => [
         AccountInProgress(),
         AccountUpdateSuccess(),
         AccountInProgress(),
-        AccountSuccess(account: const Account.empty()),
+        const AccountSuccess(account: Account.empty()),
       ],
     );
 
@@ -111,10 +137,16 @@ void main() {
       'should emit AccountFailure when unsuccessfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => updateAccountUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => updateAccountUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
-      act: (bloc) => bloc.add(const AccountUpdated(param: tUpdateAccountParams)),
-      expect: () => [AccountInProgress(), AccountFailure(error: tFailure.message)],
+      act: (bloc) =>
+          bloc.add(const AccountUpdated(param: tUpdateAccountParams)),
+      expect: () => [
+        AccountInProgress(),
+        AccountFailure(error: tFailure.message),
+      ],
     );
   });
 
@@ -123,7 +155,9 @@ void main() {
       'should emit AccountDeleteSuccess when successfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => deleteAccountUseCase(any())).thenAnswer((_) async => const Right(null));
+        when(
+          () => deleteAccountUseCase(any()),
+        ).thenAnswer((_) async => const Right(null));
       },
       act: (bloc) => bloc.add(const AccountDeleted(id: tId)),
       expect: () => [AccountInProgress(), AccountDeleteSuccess()],
@@ -133,10 +167,15 @@ void main() {
       'should emit AccountFailure when unsuccessfully',
       build: () => accountBloc,
       setUp: () {
-        when(() => deleteAccountUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => deleteAccountUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(const AccountDeleted(id: tId)),
-      expect: () => [AccountInProgress(), AccountFailure(error: tFailure.message)],
+      expect: () => [
+        AccountInProgress(),
+        AccountFailure(error: tFailure.message),
+      ],
     );
   });
 }

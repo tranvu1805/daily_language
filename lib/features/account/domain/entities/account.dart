@@ -5,6 +5,7 @@ class Account extends Equatable {
   final String fullName;
   final String email;
   final String phoneNumber;
+  final String avatarUrl;
   final int streak;
 
   const Account({
@@ -13,6 +14,7 @@ class Account extends Equatable {
     required this.email,
     required this.phoneNumber,
     required this.streak,
+    required this.avatarUrl,
   });
 
   const Account.empty({
@@ -21,8 +23,16 @@ class Account extends Equatable {
     this.email = '',
     this.phoneNumber = '',
     this.streak = -1,
+    this.avatarUrl = '',
   });
 
   @override
-  List<Object> get props => [uid, fullName, email, phoneNumber, streak];
+  List<Object> get props => [
+    uid,
+    fullName,
+    email,
+    phoneNumber,
+    streak,
+    avatarUrl,
+  ];
 }

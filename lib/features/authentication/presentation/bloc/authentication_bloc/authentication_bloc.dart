@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final GetUserUseCase _getUserUseCase;
   final LoginWithGoogleUseCase _loginWithGoogleUseCase;
   final LogoutUseCase _logoutUseCase;
@@ -46,7 +47,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       _getUserUseCase(),
       onData: (user) => user != null
           ? AuthenticationSuccess(user: user)
-          : AuthenticationFailure(error: 'Unauthenticated'),
+          : const AuthenticationFailure(error: 'Unauthenticated'),
       onError: (e, _) => AuthenticationFailure(error: e.toString()),
     );
   }
@@ -59,7 +60,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     final result = await _logoutUseCase();
     result.fold(
       (failure) => emit(AuthenticationFailure(error: failure.message)),
-      (_) => emit(AuthenticationFailure(error: 'Unauthenticated')),
+      (_) => emit(const AuthenticationFailure(error: 'Unauthenticated')),
     );
   }
 }

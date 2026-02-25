@@ -30,10 +30,12 @@ class _AccountPageState extends State<AccountPage> {
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (context, state) {
           if (state is AccountInProgress) {
-            return AppCircularProgressIndicator();
+            return const AppCircularProgressIndicator();
           }
           if (state is AccountFailure) {
-            return Center(child: Text(state.error, style: textTheme.bodyMedium));
+            return Center(
+              child: Text(state.error, style: textTheme.bodyMedium),
+            );
           }
           if (state is AccountSuccess) {
             final account = state.account;
@@ -43,10 +45,13 @@ class _AccountPageState extends State<AccountPage> {
                 child: Column(
                   children: [
                     AccountAvatarButton(onTap: () {}),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        border: Border.all(color: ColorApp.darkGray.withAlpha(40), width: 1),
+                        border: Border.all(
+                          color: ColorApp.darkGray.withAlpha(40),
+                          width: 1,
+                        ),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -81,12 +86,17 @@ class _AccountPageState extends State<AccountPage> {
                         ).toList(),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    PrimaryButton(onPressed: () {}, label: context.l10n.editProfile),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
+                    PrimaryButton(
+                      onPressed: () {},
+                      label: context.l10n.editProfile,
+                    ),
+                    const SizedBox(height: 20),
                     SecondaryButton(
                       onPressed: () {
-                        context.read<AuthenticationBloc>().add(AuthenticationLoggedOut());
+                        context.read<AuthenticationBloc>().add(
+                          AuthenticationLoggedOut(),
+                        );
                       },
                       label: context.l10n.logOut,
                     ),

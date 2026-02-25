@@ -49,7 +49,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (context, state) {
           if (state is AccountInProgress) {
-            return AppCircularProgressIndicator();
+            return const AppCircularProgressIndicator();
           }
           return SingleChildScrollView(
             child: Form(
@@ -60,12 +60,16 @@ class _AccountEditPageState extends State<AccountEditPage> {
                   children: [
                     TextFormField(
                       controller: _fullNameController,
-                      decoration: InputDecoration(labelText: context.l10n.fullName),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.fullName,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
-                      decoration: InputDecoration(labelText: context.l10n.phoneNumber),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.phoneNumber,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     Row(

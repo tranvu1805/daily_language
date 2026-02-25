@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB2jkVrMeu1KD96YV_7rGvMo-EBaHJczNw',
+    apiKey: 'AIzaSyDiw1GCEuUutMdsVIjZSrMvgoJiBHYIEjc',
     appId: '1:213417778682:android:8994213ee62dc8cc70d843',
     messagingSenderId: '213417778682',
     projectId: 'daily-language-2c4f9',
@@ -58,12 +58,12 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCRb8fCNwD6w6A1ktEEwKv_EtzKPRBMIrY',
+    apiKey: 'AIzaSyByAfdVM9FMqaqAZUql3pcpCU957UkkwUE',
     appId: '1:213417778682:ios:c7b1dadd02b209a770d843',
     messagingSenderId: '213417778682',
     projectId: 'daily-language-2c4f9',
     storageBucket: 'daily-language-2c4f9.firebasestorage.app',
-    iosClientId: '213417778682-q9cncuopm2c117cul4ag94hssefov1q1.apps.googleusercontent.com',
+    androidClientId: '213417778682-sj30d07gm8pslllomkbn48sve5rpjrsc.apps.googleusercontent.com',
     iosBundleId: 'com.vincent.daily.language',
   );
 

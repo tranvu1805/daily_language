@@ -4,11 +4,19 @@ import 'package:equatable/equatable.dart';
 class AccountModel extends Equatable {
   final String? uid;
   final String? fullName;
+  final String? avatarUrl;
   final String? email;
   final String? phoneNumber;
   final int? streak;
 
-  const AccountModel({this.uid, this.fullName, this.email, this.phoneNumber, this.streak});
+  const AccountModel({
+    this.uid,
+    this.fullName,
+    this.email,
+    this.phoneNumber,
+    this.streak,
+    this.avatarUrl,
+  });
 
   const AccountModel.empty({
     this.uid = '',
@@ -16,12 +24,14 @@ class AccountModel extends Equatable {
     this.email = '',
     this.phoneNumber = '',
     this.streak = -1,
+    this.avatarUrl = '',
   });
 
   const AccountModel.toCreate({
     required this.uid,
     required this.email,
     required this.fullName,
+    required this.avatarUrl,
     this.phoneNumber = '',
     this.streak = 0,
   });
@@ -31,7 +41,8 @@ class AccountModel extends Equatable {
     fullName: fullName ?? '',
     email: email ?? '',
     phoneNumber: phoneNumber ?? '',
-    streak: streak ?? -1,
+    streak: streak ?? 0,
+    avatarUrl: avatarUrl ?? '',
   );
 
   Map<String, dynamic> toJson() {
@@ -39,6 +50,7 @@ class AccountModel extends Equatable {
     map['uid'] = uid;
     map['fullName'] = fullName;
     map['email'] = email;
+    map['avatarUrl'] = avatarUrl;
     map['phoneNumber'] = phoneNumber;
     map['streak'] = streak;
     return map;
@@ -51,6 +63,7 @@ class AccountModel extends Equatable {
         email: json['email'] as String?,
         phoneNumber: json['phoneNumber'] as String?,
         streak: json['streak'] as int?,
+        avatarUrl: json['avatarUrl'] as String?,
       );
 
   @override

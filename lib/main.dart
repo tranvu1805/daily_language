@@ -32,7 +32,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _authBloc = DI.instance.sl<AuthenticationBloc>()..add(AuthenticationRequested());
+    _authBloc = DI.instance.sl<AuthenticationBloc>()
+      ..add(AuthenticationRequested());
     _authRefresh = GoRouterRefreshStream(_authBloc.stream);
   }
 

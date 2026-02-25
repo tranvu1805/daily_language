@@ -11,7 +11,8 @@ abstract interface class AuthenticationRemoteDataSource {
   Future<void> logout();
 }
 
-class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
+class AuthenticationRemoteDataSourceImpl
+    implements AuthenticationRemoteDataSource {
   final GoogleSignIn _googleSignIn;
   final FirebaseAuth _firebaseAuth;
 
@@ -41,10 +42,15 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
     await _googleSignIn.initialize();
     final googleUser = await _googleSignIn.authenticate();
     final googleAuth = googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+    final credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+    );
     final userCredential = await _firebaseAuth.signInWithCredential(credential);
     if (userCredential.user == null) {
-      throw ServerException(message: 'Google sign-in failed', statusCode: 401);
+      throw const ServerException(
+        message: 'Google sign-in failed',
+        statusCode: 401,
+      );
     }
   }
 

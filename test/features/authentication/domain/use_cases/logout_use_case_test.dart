@@ -16,11 +16,11 @@ void main() {
 
   test('should call [AuthenticationRepos.getAuthentication]', () async {
     // arrange
-    when(() => repository.logout()).thenAnswer((_) async => Right(null));
+    when(() => repository.logout()).thenAnswer((_) async => const Right(null));
     // act
     final result = await useCase();
     // assert
-    expect(result, equals(Right(null)));
+    expect(result, equals(const Right(null)));
     verify(() => repository.logout()).called(1);
     verifyNoMoreInteractions(repository);
   });

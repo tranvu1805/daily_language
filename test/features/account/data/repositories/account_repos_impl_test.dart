@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAccountRemoteDataSource extends Mock implements AccountRemoteDataSource {}
+class MockAccountRemoteDataSource extends Mock
+    implements AccountRemoteDataSource {}
 
 void main() {
   late MockAccountRemoteDataSource mockRemoteDataSource;
@@ -16,11 +17,12 @@ void main() {
   const tCreateAccountUseCaseParams = CreateAccountUseCaseParams.empty();
   const tUpdateAccountUseCaseParams = UpdateAccountUseCaseParams.empty();
   final tCreateAccountModel = AccountModel.toCreate(
+    avatarUrl: tCreateAccountUseCaseParams.avatarUrl,
     uid: tCreateAccountUseCaseParams.uid,
     email: tCreateAccountUseCaseParams.email,
     fullName: tCreateAccountUseCaseParams.fullName,
   );
-  final tUpdateAccountModel = AccountModel();
+  final tUpdateAccountModel = const AccountModel();
 
   setUp(() {
     mockRemoteDataSource = MockAccountRemoteDataSource();
@@ -62,53 +64,76 @@ void main() {
   // });
 
   group('getAccount', () {
-    test('should call getAccount and return account when successfully', () async {
-      when(
-        () => mockRemoteDataSource.getAccount(uid: any(named: 'uid')),
-      ).thenAnswer((_) async => const AccountModel.empty());
+    test(
+      'should call getAccount and return account when successfully',
+      () async {
+        when(
+          () => mockRemoteDataSource.getAccount(uid: any(named: 'uid')),
+        ).thenAnswer((_) async => const AccountModel.empty());
 
-      final result = await repository.getAccount(uid: tId);
+        final result = await repository.getAccount(uid: tId);
 
-      expect(result, equals(const Right(Account.empty())));
-      verify(() => mockRemoteDataSource.getAccount(uid: tId)).called(1);
-      verifyNoMoreInteractions(mockRemoteDataSource);
-    });
+        expect(result, equals(const Right(Account.empty())));
+        verify(() => mockRemoteDataSource.getAccount(uid: tId)).called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      },
+    );
 
-    test('should call getAccount and return exception when unsuccessfully', () async {
-      when(() => mockRemoteDataSource.getAccount(uid: any(named: 'uid'))).thenThrow(tException);
+    test(
+      'should call getAccount and return exception when unsuccessfully',
+      () async {
+        when(
+          () => mockRemoteDataSource.getAccount(uid: any(named: 'uid')),
+        ).thenThrow(tException);
 
-      final result = await repository.getAccount(uid: tId);
+        final result = await repository.getAccount(uid: tId);
 
-      expect(result, equals(Left(ServerFailure.fromException(tException))));
-      verify(() => mockRemoteDataSource.getAccount(uid: tId)).called(1);
-      verifyNoMoreInteractions(mockRemoteDataSource);
-    });
+        expect(result, equals(Left(ServerFailure.fromException(tException))));
+        verify(() => mockRemoteDataSource.getAccount(uid: tId)).called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      },
+    );
   });
 
   group('createAccount', () {
     test('should call createAccount when successfully', () async {
       when(
-        () => mockRemoteDataSource.createAccount(account: any(named: 'account')),
+        () =>
+            mockRemoteDataSource.createAccount(account: any(named: 'account')),
       ).thenAnswer((_) async => Future.value());
 
-      final result = await repository.createAccount(params: tCreateAccountUseCaseParams);
+      final result = await repository.createAccount(
+        params: tCreateAccountUseCaseParams,
+      );
 
       expect(result, equals(const Right(null)));
-      verify(() => mockRemoteDataSource.createAccount(account: tCreateAccountModel)).called(1);
+      verify(
+        () => mockRemoteDataSource.createAccount(account: tCreateAccountModel),
+      ).called(1);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });
 
-    test('should call createAccount and return exception when unsuccessfully', () async {
-      when(
-        () => mockRemoteDataSource.createAccount(account: any(named: 'account')),
-      ).thenThrow(tException);
+    test(
+      'should call createAccount and return exception when unsuccessfully',
+      () async {
+        when(
+          () => mockRemoteDataSource.createAccount(
+            account: any(named: 'account'),
+          ),
+        ).thenThrow(tException);
 
-      final result = await repository.createAccount(params: tCreateAccountUseCaseParams);
+        final result = await repository.createAccount(
+          params: tCreateAccountUseCaseParams,
+        );
 
-      expect(result, equals(Left(ServerFailure.fromException(tException))));
-      verify(() => mockRemoteDataSource.createAccount(account: tCreateAccountModel)).called(1);
-      verifyNoMoreInteractions(mockRemoteDataSource);
-    });
+        expect(result, equals(Left(ServerFailure.fromException(tException))));
+        verify(
+          () =>
+              mockRemoteDataSource.createAccount(account: tCreateAccountModel),
+        ).called(1);
+        verifyNoMoreInteractions(mockRemoteDataSource);
+      },
+    );
   });
   //
   // group('updateAccount', () {

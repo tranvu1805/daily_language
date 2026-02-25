@@ -16,11 +16,13 @@ class SplashPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(gradient: ColorApp.backgroundGradient),
+        decoration: const BoxDecoration(gradient: ColorApp.backgroundGradient),
         child: BlocListener<AccountBloc, AccountState>(
           listener: (context, state) {
             if (state is AccountFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error)));
             }
           },
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
@@ -32,11 +34,14 @@ class SplashPage extends StatelessWidget {
                       uid: state.user.id,
                       email: state.user.email,
                       fullName: state.user.username,
+                      avatarUrl: state.user.avatarUrl,
                     ),
                   ),
                 );
               } else if (state is AuthenticationFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.error)));
               }
             },
             builder: (context, state) {
@@ -51,7 +56,9 @@ class SplashPage extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     context.l10n.dailyLanguage,
-                    style: textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 100),
                   Text(context.l10n.continueWith, style: textTheme.bodyMedium),
@@ -69,9 +76,11 @@ class SplashPage extends StatelessWidget {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            context.read<AuthenticationBloc>().add(AuthenticationGoogleLoggedIn());
+                            context.read<AuthenticationBloc>().add(
+                              AuthenticationGoogleLoggedIn(),
+                            );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             FontAwesomeIcons.googlePlusG,
                             size: 24,
                             color: Colors.redAccent,

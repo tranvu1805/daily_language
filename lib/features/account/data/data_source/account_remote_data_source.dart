@@ -20,7 +20,10 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   AccountRemoteDataSourceImpl(this._database);
 
   @override
-  Future<List<AccountModel>> getAccounts({required String token, int page = 1}) async {
+  Future<List<AccountModel>> getAccounts({
+    required String token,
+    int page = 1,
+  }) async {
     throw UnimplementedError();
     // final response = await db.get(
     //   Uri.parse('$baseUrl/account:list').replace(queryParameters: {'page': page.toString()}),
@@ -36,15 +39,19 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<AccountModel> getAccount({required String uid}) async {
     final ref = _database
-        .collection("users")
+        .collection('users')
         .doc(uid)
         .withConverter(
-          fromFirestore: (snapshot, _) => AccountModel.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) =>
+              AccountModel.fromJson(snapshot.data()!),
           toFirestore: (model, _) => model.toJson(),
         );
     final docSnap = await ref.get();
     if (!docSnap.exists || docSnap.data() == null) {
-      throw ServerException(message: 'account not found', statusCode: 404);
+      throw const ServerException(
+        message: 'account not found',
+        statusCode: 404,
+      );
     }
     return docSnap.data()!;
   }
@@ -55,16 +62,12 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         .collection('users')
         .doc(account.uid)
         .withConverter(
-          fromFirestore: (snapshot, _) => AccountModel.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) =>
+              AccountModel.fromJson(snapshot.data()!),
           toFirestore: (model, _) => model.toJson(),
         );
 
-    await _database.runTransaction((tx) async {
-      final snapshot = await tx.get(ref);
-      if (!snapshot.exists) {
-        tx.set(ref, account);
-      }
-    });
+    await ref.set(account, SetOptions(merge: true));
   }
 
   @override

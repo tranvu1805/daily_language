@@ -22,7 +22,7 @@ class AccountListTile extends StatelessWidget {
     final content = subtitle.isEmpty ? context.l10n.empty : subtitle;
     return ListTile(
       leading: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: color.withAlpha(40),
           borderRadius: BorderRadius.circular(8),

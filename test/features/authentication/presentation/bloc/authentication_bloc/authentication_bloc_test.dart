@@ -10,7 +10,8 @@ class MockLogoutUseCase extends Mock implements LogoutUseCase {}
 
 class MockGetAuthenticationUseCase extends Mock implements GetUserUseCase {}
 
-class MockLoginWithGoogleUseCase extends Mock implements LoginWithGoogleUseCase {}
+class MockLoginWithGoogleUseCase extends Mock
+    implements LoginWithGoogleUseCase {}
 
 void main() {
   late LogoutUseCase logoutUseCase;
@@ -35,20 +36,30 @@ void main() {
       'should emit AuthenticationSuccess when successfully',
       build: () => authenticationBloc,
       setUp: () {
-        when(() => getAuthenticationUseCase()).thenAnswer((_) => Stream.value(const User.empty()));
+        when(
+          () => getAuthenticationUseCase(),
+        ).thenAnswer((_) => Stream.value(const User.empty()));
       },
       act: (bloc) => bloc.add(AuthenticationRequested()),
-      expect: () => [AuthenticationInProgress(), AuthenticationSuccess(user: const User.empty())],
+      expect: () => [
+        AuthenticationInProgress(),
+        const AuthenticationSuccess(user: User.empty()),
+      ],
     );
 
     blocTest(
       'should emit AuthenticationFailure when unsuccessfully',
       build: () => authenticationBloc,
       setUp: () {
-        when(() => getAuthenticationUseCase()).thenAnswer((_) => Stream.value(null));
+        when(
+          () => getAuthenticationUseCase(),
+        ).thenAnswer((_) => Stream.value(null));
       },
       act: (bloc) => bloc.add(AuthenticationRequested()),
-      expect: () => [AuthenticationInProgress(), AuthenticationFailure(error: 'Unauthenticated')],
+      expect: () => [
+        AuthenticationInProgress(),
+        const AuthenticationFailure(error: 'Unauthenticated'),
+      ],
     );
   });
   group('AuthenticationGoogleLoggedIn', () {
@@ -56,22 +67,36 @@ void main() {
       'should emit AuthenticationSuccess when successfully',
       build: () => authenticationBloc,
       setUp: () {
-        when(() => getAuthenticationUseCase()).thenAnswer((_) => Stream.value(const User.empty()));
-        when(() => loginWithGoogleUseCase()).thenAnswer((_) async => const Right(null));
+        when(
+          () => getAuthenticationUseCase(),
+        ).thenAnswer((_) => Stream.value(const User.empty()));
+        when(
+          () => loginWithGoogleUseCase(),
+        ).thenAnswer((_) async => const Right(null));
       },
       act: (bloc) => bloc.add(AuthenticationGoogleLoggedIn()),
-      expect: () => [AuthenticationInProgress(), AuthenticationSuccess(user: const User.empty())],
+      expect: () => [
+        AuthenticationInProgress(),
+        const AuthenticationSuccess(user: User.empty()),
+      ],
     );
 
     blocTest(
       'should emit AuthenticationFailure when unsuccessfully',
       build: () => authenticationBloc,
       setUp: () {
-        when(() => getAuthenticationUseCase()).thenAnswer((_) => Stream.value(null));
-        when(() => loginWithGoogleUseCase()).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => getAuthenticationUseCase(),
+        ).thenAnswer((_) => Stream.value(null));
+        when(
+          () => loginWithGoogleUseCase(),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(AuthenticationGoogleLoggedIn()),
-      expect: () => [AuthenticationInProgress(), AuthenticationFailure(error: tFailure.message)],
+      expect: () => [
+        AuthenticationInProgress(),
+        AuthenticationFailure(error: tFailure.message),
+      ],
     );
   });
   group('AuthenticationLoggedOut', () {
@@ -82,17 +107,25 @@ void main() {
         when(() => logoutUseCase()).thenAnswer((_) async => const Right(null));
       },
       act: (bloc) => bloc.add(AuthenticationLoggedOut()),
-      expect: () => [AuthenticationInProgress(), AuthenticationFailure(error: 'Unauthenticated')],
+      expect: () => [
+        AuthenticationInProgress(),
+        const AuthenticationFailure(error: 'Unauthenticated'),
+      ],
     );
 
     blocTest(
       'should emit AuthenticationFailure when unsuccessfully',
       build: () => authenticationBloc,
       setUp: () {
-        when(() => logoutUseCase()).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => logoutUseCase(),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(AuthenticationLoggedOut()),
-      expect: () => [AuthenticationInProgress(), AuthenticationFailure(error: tFailure.message)],
+      expect: () => [
+        AuthenticationInProgress(),
+        AuthenticationFailure(error: tFailure.message),
+      ],
     );
   });
 }

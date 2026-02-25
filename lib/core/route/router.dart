@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
 GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: Routes.account,
+    initialLocation: Routes.splash,
     redirect: (context, state) {
       final authState = context.read<AuthenticationBloc>().state;
       final isSplash = state.matchedLocation == Routes.splash;
@@ -28,12 +30,21 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
     },
     refreshListenable: goRouterRefreshStream,
     routes: [
-      GoRoute(path: Routes.splash, builder: (context, state) => const SplashPage()),
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shellRoutes) => AppPage(navigationShell: shellRoutes),
+        builder: (context, state, shellRoutes) =>
+            AppPage(navigationShell: shellRoutes),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.home, builder: (context, state) => HomePage())],
+            routes: [
+              GoRoute(
+                path: Routes.home,
+                builder: (context, state) => const HomePage(),
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [
@@ -57,9 +68,12 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
             routes: [
               GoRoute(
                 path: Routes.account,
-                builder: (context, state) => AccountEditPage(),
+                builder: (context, state) => const AccountEditPage(),
                 routes: [
-                  GoRoute(path: Routes.accountEdit, builder: (context, state) => AccountEditPage()),
+                  GoRoute(
+                    path: Routes.accountEdit,
+                    builder: (context, state) => const AccountEditPage(),
+                  ),
                 ],
               ),
             ],
@@ -90,12 +104,21 @@ class AppRouter {
       return null;
     },
     routes: [
-      GoRoute(path: Routes.splash, builder: (context, state) => const SplashPage()),
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shellRoutes) => AppPage(navigationShell: shellRoutes),
+        builder: (context, state, shellRoutes) =>
+            AppPage(navigationShell: shellRoutes),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.home, builder: (context, state) => HomePage())],
+            routes: [
+              GoRoute(
+                path: Routes.home,
+                builder: (context, state) => const HomePage(),
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [
@@ -116,7 +139,12 @@ class AppRouter {
             ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.account, builder: (context, state) => AccountPage())],
+            routes: [
+              GoRoute(
+                path: Routes.account,
+                builder: (context, state) => const AccountPage(),
+              ),
+            ],
           ),
         ],
       ),

@@ -14,20 +14,25 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   static final List<Icon> _icons = [
-    Icon(Icons.home_outlined),
-    Icon(Icons.edit_calendar_rounded),
-    Icon(Icons.menu_book_rounded),
-    Icon(Icons.person_outline_rounded),
+    const Icon(Icons.home_outlined),
+    const Icon(Icons.edit_calendar_rounded),
+    const Icon(Icons.menu_book_rounded),
+    const Icon(Icons.person_outline_rounded),
   ];
 
   @override
   Widget build(BuildContext context) {
     final curIndex = widget.navigationShell.currentIndex;
-    final label = [context.l10n.home, context.l10n.diary, context.l10n.words, context.l10n.profile];
+    final label = [
+      context.l10n.home,
+      context.l10n.diary,
+      context.l10n.words,
+      context.l10n.profile,
+    ];
     return Scaffold(
       backgroundColor: ColorApp.pureWhite,
       floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         onPressed: () {},
         backgroundColor: ColorApp.primary,
         elevation: 4,
@@ -42,9 +47,11 @@ class _AppPageState extends State<AppPage> {
         currentIndex: curIndex,
         items: List.generate(
           _icons.length,
-          (index) => BottomNavigationBarItem(icon: _icons[index], label: label[index]),
+          (index) =>
+              BottomNavigationBarItem(icon: _icons[index], label: label[index]),
         ),
-        onTap: (index) => widget.navigationShell.goBranch(index, initialLocation: true),
+        onTap: (index) =>
+            widget.navigationShell.goBranch(index, initialLocation: true),
       ),
       body: widget.navigationShell,
     );

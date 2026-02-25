@@ -25,13 +25,17 @@ class _AccountAvatarButtonState extends State<AccountAvatarButton> {
           child: GestureDetector(
             onTap: widget.onTap,
             child: Container(
-              padding: EdgeInsets.all(6),
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: ColorApp.primary,
                 shape: BoxShape.circle,
                 border: Border.all(color: ColorApp.pureWhite, width: 2),
               ),
-              child: Icon(Icons.camera_alt, color: ColorApp.pureWhite, size: 12),
+              child: const Icon(
+                Icons.camera_alt,
+                color: ColorApp.pureWhite,
+                size: 12,
+              ),
             ),
           ),
         ),

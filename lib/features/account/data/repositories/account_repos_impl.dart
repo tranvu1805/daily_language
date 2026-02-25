@@ -25,6 +25,7 @@ class AccountReposImpl implements AccountRepos {
         uid: params.uid,
         email: params.email,
         fullName: params.fullName,
+        avatarUrl: params.avatarUrl,
       );
       await _remoteDataSource.createAccount(account: accountModel);
     });
