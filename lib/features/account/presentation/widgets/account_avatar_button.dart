@@ -17,7 +17,7 @@ class _AccountAvatarButtonState extends State<AccountAvatarButton> {
         CircleAvatar(
           radius: 48,
           backgroundColor: ColorApp.darkGray.withAlpha(40),
-          child: Image.asset(Assets.iconsLogo),
+          child: Assets.icons.logo.image(),
         ),
         Positioned(
           bottom: 0,

@@ -52,7 +52,7 @@ class SplashPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(Assets.iconsLogo, width: 200),
+                  Assets.icons.logo.image(width: 200),
                   const SizedBox(height: 12),
                   Text(
                     context.l10n.dailyLanguage,
