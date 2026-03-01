@@ -4,9 +4,14 @@ import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
 import 'package:daily_language/features/account/domain/use_cases/create_account_use_case.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/authentication/presentation/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:daily_language/features/home/presentation/widgets/category_chip.dart';
+import 'package:daily_language/features/home/presentation/widgets/entry_card.dart';
 import 'package:daily_language/features/home/presentation/widgets/home_app_bar.dart';
+import 'package:daily_language/features/home/presentation/widgets/quick_action_button.dart';
+import 'package:daily_language/features/home/presentation/widgets/stat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -93,7 +98,9 @@ class _HomePageState extends State<HomePage> {
                                     ).textTheme.labelLarge,
                                   ),
                                   Text(
-                                    'December 01, 2024',
+                                    DateFormat(
+                                      'MMMM d, yyyy',
+                                    ).format(DateTime.now()),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -152,23 +159,23 @@ class _HomePageState extends State<HomePage> {
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         const SizedBox(height: 12),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _buildQuickActionButton(
-                              'Text Entry',
-                              Icons.edit,
-                              ColorApp.primary,
+                            QuickActionButton(
+                              label: 'Text Entry',
+                              icon: Icons.edit,
+                              color: ColorApp.primary,
                             ),
-                            _buildQuickActionButton(
-                              'Voice',
-                              Icons.mic,
-                              ColorApp.purple,
+                            QuickActionButton(
+                              label: 'Voice',
+                              icon: Icons.mic,
+                              color: ColorApp.purple,
                             ),
-                            _buildQuickActionButton(
-                              'Photo',
-                              Icons.photo_camera,
-                              Colors.pink,
+                            QuickActionButton(
+                              label: 'Photo',
+                              icon: Icons.photo_camera,
+                              color: Colors.pink,
                             ),
                           ],
                         ),
@@ -200,25 +207,23 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        Row(
+                        const Row(
                           children: [
                             Expanded(
-                              child: _buildStatCard(
-                                context,
-                                'Words Written',
-                                '1,247',
-                                '+18% from last week',
-                                Icons.book,
+                              child: StatCard(
+                                title: 'Words Written',
+                                value: '1,247',
+                                subtitle: '+18% from last week',
+                                icon: Icons.book,
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
                             Expanded(
-                              child: _buildStatCard(
-                                context,
-                                'New Vocabulary',
-                                '42',
-                                '+12% from last week',
-                                Icons.bookmark,
+                              child: StatCard(
+                                title: 'New Vocabulary',
+                                value: '42',
+                                subtitle: '+12% from last week',
+                                icon: Icons.bookmark,
                               ),
                             ),
                           ],
@@ -251,12 +256,12 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildEntryCard(
-                          context,
-                          'December 20',
-                          'English • 156 words',
-                          '"Today was amazing! I had a great meeting with my team and we finished the project..."',
-                          ['Translation', 'Listen', '5 New Words'],
+                        EntryCard(
+                          date: 'December 20',
+                          subtitle: 'English • 156 words',
+                          content:
+                              '"Today was amazing! I had a great meeting with my team and we finished the project..."',
+                          tags: const ['Translation', 'Listen', '5 New Words'],
                           backgroundColor: ColorApp.green.withValues(
                             alpha: 0.1,
                           ),
@@ -264,12 +269,11 @@ class _HomePageState extends State<HomePage> {
                           badgeText: 'Corrected',
                         ),
                         const SizedBox(height: 12),
-                        _buildEntryCard(
-                          context,
-                          'December 19',
-                          'Japanese • Voice Entry',
-                          '',
-                          ['Transcript', 'Practice'],
+                        EntryCard(
+                          date: 'December 19',
+                          subtitle: 'Japanese • Voice Entry',
+                          content: '',
+                          tags: const ['Transcript', 'Practice'],
                           hasAudio: true,
                           backgroundColor: ColorApp.primary.withValues(
                             alpha: 0.1,
@@ -278,12 +282,11 @@ class _HomePageState extends State<HomePage> {
                           badgeText: 'Voice',
                         ),
                         const SizedBox(height: 12),
-                        _buildEntryCard(
-                          context,
-                          'December 18',
-                          'Korean • 2 photos',
-                          '"오늘 친구들과 시장에 갔어요. 정말 재미있었어요"',
-                          ['Translate', 'Check Grammar'],
+                        EntryCard(
+                          date: 'December 18',
+                          subtitle: 'Korean • 2 photos',
+                          content: '"오늘 친구들과 시장에 갔어요. 정말 재미있었어요"',
+                          tags: const ['Translate', 'Check Grammar'],
                           hasImages: true,
                           backgroundColor: Colors.pink.withValues(alpha: 0.1),
                           badgeColor: Colors.pink,
@@ -376,14 +379,26 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               const SizedBox(height: 16),
-                              Wrap(
+                              const Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: [
-                                  _buildChip('Work (32)', Colors.red),
-                                  _buildChip('Travel (18)', ColorApp.green),
-                                  _buildChip('Family (24)', ColorApp.primary),
-                                  _buildChip('Food (15)', ColorApp.orange),
+                                  CategoryChip(
+                                    label: 'Work (32)',
+                                    color: Colors.red,
+                                  ),
+                                  CategoryChip(
+                                    label: 'Travel (18)',
+                                    color: ColorApp.green,
+                                  ),
+                                  CategoryChip(
+                                    label: 'Family (24)',
+                                    color: ColorApp.primary,
+                                  ),
+                                  CategoryChip(
+                                    label: 'Food (15)',
+                                    color: ColorApp.orange,
+                                  ),
                                 ],
                               ),
                             ],
@@ -399,257 +414,6 @@ class _HomePageState extends State<HomePage> {
           }
           return Container();
         },
-      ),
-    );
-  }
-
-  Widget _buildQuickActionButton(String label, IconData icon, Color color) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(
-    BuildContext context,
-    String title,
-    String value,
-    String subtitle,
-    IconData icon,
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8),
-        ],
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: ColorApp.primary),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(fontSize: 12),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
-              fontSize: 20,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: ColorApp.green,
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEntryCard(
-    BuildContext context,
-    String date,
-    String subtitle,
-    String content,
-    List<String> tags, {
-    Color? backgroundColor,
-    Color? badgeColor,
-    String? badgeText,
-    bool hasAudio = false,
-    bool hasImages = false,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8),
-        ],
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(date, style: Theme.of(context).textTheme.labelLarge),
-                  Text(
-                    subtitle,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(fontSize: 12),
-                  ),
-                ],
-              ),
-              if (badgeText != null)
-                Container(
-                  decoration: BoxDecoration(
-                    color: badgeColor?.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  child: Text(
-                    badgeText,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: badgeColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          if (content.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-              content,
-              style: Theme.of(context).textTheme.bodySmall,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-          if (hasAudio) ...[
-            const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: badgeColor,
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(height: 4, color: Colors.grey[300]),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '0:45',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          if (hasImages) ...[
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            children: tags
-                .map(
-                  (tag) => Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    child: Text(
-                      tag,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: badgeColor,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChip(String label, Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
       ),
     );
   }

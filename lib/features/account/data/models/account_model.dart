@@ -33,7 +33,7 @@ class AccountModel extends Equatable {
     required this.fullName,
     required this.avatarUrl,
     this.phoneNumber = '',
-    this.streak = 0,
+    this.streak,
   });
 
   Account toEntity() => Account(
@@ -53,6 +53,16 @@ class AccountModel extends Equatable {
     map['avatarUrl'] = avatarUrl;
     map['phoneNumber'] = phoneNumber;
     map['streak'] = streak;
+    return map;
+  }
+
+  Map<String, dynamic> toCreateJson() {
+    final map = <String, dynamic>{};
+    map['uid'] = uid;
+    map['fullName'] = fullName;
+    map['email'] = email;
+    map['avatarUrl'] = avatarUrl;
+    map['phoneNumber'] = phoneNumber;
     return map;
   }
 

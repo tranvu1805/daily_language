@@ -80,7 +80,7 @@ class HomeAppBar extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '14 days',
+                      '${account.streak} days',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.white,
                         fontSize: 28,

@@ -68,7 +68,7 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
             routes: [
               GoRoute(
                 path: Routes.account,
-                builder: (context, state) => const AccountEditPage(),
+                builder: (context, state) => const AccountPage(),
                 routes: [
                   GoRoute(
                     path: Routes.accountEdit,

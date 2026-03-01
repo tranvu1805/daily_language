@@ -64,7 +64,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         .withConverter(
           fromFirestore: (snapshot, _) =>
               AccountModel.fromJson(snapshot.data()!),
-          toFirestore: (model, _) => model.toJson(),
+          toFirestore: (model, _) => model.toCreateJson(),
         );
 
     await ref.set(account, SetOptions(merge: true));
