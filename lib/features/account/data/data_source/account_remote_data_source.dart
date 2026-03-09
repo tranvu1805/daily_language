@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_language/core/errors/exceptions.dart';
+import 'package:daily_language/core/utils/helper/method_utils.dart';
 import 'package:daily_language/features/account/data/data.dart';
 
 abstract interface class AccountRemoteDataSource {
@@ -48,8 +49,8 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         );
     final docSnap = await ref.get();
     if (!docSnap.exists || docSnap.data() == null) {
-      throw const ServerException(
-        message: 'account not found',
+      throwServerException(
+        message: 'not found',
         statusCode: 404,
       );
     }

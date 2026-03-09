@@ -1,5 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/utils.dart';
+import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/account/presentation/widgets/widgets.dart';
 import 'package:daily_language/features/authentication/domain/domain.dart';
@@ -16,14 +17,6 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   bool _notificationsEnabled = true;
-
-  User get _user => getUserFromState(context);
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    context.read<AccountBloc>().add(AccountRequested(uid: _user.id));
-  }
 
   @override
   Widget build(BuildContext context) {

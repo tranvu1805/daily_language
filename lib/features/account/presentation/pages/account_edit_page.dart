@@ -18,20 +18,12 @@ class _AccountEditPageState extends State<AccountEditPage> {
   late final TextEditingController _fullNameController;
   late final TextEditingController _phoneController;
 
-  User get _user => getUserFromState(context);
-
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
     _fullNameController = TextEditingController();
     _phoneController = TextEditingController();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    context.read<AccountBloc>().add(AccountRequested(uid: _user.id));
   }
 
   @override
