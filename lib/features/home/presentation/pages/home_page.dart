@@ -1,14 +1,10 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
-import 'package:daily_language/features/account/domain/use_cases/create_account_use_case.dart';
+import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
-import 'package:daily_language/features/authentication/presentation/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:daily_language/features/home/presentation/widgets/category_chip.dart';
-import 'package:daily_language/features/home/presentation/widgets/entry_card.dart';
-import 'package:daily_language/features/home/presentation/widgets/home_app_bar.dart';
-import 'package:daily_language/features/home/presentation/widgets/quick_action_button.dart';
-import 'package:daily_language/features/home/presentation/widgets/stat_card.dart';
+import 'package:daily_language/features/authentication/presentation/presentation.dart';
+import 'package:daily_language/features/home/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -232,69 +228,60 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Recent Entries
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Recent Entries',
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            Text(
-                              'See All',
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    color: ColorApp.primary,
-                                    fontSize: 12,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        EntryCard(
-                          date: 'December 20',
-                          subtitle: 'English • 156 words',
-                          content:
-                              '"Today was amazing! I had a great meeting with my team and we finished the project..."',
-                          tags: const ['Translation', 'Listen', '5 New Words'],
-                          backgroundColor: ColorApp.green.withValues(
-                            alpha: 0.1,
-                          ),
-                          badgeColor: ColorApp.green,
-                          badgeText: 'Corrected',
-                        ),
-                        const SizedBox(height: 12),
-                        EntryCard(
-                          date: 'December 19',
-                          subtitle: 'Japanese • Voice Entry',
-                          content: '',
-                          tags: const ['Transcript', 'Practice'],
-                          hasAudio: true,
-                          backgroundColor: ColorApp.primary.withValues(
-                            alpha: 0.1,
-                          ),
-                          badgeColor: ColorApp.primary,
-                          badgeText: 'Voice',
-                        ),
-                        const SizedBox(height: 12),
-                        EntryCard(
-                          date: 'December 18',
-                          subtitle: 'Korean • 2 photos',
-                          content: '"오늘 친구들과 시장에 갔어요. 정말 재미있었어요"',
-                          tags: const ['Translate', 'Check Grammar'],
-                          hasImages: true,
-                          backgroundColor: Colors.pink.withValues(alpha: 0.1),
-                          badgeColor: Colors.pink,
-                          badgeText: 'Images',
-                        ),
-                      ],
-                    ),
-                  ),
+                  // // Recent Entries
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Text(
+                  //             'Recent Entries',
+                  //             style: Theme.of(context).textTheme.labelLarge,
+                  //           ),
+                  //           Text(
+                  //             'See All',
+                  //             style: Theme.of(context).textTheme.bodyMedium
+                  //                 ?.copyWith(
+                  //                   color: ColorApp.primary,
+                  //                   fontSize: 12,
+                  //                 ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(height: 12),
+                  //       RecordCard(
+                  //         record: Record(emotion: emotion, type: type, content: content, imageUrls: imageUrls, createdAt: createdAt, voiceUrl: voiceUrl, id: id, updatedAt: updatedAt),
+                  //       ),
+                  //       const SizedBox(height: 12),
+                  //       RecordCard(
+                  //         date: 'December 19',
+                  //         subtitle: 'Japanese • Voice Record',
+                  //         content: '',
+                  //         tags: const ['Transcript', 'Practice'],
+                  //         hasAudio: true,
+                  //         backgroundColor: ColorApp.primary.withValues(
+                  //           alpha: 0.1,
+                  //         ),
+                  //         badgeColor: ColorApp.primary,
+                  //         badgeText: 'Voice',
+                  //       ),
+                  //       const SizedBox(height: 12),
+                  //       RecordCard(
+                  //         date: 'December 18',
+                  //         subtitle: 'Korean • 2 photos',
+                  //         content: '"오늘 친구들과 시장에 갔어요. 정말 재미있었어요"',
+                  //         tags: const ['Translate', 'Check Grammar'],
+                  //         hasImages: true,
+                  //         backgroundColor: Colors.pink.withValues(alpha: 0.1),
+                  //         badgeColor: Colors.pink,
+                  //         badgeText: 'Images',
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(height: 24),
                   // My Vocabulary
                   Padding(

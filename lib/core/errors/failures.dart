@@ -20,28 +20,41 @@ class ServerFailure extends Failure {
 
   factory ServerFailure.fromException(ServerException exception) {
     final message = switch (exception.message.toLowerCase()) {
-      'unique violation' => 'Tài khoản đã tồn tại',
-      'account not found' => 'Tài khoản không tồn tại',
-      'file too large' => 'Tệp quá lớn',
-      'request timed out' => 'Yêu cầu đã hết thời gian chờ',
-      'the username/email or password is incorrect, please re-enter' =>
-        'Số điện thoại hoặc mật khẩu không chính xác',
-      'the password is incorrect, please re-enter' => 'Mật khẩu không chính xác, vui lòng nhập lại',
-      _ => 'Lỗi không xác định',
+      'not found' => 'Dữ liệu không tồn tại',
+      'google sign-in failed' => 'Đăng nhập Google thất bại',
+      _ => 'Lỗi không xác định: ${exception.message}',
     };
     return ServerFailure(message: message, statusCode: exception.statusCode);
   }
 
   factory ServerFailure.fromFirebaseException(FirebaseException exception) {
-    final message = switch (exception.message?.toLowerCase()) {
-      'unique violation' => 'Tài khoản đã tồn tại',
-      'account not found' => 'Tài khoản không tồn tại',
-      'file too large' => 'Tệp quá lớn',
-      'request timed out' => 'Yêu cầu đã hết thời gian chờ',
-      'the username/email or password is incorrect, please re-enter' =>
-        'Số điện thoại hoặc mật khẩu không chính xác',
-      'the password is incorrect, please re-enter' => 'Mật khẩu không chính xác, vui lòng nhập lại',
-      _ => 'Lỗi không xác định',
+    final message = switch (exception.code) {
+      // Firestore errors
+      'permission-denied' => 'Bạn không có quyền thực hiện thao tác này',
+      'not-found' => 'Không tìm thấy dữ liệu',
+      'already-exists' => 'Dữ liệu đã tồn tại',
+      'resource-exhausted' => 'Đã vượt quá giới hạn, vui lòng thử lại sau',
+      'failed-precondition' => 'Thao tác không hợp lệ',
+      'aborted' => 'Thao tác bị hủy, vui lòng thử lại',
+      'out-of-range' => 'Giá trị nằm ngoài phạm vi cho phép',
+      'unavailable' => 'Dịch vụ tạm thời không khả dụng, vui lòng thử lại sau',
+      'data-loss' => 'Dữ liệu bị mất hoặc hỏng',
+      'deadline-exceeded' => 'Yêu cầu đã hết thời gian chờ',
+      'cancelled' => 'Yêu cầu đã bị hủy',
+      // Firebase Auth errors
+      'user-not-found' => 'Tài khoản không tồn tại',
+      'wrong-password' => 'Mật khẩu không chính xác',
+      'email-already-in-use' => 'Email đã được sử dụng',
+      'invalid-email' => 'Email không hợp lệ',
+      'weak-password' => 'Mật khẩu quá yếu',
+      'user-disabled' => 'Tài khoản đã bị vô hiệu hóa',
+      'too-many-requests' => 'Quá nhiều yêu cầu, vui lòng thử lại sau',
+      'operation-not-allowed' => 'Thao tác không được phép',
+      'account-exists-with-different-credential' =>
+        'Tài khoản đã tồn tại với phương thức đăng nhập khác',
+      'invalid-credential' => 'Thông tin xác thực không hợp lệ',
+      'network-request-failed' => 'Lỗi kết nối mạng, vui lòng kiểm tra lại',
+      _ => 'Lỗi không xác định: ${exception.message}',
     };
     return ServerFailure(message: message, statusCode: 500);
   }

@@ -1,10 +1,15 @@
 import 'dart:async';
 
+import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/app_shell.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
 import 'package:daily_language/features/home/presentation/pages/home_page.dart';
+import 'package:daily_language/features/record/presentation/bloc/record_bloc/record_bloc.dart';
+import 'package:daily_language/features/record/presentation/bloc/records_bloc/records_bloc.dart';
+import 'package:daily_language/features/record/presentation/pages/record_add_page.dart';
+import 'package:daily_language/features/record/presentation/pages/record_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,8 +40,13 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
         builder: (context, state) => const SplashPage(),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shellRoutes) =>
-            AppPage(navigationShell: shellRoutes),
+        builder: (context, state, shellRoutes) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => sl<RecordBloc>()),
+            BlocProvider(create: (context) => sl<RecordsBloc>()),
+          ],
+          child: AppPage(navigationShell: shellRoutes),
+        ),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -50,8 +60,13 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
             routes: [
               GoRoute(
                 path: Routes.diary,
-                builder: (context, state) =>
-                    const Scaffold(body: Center(child: Text('Diary Page'))),
+                builder: (context, state) => const RecordPage(),
+                routes: [
+                  GoRoute(
+                    path: Routes.diaryAdd,
+                    builder: (context, state) => const RecordAddPage(),
+                  ),
+                ],
               ),
             ],
           ),

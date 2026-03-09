@@ -32,8 +32,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _authBloc = DI.instance.sl<AuthenticationBloc>()
-      ..add(AuthenticationRequested());
+    _authBloc = sl<AuthenticationBloc>()..add(AuthenticationRequested());
     _authRefresh = GoRouterRefreshStream(_authBloc.stream);
   }
 
@@ -48,7 +47,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _authBloc),
-        BlocProvider(create: (context) => DI.instance.sl<AccountBloc>()),
+        BlocProvider(create: (context) => sl<AccountBloc>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
