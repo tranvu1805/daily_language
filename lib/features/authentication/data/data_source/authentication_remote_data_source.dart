@@ -1,4 +1,5 @@
 import 'package:daily_language/core/errors/exceptions.dart';
+import 'package:daily_language/core/utils/helper/method_utils.dart';
 import 'package:daily_language/features/authentication/data/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -47,8 +48,8 @@ class AuthenticationRemoteDataSourceImpl
     );
     final userCredential = await _firebaseAuth.signInWithCredential(credential);
     if (userCredential.user == null) {
-      throw const ServerException(
-        message: 'Google sign-in failed',
+      throwServerException(
+        message: 'google sign-in failed',
         statusCode: 401,
       );
     }
