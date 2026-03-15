@@ -4,6 +4,7 @@ abstract class Routes {
   static const diary = '/diary';
   static const diaryAdd = 'add';
   static const words = '/words';
+  static const wordsAdd = 'add';
   static const account = '/account';
   static const accountEdit = '/account_edit';
   static const onboarding = '/onboarding';

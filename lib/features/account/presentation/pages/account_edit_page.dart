@@ -1,6 +1,5 @@
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
-import 'package:daily_language/features/authentication/domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

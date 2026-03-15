@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_language/core/errors/exceptions.dart';
 import 'package:daily_language/core/utils/helper/method_utils.dart';
 import 'package:daily_language/features/account/data/data.dart';
 

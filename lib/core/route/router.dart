@@ -10,6 +10,10 @@ import 'package:daily_language/features/record/presentation/bloc/record_bloc/rec
 import 'package:daily_language/features/record/presentation/bloc/records_bloc/records_bloc.dart';
 import 'package:daily_language/features/record/presentation/pages/record_add_page.dart';
 import 'package:daily_language/features/record/presentation/pages/record_page.dart';
+import 'package:daily_language/features/word/presentation/bloc/word_bloc/word_bloc.dart';
+import 'package:daily_language/features/word/presentation/bloc/words_bloc/words_bloc.dart';
+import 'package:daily_language/features/word/presentation/pages/word_add_page.dart';
+import 'package:daily_language/features/word/presentation/pages/word_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -44,6 +48,8 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
           providers: [
             BlocProvider(create: (context) => sl<RecordBloc>()),
             BlocProvider(create: (context) => sl<RecordsBloc>()),
+            BlocProvider(create: (context) => sl<WordBloc>()),
+            BlocProvider(create: (context) => sl<WordsBloc>()),
           ],
           child: AppPage(navigationShell: shellRoutes),
         ),
@@ -74,8 +80,13 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
             routes: [
               GoRoute(
                 path: Routes.words,
-                builder: (context, state) =>
-                    const Scaffold(body: Center(child: Text('Words Page'))),
+                builder: (context, state) => const WordPage(),
+                routes: [
+                  GoRoute(
+                    path: Routes.wordsAdd,
+                    builder: (context, state) => const WordAddPage(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -148,8 +159,13 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: Routes.words,
-                builder: (context, state) =>
-                    const Scaffold(body: Center(child: Text('Words Page'))),
+                builder: (context, state) => const WordPage(),
+                routes: [
+                  GoRoute(
+                    path: Routes.wordsAdd,
+                    builder: (context, state) => const WordAddPage(),
+                  ),
+                ],
               ),
             ],
           ),

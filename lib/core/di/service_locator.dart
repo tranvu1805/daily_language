@@ -8,6 +8,9 @@ import 'package:daily_language/features/authentication/presentation/bloc/authent
 import 'package:daily_language/features/record/data/data.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
 import 'package:daily_language/features/record/presentation/presentation.dart';
+import 'package:daily_language/features/word/data/data.dart';
+import 'package:daily_language/features/word/domain/domain.dart';
+import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,6 +26,7 @@ class DI {
     _initAuthenticationFeature();
     _initAccountFeature();
     _initRecordFeature();
+    _initWordFeature();
   }
 
   void _initAuthenticationFeature() {
@@ -108,5 +112,34 @@ class DI {
       ),
     );
     sl.registerFactory<RecordsBloc>(() => RecordsBloc(getRecordsUseCase: sl()));
+  }
+
+  void _initWordFeature() {
+    sl.registerLazySingleton<WordRemoteDataSource>(
+      () => WordRemoteDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<WordRepos>(
+      () => WordReposImpl(remoteDataSource: sl()),
+    );
+    sl.registerLazySingleton<GetWordUseCase>(() => GetWordUseCase(sl()));
+    sl.registerLazySingleton<GetWordsUseCase>(() => GetWordsUseCase(sl()));
+    sl.registerLazySingleton<CreateWordUseCase>(
+      () => CreateWordUseCase(sl()),
+    );
+    sl.registerLazySingleton<UpdateWordUseCase>(
+      () => UpdateWordUseCase(sl()),
+    );
+    sl.registerLazySingleton<DeleteWordUseCase>(
+      () => DeleteWordUseCase(sl()),
+    );
+    sl.registerFactory<WordBloc>(
+      () => WordBloc(
+        getWordUseCase: sl(),
+        createWordUseCase: sl(),
+        updateWordUseCase: sl(),
+        deleteWordUseCase: sl(),
+      ),
+    );
+    sl.registerFactory<WordsBloc>(() => WordsBloc(getWordsUseCase: sl()));
   }
 }

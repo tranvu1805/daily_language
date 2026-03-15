@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/features/record/presentation/widgets/mic_listening_widget.dart';
 import 'package:flutter/material.dart';
 
 class DialogHelper {
@@ -82,6 +83,23 @@ class DialogHelper {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  static Future<void> showMicListeningDialog({
+    required BuildContext context,
+  }) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Dialog(
+        backgroundColor: ColorApp.linenWhite,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: MicListeningWidget(),
         ),
       ),
     );
