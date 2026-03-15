@@ -21,6 +21,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   String _selectedType = '';
   late final stt.SpeechToText _speech;
   bool _isListening = false;
+  String _sttLocale = 'vi_VN';
 
   Account get _account => getAccountFromState(context);
 
@@ -62,9 +63,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
           context.pop();
         }
         if (state is RecordFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-          );
+          SnackBarHelper.showFailure(context, state.error);
         }
       },
       child: Scaffold(
@@ -123,7 +122,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
                 runSpacing: 8,
                 children: _emotions.map((emotion) {
                   final isSelected = _selectedEmotion == emotion;
-                  return _EmotionChip(
+                  return EmotionChip(
                     label: emotion,
                     isSelected: isSelected,
                     onTap: () => setState(() => _selectedEmotion = emotion),
@@ -140,7 +139,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
                 runSpacing: 8,
                 children: _types.map((type) {
                   final isSelected = _selectedType == type;
-                  return _TypeChip(
+                  return TypeChip(
                     label: type,
                     isSelected: isSelected,
                     onTap: () => setState(() => _selectedType = type),
@@ -151,12 +150,39 @@ class _RecordAddPageState extends State<RecordAddPage> {
 
               // Content Section
               Row(
-                mainAxisAlignment: .spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Write your thoughts', style: textTheme.labelLarge),
-                  IconButton(
-                    onPressed: _onMicPressed,
-                    icon: const Icon(Icons.mic, size: 20, color: ColorApp.taupeGray),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _sttLocale = _sttLocale == 'vi_VN' ? 'en_US' : 'vi_VN';
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: ColorApp.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            _sttLocale == 'vi_VN' ? 'VN' : 'EN',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: ColorApp.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        onPressed: _onMicPressed,
+                        icon: const Icon(Icons.mic, size: 20, color: ColorApp.taupeGray),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -195,12 +221,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   void _onSave() {
     final content = _contentController.text.trim();
     if (content.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please write something'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      SnackBarHelper.showFailure(context, 'Please write something');
       return;
     }
 
@@ -217,27 +238,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   }
 
   Future<void> _onMicPressed() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        backgroundColor: ColorApp.linenWhite,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.mic, size: 48, color: ColorApp.primary),
-              const SizedBox(height: 16),
-              Text('Listening...', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              Text('Speak now and we will transcribe your words.', style: Theme.of(context).textTheme.bodySmall),
-            ],
-          ),
-        ),
-      ),
-    );
+    DialogHelper.showMicListeningDialog(context: context);
     setState(() { _isListening = true; });
     bool available = await _speech.initialize();
     if (available) {
@@ -253,95 +254,16 @@ class _RecordAddPageState extends State<RecordAddPage> {
           }
         },
         listenFor: const Duration(seconds: 30),
-        localeId: 'vi_VN',
+        localeId: _sttLocale,
         listenOptions: stt.SpeechListenOptions(
           cancelOnError: true,
         ),
       );
     } else {
       setState(() { _isListening = false; });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Speech recognition unavailable'), backgroundColor: Colors.red),
-      );
+      SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
       context.pop();
     }
   }
 }
 
-class _EmotionChip extends StatelessWidget {
-  const _EmotionChip({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? ColorApp.primary.withAlpha(25) : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: isSelected
-                ? ColorApp.primary
-                : ColorApp.darkGray.withAlpha(30),
-          ),
-        ),
-        child: Text(
-          label,
-          style: textTheme.bodySmall?.copyWith(
-            color: isSelected ? ColorApp.primary : ColorApp.darkGray,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TypeChip extends StatelessWidget {
-  const _TypeChip({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? ColorApp.primary : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: isSelected
-                ? ColorApp.primary
-                : ColorApp.darkGray.withAlpha(30),
-          ),
-        ),
-        child: Text(
-          label,
-          style: textTheme.bodySmall?.copyWith(
-            color: isSelected ? Colors.white : ColorApp.darkGray,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          ),
-        ),
-      ),
-    );
-  }
-}
