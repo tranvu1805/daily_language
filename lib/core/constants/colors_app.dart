@@ -20,6 +20,7 @@ class ColorApp {
   static const Color cyanOrange = Color(0xFFF7EADD);
   static const Color brown = Color(0xFF583C29);
   static const Color darkGray = Color(0xFF3B3B3B);
+  static const Color failedRed = Color(0xFFEF4444);
   static const LinearGradient backgroundGradient = LinearGradient(
     begin: Alignment.bottomLeft,
     end: Alignment.topRight,

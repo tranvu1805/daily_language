@@ -6,6 +6,7 @@ import 'package:daily_language/features/record/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class RecordAddPage extends StatefulWidget {
   const RecordAddPage({super.key});
@@ -18,6 +19,8 @@ class _RecordAddPageState extends State<RecordAddPage> {
   late final TextEditingController _contentController;
   String _selectedEmotion = '';
   String _selectedType = '';
+  late final stt.SpeechToText _speech;
+  bool _isListening = false;
 
   Account get _account => getAccountFromState(context);
 
@@ -35,6 +38,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   void initState() {
     super.initState();
     _contentController = TextEditingController();
+    _speech = stt.SpeechToText();
   }
 
   @override
@@ -146,7 +150,16 @@ class _RecordAddPageState extends State<RecordAddPage> {
               const SizedBox(height: 24),
 
               // Content Section
-              Text('Write your thoughts', style: textTheme.labelLarge),
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Text('Write your thoughts', style: textTheme.labelLarge),
+                  IconButton(
+                    onPressed: _onMicPressed,
+                    icon: const Icon(Icons.mic, size: 20, color: ColorApp.taupeGray),
+                  ),
+                ],
+              ),
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
@@ -201,6 +214,57 @@ class _RecordAddPageState extends State<RecordAddPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _onMicPressed() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: ColorApp.linenWhite,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.mic, size: 48, color: ColorApp.primary),
+              const SizedBox(height: 16),
+              Text('Listening...', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Text('Speak now and we will transcribe your words.', style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+        ),
+      ),
+    );
+    setState(() { _isListening = true; });
+    bool available = await _speech.initialize();
+    if (available) {
+      _speech.listen(
+        onResult: (result) async {
+          if (result.finalResult) {
+            setState(() {
+              _contentController.text = result.recognizedWords;
+              _isListening = false;
+            });
+            _speech.stop();
+            context.pop();
+          }
+        },
+        listenFor: const Duration(seconds: 30),
+        localeId: 'vi_VN',
+        listenOptions: stt.SpeechListenOptions(
+          cancelOnError: true,
+        ),
+      );
+    } else {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Speech recognition unavailable'), backgroundColor: Colors.red),
+      );
+      context.pop();
+    }
   }
 }
 
