@@ -21,6 +21,21 @@ class ColorApp {
   static const Color brown = Color(0xFF583C29);
   static const Color darkGray = Color(0xFF3B3B3B);
   static const Color failedRed = Color(0xFFEF4444);
+  static const Color levelA1 = Color(0xFF16A34A);
+  static const Color levelA1Bg = Color(0xFFDCFCE7);
+  static const Color levelA2 = Color(0xFF0891B2);
+  static const Color levelA2Bg = Color(0xFFE0F2FE);
+  static const Color levelB1 = Color(0xFF7C3AED);
+  static const Color levelB1Bg = Color(0xFFEDE9FE);
+  static const Color levelB2 = Color(0xFFD97706);
+  static const Color levelB2Bg = Color(0xFFFEF3C7);
+  static const Color levelC1 = Color(0xFFDC2626);
+  static const Color levelC1Bg = Color(0xFFFEE2E2);
+  static const Color purpleLight = Color(0xFF8B5CF6);
+  static const Color textPrimary = Color(0xFF111827);
+  static const Color textSecondary = Color(0xFF6B7280);
+  static const Color textTertiary = Color(0xFF9CA3AF);
+
   static const LinearGradient backgroundGradient = LinearGradient(
     begin: Alignment.bottomLeft,
     end: Alignment.topRight,

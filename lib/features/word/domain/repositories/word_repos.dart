@@ -2,15 +2,23 @@ import 'package:daily_language/core/utils/helper/type_definition.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 
 abstract interface class WordRepos {
-  ResultFuture<List<Word>> getWords({
-    required GetWordsUseCaseParams params,
+  ResultFuture<List<UserWord>> getWords({
+    required GetUserWordsUseCaseParams params,
   });
 
-  ResultFuture<Word> getWord({required GetWordUseCaseParams params});
+  ResultFuture<List<Word>> getDictionaryWords({
+    required GetDictionaryWordsUseCaseParams params,
+  });
 
-  ResultVoid createWord({required CreateWordUseCaseParams params});
+  ResultFuture<Word> getDictionaryWordById({
+    required String id,
+  });
 
-  ResultVoid updateWord({required UpdateWordUseCaseParams params});
+  ResultFuture<UserWord> getWord({required GetUserWordUseCaseParams params});
 
-  ResultVoid deleteWord({required String id});
+  ResultVoid createWord({required CreateUserWordUseCaseParams params});
+
+  ResultVoid updateWord({required UpdateUserWordUseCaseParams params});
+
+  ResultVoid deleteWord({required DeleteUserWordUseCaseParams params});
 }

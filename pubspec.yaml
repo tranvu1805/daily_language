@@ -50,6 +50,9 @@ dependencies:
   cloud_firestore: ^6.1.1
   flutter_tts: ^4.2.5
   speech_to_text: ^7.3.0
+  uuid: ^4.5.3
+  audioplayers: ^6.6.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -111,6 +114,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/data/
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

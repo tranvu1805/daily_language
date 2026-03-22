@@ -1,77 +1,101 @@
-import 'package:daily_language/core/constants/app.dart';
 import 'package:daily_language/core/network/api_service.dart';
 import 'package:daily_language/core/utils/helper/type_definition.dart';
 import 'package:daily_language/features/word/data/data.dart';
+import 'package:daily_language/features/word/data/models/user_word_model.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 
 class WordReposImpl implements WordRepos {
-  final WordRemoteDataSource _remoteDataSource;
+  final UserWordRemoteDataSource _remoteDataSource;
+  final WordLocalDataSource _localDataSource;
 
-  WordReposImpl({required WordRemoteDataSource remoteDataSource})
-    : _remoteDataSource = remoteDataSource;
+  WordReposImpl({
+    required UserWordRemoteDataSource remoteDataSource,
+    required WordLocalDataSource localDataSource,
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource;
 
   @override
-  ResultFuture<List<Word>> getWords({
-    required GetWordsUseCaseParams params,
+  ResultFuture<List<UserWord>> getWords({
+    required GetUserWordsUseCaseParams params,
   }) {
     return ApiService.handle(() async {
       final models = await _remoteDataSource.getWords(
         userId: params.userId,
-        limit: pageSize,
+        limit: params.limit,
         lastDocId: params.lastDocId,
+        isReview: params.isReview,
       );
       return models.map((model) => model.toEntity()).toList();
     });
   }
 
   @override
-  ResultFuture<Word> getWord({required GetWordUseCaseParams params}) {
+  ResultFuture<UserWord> getWord({required GetUserWordUseCaseParams params}) {
     return ApiService.handle(() async {
       final model = await _remoteDataSource.getWord(
         userId: params.userId,
-        id: params.id,
+        id: params.wordId,
       );
       return model.toEntity();
     });
   }
 
   @override
-  ResultVoid createWord({required CreateWordUseCaseParams params}) {
+  ResultFuture<List<Word>> getDictionaryWords({
+    required GetDictionaryWordsUseCaseParams params,
+  }) {
     return ApiService.handle(() async {
-      final wordModel = WordModel.toCreate(
-        meaning: params.meaning,
-        category: params.category,
-        wordText: params.wordText,
-        imageUrls: params.imageUrls,
-        isBookmarked: params.isBookmarked,
+      final models = await _localDataSource.getWordsFromAssets(
+        level: params.level,
+        limit: params.limit,
+        lastId: params.lastId,
       );
+      return models.map((model) => model.toEntity()).toList();
+    });
+  }
+
+  @override
+  ResultFuture<Word> getDictionaryWordById({
+    required String id,
+  }) {
+    return ApiService.handle(() async {
+      final model = await _localDataSource.getWordByIdFromAllAssets(id: id);
+      if (model == null) {
+        throw Exception('Word not found in dictionary');
+      }
+      return model.toEntity();
+    });
+  }
+
+  @override
+  ResultVoid createWord({required CreateUserWordUseCaseParams params}) {
+    return ApiService.handle(() async {
+      final userWordModel = UserWordModel.fromCreateParams(params);
       await _remoteDataSource.createWord(
         userId: params.userId,
-        word: wordModel,
+        word: userWordModel,
       );
     });
   }
 
   @override
-  ResultVoid updateWord({required UpdateWordUseCaseParams params}) {
+  ResultVoid updateWord({required UpdateUserWordUseCaseParams params}) {
     return ApiService.handle(() async {
-      final wordModel = WordModel.toUpdate(
-        id: params.id,
-        meaning: params.meaning,
-        category: params.category,
-        wordText: params.wordText,
-        imageUrls: params.imageUrls,
-        isBookmarked: params.isBookmarked,
-      );
+      final userWordModel = UserWordModel.fromUpdateParams(params);
       await _remoteDataSource.updateWord(
         userId: params.userId,
-        word: wordModel,
+        word: userWordModel,
       );
     });
   }
 
   @override
-  ResultVoid deleteWord({required String id}) {
-    throw UnimplementedError();
+  ResultVoid deleteWord({required DeleteUserWordUseCaseParams params}) {
+    return ApiService.handle(() async {
+      await _remoteDataSource.deleteWord(
+        userId: params.userId,
+        id: params.wordId,
+      );
+    });
   }
 }

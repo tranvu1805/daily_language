@@ -6,47 +6,12 @@ import 'package:flutter/material.dart';
 class WordCard extends StatelessWidget {
   const WordCard({super.key, required this.word, this.onTap});
 
-  final Word word;
+  final UserWord word;
   final VoidCallback? onTap;
-
-  // Helper method based on Figma to choose colors dynamically per Category
-  Color _getCategoryColor(String category) {
-    switch (category.toLowerCase()) {
-      case 'environment':
-        return Colors.green.shade700;
-      case 'career':
-      case 'work':
-        return Colors.blue.shade700;
-      case 'wellness':
-        return Colors.purple.shade700;
-      case 'technology':
-        return Colors.orange.shade700;
-      default:
-        return Colors.indigo.shade400;
-    }
-  }
-
-  Color _getCategoryBgColor(String category) {
-    switch (category.toLowerCase()) {
-      case 'environment':
-        return Colors.green.shade100;
-      case 'career':
-      case 'work':
-        return Colors.blue.shade100;
-      case 'wellness':
-        return Colors.purple.shade100;
-      case 'technology':
-        return Colors.orange.shade100;
-      default:
-        return Colors.indigo.shade50;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final catColor = _getCategoryColor(word.category);
-    final catBgColor = _getCategoryBgColor(word.category);
 
     return GestureDetector(
       onTap: onTap,
@@ -68,81 +33,37 @@ class WordCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        word.wordText.isEmpty ? 'Unknown' : word.wordText,
+                        word.word.isEmpty ? 'Unknown' : word.word,
                         style: textTheme.titleMedium?.copyWith(
-                          color: const Color(0xff111827),
+                          color: ColorApp.textPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Added ${DateTimeHelper.formatDate(word.createdAt)}',
+                        'Next review: ${DateTimeHelper.formatDate(word.nextReview)}',
                         style: textTheme.bodySmall?.copyWith(
-                          color: const Color(0xff6b7280),
+                          color: ColorApp.textSecondary,
                         ),
                       ),
                     ],
                   ),
                 ),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: Icon(
-                    word.isBookmarked ? Icons.favorite : Icons.favorite_outline,
-                    color: word.isBookmarked ? const Color(0xffef4444) : Colors.grey,
-                  ),
-                  onPressed: () {
-                    // TODO: Toggle bookmark
-                  },
-                ),
-              ],
-            ),
-            if (word.meaning.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Text(
-                word.meaning,
-                style: textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xff374151),
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-            const SizedBox(height: 16),
-            Row(
-              children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: catBgColor,
-                    borderRadius: BorderRadius.circular(20),
+                    color: ColorApp.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.label_important, size: 14, color: catColor),
-                      const SizedBox(width: 4),
-                      Text(
-                        word.category.isEmpty ? 'General' : word.category,
-                        style: textTheme.labelSmall?.copyWith(
-                          color: catColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.indigo.shade50,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.volume_up,
-                    size: 16,
-                    color: Color(0xff6366f1),
+                  child: Text(
+                    'Stage ${word.stage}',
+                    style: textTheme.labelSmall?.copyWith(
+                      color: ColorApp.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

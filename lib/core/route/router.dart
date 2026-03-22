@@ -6,14 +6,9 @@ import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
 import 'package:daily_language/features/home/presentation/pages/home_page.dart';
-import 'package:daily_language/features/record/presentation/bloc/record_bloc/record_bloc.dart';
-import 'package:daily_language/features/record/presentation/bloc/records_bloc/records_bloc.dart';
-import 'package:daily_language/features/record/presentation/pages/record_add_page.dart';
-import 'package:daily_language/features/record/presentation/pages/record_page.dart';
-import 'package:daily_language/features/word/presentation/bloc/word_bloc/word_bloc.dart';
-import 'package:daily_language/features/word/presentation/bloc/words_bloc/words_bloc.dart';
-import 'package:daily_language/features/word/presentation/pages/word_add_page.dart';
-import 'package:daily_language/features/word/presentation/pages/word_page.dart';
+import 'package:daily_language/features/record/presentation/presentation.dart';
+import 'package:daily_language/features/word/domain/domain.dart';
+import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -48,8 +43,10 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
           providers: [
             BlocProvider(create: (context) => sl<RecordBloc>()),
             BlocProvider(create: (context) => sl<RecordsBloc>()),
-            BlocProvider(create: (context) => sl<WordBloc>()),
+            BlocProvider(create: (context) => sl<UserWordBloc>()),
             BlocProvider(create: (context) => sl<WordsBloc>()),
+            BlocProvider(create: (context) => sl<UserWordsBloc>()),
+            BlocProvider(create: (context) => sl<ReviewWordBloc>()),
           ],
           child: AppPage(navigationShell: shellRoutes),
         ),
@@ -83,8 +80,23 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
                 builder: (context, state) => const WordPage(),
                 routes: [
                   GoRoute(
+                    path: Routes.wordsLevel,
+                    builder: (context, state) => WordLevelPage(
+                      topic: state.extra as String? ?? 'my_words',
+                    ),
+                  ),
+                  GoRoute(
+                    path: Routes.wordsLevelDetail,
+                    builder: (context, state) =>
+                        OxfordWordDetailPage(word: state.extra as Word),
+                  ),
+                  GoRoute(
                     path: Routes.wordsAdd,
                     builder: (context, state) => const WordAddPage(),
+                  ),
+                  GoRoute(
+                    path: Routes.wordsReview,
+                    builder: (context, state) => const ReviewWordPage(),
                   ),
                 ],
               ),

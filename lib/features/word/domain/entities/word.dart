@@ -1,45 +1,62 @@
 import 'package:equatable/equatable.dart';
 
 class Word extends Equatable {
-  final String meaning;
-  final String category;
-  final String wordText;
-  final List<String> imageUrls;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool isBookmarked;
+  final String content;
+  final String type;
+  final String level;
+  final String pronunciation;
+  final String audioUs;
+  final String meaningEn;
+  final String example;
+  final List<String> synonym;
+  final List<String> antonym;
+  final String meaningVi;
+  final String definitionVi;
   final String id;
 
   const Word({
-    required this.meaning,
-    required this.category,
-    required this.wordText,
-    required this.imageUrls,
-    required this.createdAt,
-    required this.isBookmarked,
+    required this.content,
+    required this.type,
+    required this.level,
+    required this.pronunciation,
+    required this.audioUs,
+    required this.meaningEn,
+    required this.example,
+    required this.synonym,
+    required this.antonym,
+    required this.meaningVi,
+    required this.definitionVi,
     required this.id,
-    required this.updatedAt,
   });
 
-  Word.empty({
-    this.meaning = '',
-    this.category = '',
-    this.wordText = '',
-    this.imageUrls = const <String>[],
-    this.isBookmarked = false,
+  const Word.empty({
+    this.content = '',
+    this.type = '',
+    this.level = '',
+    this.pronunciation = '',
+    this.audioUs = '',
+    this.meaningEn = '',
+    this.example = '',
+    this.synonym = const [],
+    this.antonym = const [],
+    this.meaningVi = '',
+    this.definitionVi = '',
     this.id = '',
-  }) : createdAt = DateTime.now(),
-       updatedAt = DateTime.now();
+  });
 
   @override
-  List<Object> get props => [
-    meaning,
-    category,
-    wordText,
-    imageUrls,
-    createdAt,
-    updatedAt,
-    isBookmarked,
+  List<Object?> get props => [
+    content,
+    type,
+    level,
+    pronunciation,
+    audioUs,
+    meaningEn,
+    example,
+    synonym,
+    antonym,
+    meaningVi,
+    definitionVi,
     id,
   ];
 }

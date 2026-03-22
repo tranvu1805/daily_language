@@ -1,117 +1,97 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class WordModel extends Equatable {
-  final String? meaning;
-  final String? category;
-  final String? wordText;
-  final List<String>? imageUrls;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final bool? isBookmarked;
+  final String? word;
+  final String? type;
+  final String? level;
+  final String? pronunciation;
+  final String? audioUs;
+  final String? meaningEn;
+  final String? example;
+  final List<String>? synonym;
+  final List<String>? antonym;
+  final String? meaningVi;
+  final String? definitionVi;
   final String? id;
 
-  const WordModel({
-    this.meaning,
-    this.category,
-    this.wordText,
-    this.imageUrls,
-    this.createdAt,
-    this.updatedAt,
-    this.isBookmarked,
-    this.id,
-  });
-
-  const WordModel.empty({
-    this.meaning = '',
-    this.category = '',
-    this.wordText = '',
-    this.imageUrls = const <String>[],
-    this.createdAt,
-    this.updatedAt,
-    this.isBookmarked = false,
-    this.id = '',
-  });
-
-  const WordModel.toCreate({
-    required this.meaning,
-    required this.category,
-    required this.wordText,
-    this.imageUrls,
-    this.createdAt,
-    this.updatedAt,
-    this.isBookmarked,
-    this.id,
-  });
-
-  const WordModel.toUpdate({
-    required this.meaning,
-    required this.category,
-    required this.wordText,
-    this.imageUrls,
-    this.createdAt,
-    this.updatedAt,
-    this.isBookmarked,
-    required this.id,
-  });
-
+  WordModel({
+    this.word,
+    this.type,
+    this.level,
+    this.pronunciation,
+    this.audioUs,
+    this.meaningEn,
+    this.example,
+    this.synonym,
+    this.antonym,
+    this.meaningVi,
+    this.definitionVi,
+  }) : id = const Uuid().v4();
   Word toEntity() => Word(
-    meaning: meaning ?? '',
-    category: category ?? '',
-    wordText: wordText ?? '',
-    imageUrls: imageUrls ?? <String>[],
-    createdAt: createdAt ?? DateTime.now(),
-    updatedAt: updatedAt ?? DateTime.now(),
-    isBookmarked: isBookmarked ?? false,
+    content: word ?? '',
+    type: type ?? '',
+    level: level ?? '',
+    pronunciation: pronunciation ?? '',
+    audioUs: audioUs ?? '',
+    meaningEn: meaningEn ?? '',
+    example: example ?? '',
+    synonym: synonym ?? [],
+    antonym: antonym ?? [],
+    meaningVi: meaningVi ?? '',
+    definitionVi: definitionVi ?? '',
     id: id ?? '',
   );
-
-  Map<String, dynamic> toCreateJson() {
-    final map = <String, dynamic>{};
-    map['meaning'] = meaning;
-    map['category'] = category;
-    map['wordText'] = wordText;
-    map['imageUrls'] = imageUrls;
-    map['isBookmarked'] = isBookmarked;
-    map['createdAt'] = FieldValue.serverTimestamp();
-    return map;
+  factory WordModel.fromJson(Map<String, dynamic> json) {
+    return WordModel(
+      word: json['word'] as String?,
+      type: json['type'] as String?,
+      level: json['level'] as String?,
+      pronunciation: json['pronunciation'] as String?,
+      audioUs: json['audio_us'] as String?,
+      meaningEn: json['meaning_en'] as String?,
+      example: json['example'] as String?,
+      synonym: (json['synonym'] as List? ?? [])
+          .map((e) => e as String)
+          .toList(),
+      antonym: (json['antonym'] as List<dynamic>? ?? [])
+          .map((e) => e as String)
+          .toList(),
+      meaningVi: json['meaning_vi'] as String?,
+      definitionVi: json['definition_vi'] as String?,
+    );
   }
 
-  Map<String, dynamic> toUpdateJson() {
-    final map = <String, dynamic>{};
-    map['meaning'] = meaning;
-    map['category'] = category;
-    map['wordText'] = wordText;
-    map['imageUrls'] = imageUrls;
-    map['isBookmarked'] = isBookmarked;
-    map['updatedAt'] = FieldValue.serverTimestamp();
-    return map;
+  Map<String, dynamic> toJson() {
+    return {
+      'word': word,
+      'type': type,
+      'level': level,
+      'pronunciation': pronunciation,
+      'audio_us': audioUs,
+      'meaning_en': meaningEn,
+      'example': example,
+      'synonym': synonym,
+      'antonym': antonym,
+      'meaning_vi': meaningVi,
+      'definition_vi': definitionVi,
+    };
   }
-
-  WordModel.fromJson(dynamic json)
-    : this(
-        meaning: json['meaning'] as String?,
-        category: json['category'] as String?,
-        wordText: json['wordText'] as String?,
-        imageUrls: (json['imageUrls'] as List<dynamic>?)
-            ?.map((e) => e as String)
-            .toList(),
-        createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
-        updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
-        isBookmarked: json['isBookmarked'] as bool?,
-        id: json['id'] as String?,
-      );
 
   @override
   List<Object?> get props => [
-    meaning,
-    category,
-    wordText,
-    imageUrls,
-    createdAt,
-    updatedAt,
-    isBookmarked,
+    word,
+    type,
+    level,
+    pronunciation,
+    audioUs,
+    meaningEn,
+    example,
+    synonym,
+    antonym,
+    meaningVi,
+    definitionVi,
     id,
   ];
 }

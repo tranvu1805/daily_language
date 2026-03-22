@@ -8,7 +8,7 @@ sealed class WordsEvent extends Equatable {
 }
 
 final class WordsRequested extends WordsEvent {
-  final GetWordsUseCaseParams param;
+  final GetDictionaryWordsUseCaseParams param;
 
   const WordsRequested({required this.param});
 
@@ -16,10 +16,10 @@ final class WordsRequested extends WordsEvent {
   List<Object> get props => [param];
 }
 
-final class WordsRefreshed extends WordsEvent {
-  final GetWordsUseCaseParams param;
+final class WordsLoadMore extends WordsEvent {
+  final GetDictionaryWordsUseCaseParams param;
 
-  const WordsRefreshed({required this.param});
+  const WordsLoadMore({required this.param});
 
   @override
   List<Object> get props => [param];

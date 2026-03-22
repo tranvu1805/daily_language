@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 class Assets {
   Assets._();
 
+  static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
 }
 
@@ -12,6 +13,16 @@ class $AssetsIconsGen {
   const $AssetsIconsGen();
 
   final AssetGenImage logo = const AssetGenImage('assets/icons/logo.png');
+}
+
+class $AssetsDataGen {
+  const $AssetsDataGen();
+
+  final String oxford3000A1 = 'assets/data/oxford3000_a1.json';
+  final String oxford3000A2 = 'assets/data/oxford3000_a2.json';
+  final String oxford3000B1 = 'assets/data/oxford3000_b1.json';
+  final String oxford3000B2 = 'assets/data/oxford3000_b2.json';
+  final String oxford3000C1 = 'assets/data/oxford3000_c1.json';
 }
 
 class AssetGenImage {

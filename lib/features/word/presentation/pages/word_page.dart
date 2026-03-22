@@ -1,172 +1,140 @@
+import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
-import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
-import 'package:daily_language/features/word/domain/domain.dart';
-import 'package:daily_language/features/word/presentation/presentation.dart';
+import 'package:daily_language/features/word/presentation/models/level_data.dart';
+import 'package:daily_language/features/word/presentation/widgets/level_card_widget.dart';
+import 'package:daily_language/features/word/presentation/widgets/my_words_topic_card_widget.dart';
+import 'package:daily_language/features/word/presentation/widgets/review_card_widget.dart';
+import 'package:daily_language/features/word/presentation/widgets/word_topic_header_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class WordPage extends StatefulWidget {
+class WordPage extends StatelessWidget {
   const WordPage({super.key});
 
   @override
-  State<WordPage> createState() => _WordPageState();
-}
-
-class _WordPageState extends State<WordPage> {
-  late final ScrollController _scrollController;
-
-  Account get _account => getAccountFromState(context);
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    _loadWords();
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      _loadMore();
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= maxScroll - 200;
-  }
-
-  void _loadWords() {
-    context.read<WordsBloc>().add(
-      WordsRequested(param: GetWordsUseCaseParams(userId: _account.uid)),
-    );
-  }
-
-  void _loadMore() {
-    final state = context.read<WordsBloc>().state;
-    context.read<WordsBloc>().add(
-      WordsRequested(
-        param: GetWordsUseCaseParams(
-          userId: _account.uid,
-          lastDocId: state.lastDocId,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _refresh() async {
-    context.read<WordsBloc>().add(
-      WordsRefreshed(param: GetWordsUseCaseParams(userId: _account.uid)),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      backgroundColor: const Color(0xfff9fafb),
+      backgroundColor: ColorApp.linenWhite,
       body: SafeArea(
-        child: RefreshIndicator(
-          color: const Color(0xff6366f1),
-          onRefresh: _refresh,
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              const SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    WordPageHeaderWidget(),
-                    WordAutoExtractWidget(),
-                    WordStatisticsWidget(),
-                  ],
+        child: CustomScrollView(
+          slivers: [
+            // ── Header ──────────────────────────────────────────────────
+            const SliverToBoxAdapter(child: WordTopicHeaderWidget()),
+            // ── Section title ────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                child: Text(
+                  'My Learning',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: ColorApp.textPrimary,
+                  ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: WordListHeaderWidget(
-                  onAddPressed: () {
-                    context.push('${Routes.words}/${Routes.wordsAdd}');
-                  },
+            ),
+            // ── Review Card ─────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: ReviewCardWidget(
+                onTap: () => context.push(
+                  '${Routes.words}/${Routes.wordsReview}',
                 ),
               ),
-              BlocBuilder<WordsBloc, WordsState>(
-                builder: (context, state) {
-                  if (state.status == WordsStatus.loading) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: Center(child: AppCircularProgressIndicator()),
-                      ),
-                    );
-                  }
-                  if (state.status == WordsStatus.failure) {
-                    return SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: AppRetryWidget(
-                          message: state.error,
-                          onRetry: _refresh,
-                        ),
-                      ),
-                    );
-                  }
-                  if (state.status == WordsStatus.success) {
-                    if (state.words.isEmpty) {
-                      return const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.all(32.0),
-                          child: Center(child: Text('No words added yet.')),
-                        ),
-                      );
-                    }
-                    return SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      sliver: SliverList.separated(
-                        itemCount: state.hasReachedMax
-                            ? state.words.length
-                            : state.words.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index >= state.words.length) {
-                            return const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: AppCircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          final word = state.words[index];
-                          return WordCard(
-                            word: word,
-                            onTap: () {
-                              // TODO: Navigate to word details
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 12),
-                      ),
-                    );
-                  }
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                },
+            ),
+            // ── My Words card (full width) ───────────────────────────────
+            SliverToBoxAdapter(
+              child: MyWordsTopicCardWidget(
+                onTap: () => context.push(
+                  '${Routes.words}/${Routes.wordsLevel}',
+                  extra: 'my_words',
+                ),
               ),
-            ],
-          ),
+            ),
+            // ── Section title ────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 28, 20, 12),
+                child: Text(
+                  'Oxford Word Lists',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: ColorApp.textPrimary,
+                  ),
+                ),
+              ),
+            ),
+            // ── Level grid (A1 → C1) ─────────────────────────────────────
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              sliver: SliverGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 1,
+                children: _levels.map((level) {
+                  return LevelCardWidget(
+                    level: level,
+                    onTap: () => context.push(
+                      '${Routes.words}/${Routes.wordsLevel}',
+                      extra: level.id,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          ],
         ),
       ),
     );
   }
 }
+
+const List<LevelData> _levels = [
+  LevelData(
+    id: 'A1',
+    label: 'A1',
+    subtitle: 'Beginner',
+    wordCount: '500 words',
+    color: ColorApp.levelA1,
+    bgColor: ColorApp.levelA1Bg,
+    icon: Icons.emoji_nature_rounded,
+  ),
+  LevelData(
+    id: 'A2',
+    label: 'A2',
+    subtitle: 'Elementary',
+    wordCount: '700 words',
+    color: ColorApp.levelA2,
+    bgColor: ColorApp.levelA2Bg,
+    icon: Icons.local_florist_rounded,
+  ),
+  LevelData(
+    id: 'B1',
+    label: 'B1',
+    subtitle: 'Intermediate',
+    wordCount: '1200 words',
+    color: ColorApp.levelB1,
+    bgColor: ColorApp.levelB1Bg,
+    icon: Icons.bolt_rounded,
+  ),
+  LevelData(
+    id: 'B2',
+    label: 'B2',
+    subtitle: 'Upper-Intermediate',
+    wordCount: '1500 words',
+    color: ColorApp.levelB2,
+    bgColor: ColorApp.levelB2Bg,
+    icon: Icons.local_fire_department_rounded,
+  ),
+  LevelData(
+    id: 'C1',
+    label: 'C1',
+    subtitle: 'Advanced',
+    wordCount: '1000 words',
+    color: ColorApp.levelC1,
+    bgColor: ColorApp.levelC1Bg,
+    icon: Icons.auto_awesome_rounded,
+  ),
+];

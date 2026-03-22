@@ -115,31 +115,57 @@ class DI {
   }
 
   void _initWordFeature() {
-    sl.registerLazySingleton<WordRemoteDataSource>(
-      () => WordRemoteDataSourceImpl(sl()),
+    sl.registerLazySingleton<AssetLoader>(() => DefaultAssetLoader());
+    sl.registerLazySingleton<UserWordRemoteDataSource>(
+      () => UserWordRemoteDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<WordLocalDataSource>(
+      () => WordLocalDataSourceImpl(assetLoader: sl()),
     );
     sl.registerLazySingleton<WordRepos>(
-      () => WordReposImpl(remoteDataSource: sl()),
+      () => WordReposImpl(remoteDataSource: sl(), localDataSource: sl()),
     );
-    sl.registerLazySingleton<GetWordUseCase>(() => GetWordUseCase(sl()));
-    sl.registerLazySingleton<GetWordsUseCase>(() => GetWordsUseCase(sl()));
-    sl.registerLazySingleton<CreateWordUseCase>(
-      () => CreateWordUseCase(sl()),
+    sl.registerLazySingleton<GetUserWordUseCase>(
+      () => GetUserWordUseCase(sl()),
     );
-    sl.registerLazySingleton<UpdateWordUseCase>(
-      () => UpdateWordUseCase(sl()),
+    sl.registerLazySingleton<GetUserWordsUseCase>(
+      () => GetUserWordsUseCase(sl()),
     );
-    sl.registerLazySingleton<DeleteWordUseCase>(
-      () => DeleteWordUseCase(sl()),
+    sl.registerLazySingleton<GetDictionaryWordsUseCase>(
+      () => GetDictionaryWordsUseCase(sl()),
     );
-    sl.registerFactory<WordBloc>(
-      () => WordBloc(
-        getWordUseCase: sl(),
-        createWordUseCase: sl(),
-        updateWordUseCase: sl(),
-        deleteWordUseCase: sl(),
+    sl.registerLazySingleton<CreateUserWordUseCase>(
+      () => CreateUserWordUseCase(sl()),
+    );
+    sl.registerLazySingleton<UpdateUserWordUseCase>(
+      () => UpdateUserWordUseCase(sl()),
+    );
+    sl.registerLazySingleton<DeleteUserWordUseCase>(
+      () => DeleteUserWordUseCase(sl()),
+    );
+    sl.registerLazySingleton<GetDictionaryWordByIdUseCase>(
+      () => GetDictionaryWordByIdUseCase(sl()),
+    );
+    sl.registerFactory<UserWordBloc>(
+      () => UserWordBloc(
+        getUserWordUseCase: sl(),
+        createUserWordUseCase: sl(),
+        updateUserWordUseCase: sl(),
+        deleteUserWordUseCase: sl(),
       ),
     );
-    sl.registerFactory<WordsBloc>(() => WordsBloc(getWordsUseCase: sl()));
+    sl.registerFactory<UserWordsBloc>(
+      () => UserWordsBloc(getUserWordsUseCase: sl()),
+    );
+    sl.registerFactory<WordsBloc>(
+      () => WordsBloc(getDictionaryWordsUseCase: sl()),
+    );
+    sl.registerFactory<ReviewWordBloc>(
+      () => ReviewWordBloc(
+        getUserWordsUseCase: sl(),
+        getDictionaryWordByIdUseCase: sl(),
+        updateUserWordUseCase: sl(),
+      ),
+    );
   }
 }

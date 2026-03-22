@@ -1,4 +1,3 @@
-import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:flutter/material.dart';
 
 class WordPageHeaderWidget extends StatelessWidget {

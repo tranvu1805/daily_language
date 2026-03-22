@@ -17,23 +17,10 @@ class WordAddPage extends StatefulWidget {
 
 class _WordAddPageState extends State<WordAddPage> {
   late final TextEditingController _wordTextController;
-  String _selectedEmotion = '';
-  String _selectedType = '';
   late final stt.SpeechToText _speech;
-  bool _isListening = false;
   String _sttLocale = 'vi_VN';
 
   Account get _account => getAccountFromState(context);
-
-  static const _meanings = [
-    '😊 Happy',
-    '😢 Sad',
-    '😡 Angry',
-    '😨 Scared',
-    '😌 Calm',
-    '🤔 Thinking',
-  ];
-  static const _categorys = ['Daily', 'Study', 'Work', 'Travel', 'Food', 'Other'];
 
   @override
   void initState() {
@@ -52,17 +39,17 @@ class _WordAddPageState extends State<WordAddPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return BlocListener<WordBloc, WordState>(
+    return BlocListener<UserWordBloc, UserWordState>(
       listener: (context, state) {
-        if (state is WordCreateSuccess) {
-          context.read<WordsBloc>().add(
-            WordsRefreshed(
-              param: GetWordsUseCaseParams(userId: _account.uid),
+        if (state is UserWordCreateSuccess) {
+          context.read<UserWordsBloc>().add(
+            UserWordsRefreshed(
+              param: GetUserWordsUseCaseParams(userId: _account.uid, limit: 20)
             ),
           );
           context.pop();
         }
-        if (state is WordFailure) {
+        if (state is UserWordFailure) {
           SnackBarHelper.showFailure(context, state.error);
         }
       },
@@ -81,9 +68,9 @@ class _WordAddPageState extends State<WordAddPage> {
           ),
           centerTitle: true,
           actions: [
-            BlocBuilder<WordBloc, WordState>(
+            BlocBuilder<UserWordBloc, UserWordState>(
               builder: (context, state) {
-                final isLoading = state is WordInProgress;
+                final isLoading = state is UserWordInProgress;
                 return GestureDetector(
                   onTap: isLoading ? null : _onSave,
                   child: Padding(
@@ -114,45 +101,11 @@ class _WordAddPageState extends State<WordAddPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Emotion Section
-              Text('How are you feeling?', style: textTheme.labelLarge),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _meanings.map((meaning) {
-                  final isSelected = _selectedEmotion == meaning;
-                  return EmotionChip(
-                    label: meaning,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedEmotion = meaning),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
-
-              // Type Section
-              Text('Category', style: textTheme.labelLarge),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _categorys.map((category) {
-                  final isSelected = _selectedType == category;
-                  return TypeChip(
-                    label: category,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedType = category),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
-
-              // Content Section
+              // Word Input Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Write your thoughts', style: textTheme.labelLarge),
+                  Text('Enter a word', style: textTheme.labelLarge),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -195,10 +148,9 @@ class _WordAddPageState extends State<WordAddPage> {
                 ),
                 child: TextField(
                   controller: _wordTextController,
-                  maxLines: 8,
                   style: textTheme.bodySmall,
                   decoration: InputDecoration(
-                    hintText: 'What happened today?',
+                    hintText: 'Type a word to add...',
                     hintStyle: textTheme.bodySmall?.copyWith(
                       color: ColorApp.taupeGray,
                     ),
@@ -221,17 +173,24 @@ class _WordAddPageState extends State<WordAddPage> {
   void _onSave() {
     final wordText = _wordTextController.text.trim();
     if (wordText.isEmpty) {
-      SnackBarHelper.showFailure(context, 'Please write something');
+      SnackBarHelper.showFailure(context, 'Please enter a word');
       return;
     }
 
-    context.read<WordBloc>().add(
-      WordCreated(
-        param: CreateWordUseCaseParams(
+    final now = DateTime.now();
+    context.read<UserWordBloc>().add(
+      UserWordCreated(
+        param: CreateUserWordUseCaseParams(
           userId: _account.uid,
-          meaning: _selectedEmotion,
-          category: _selectedType,
-          wordText: wordText,
+          wordId: wordText.toLowerCase(),
+          word: wordText,
+          repetitionCount: 0,
+          wrongCount: 0,
+          stage: 0,
+          easeFactor: 2.5,
+          interval: 1,
+          lastReviewed: now,
+          nextReview: now.add(const Duration(days: 1)),
         ),
       ),
     );
@@ -239,7 +198,6 @@ class _WordAddPageState extends State<WordAddPage> {
 
   Future<void> _onMicPressed() async {
     DialogHelper.showMicListeningDialog(context: context);
-    setState(() { _isListening = true; });
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
@@ -247,10 +205,9 @@ class _WordAddPageState extends State<WordAddPage> {
           if (result.finalResult) {
             setState(() {
               _wordTextController.text = result.recognizedWords;
-              _isListening = false;
             });
             _speech.stop();
-            context.pop();
+            if (mounted) context.pop();
           }
         },
         listenFor: const Duration(seconds: 30),
@@ -260,9 +217,10 @@ class _WordAddPageState extends State<WordAddPage> {
         ),
       );
     } else {
-      setState(() { _isListening = false; });
-      SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
-      context.pop();
+      if (mounted) {
+        SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
+        context.pop();
+      }
     }
   }
 }

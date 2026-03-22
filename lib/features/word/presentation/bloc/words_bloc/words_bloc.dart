@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:daily_language/core/constants/app.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,54 +8,58 @@ part 'words_event.dart';
 part 'words_state.dart';
 
 class WordsBloc extends Bloc<WordsEvent, WordsState> {
-  final GetWordsUseCase _getWordsUseCase;
+  final GetDictionaryWordsUseCase _getDictionaryWordsUseCase;
 
-  WordsBloc({required GetWordsUseCase getWordsUseCase})
-    : _getWordsUseCase = getWordsUseCase,
+  WordsBloc({required GetDictionaryWordsUseCase getDictionaryWordsUseCase})
+    : _getDictionaryWordsUseCase = getDictionaryWordsUseCase,
       super(const WordsState()) {
-    on<WordsRequested>(_onRequested);
-    on<WordsRefreshed>(_onRefreshed);
+    on<WordsRequested>(_onWordRequested);
+    on<WordsLoadMore>(_onWordsLoadMore);
   }
 
-  Future<void> _onRequested(
+  Future<void> _onWordRequested(
     WordsRequested event,
     Emitter<WordsState> emit,
   ) async {
-    if (state.hasReachedMax || state.status == WordsStatus.loading) return;
-    if (state.status == WordsStatus.initial) {
-      emit(
-        state.copyWith(
-          status: WordsStatus.loading,
-          action: WordsAction.request,
-        ),
-      );
-    }
-    final result = await _getWordsUseCase(event.param);
+    emit(state.copyWith(status: WordStatus.loading, words: [], hasReachedMax: false));
+
+    final result = await _getDictionaryWordsUseCase(event.param);
     result.fold(
       (failure) => emit(
-        state.copyWith(
-          status: WordsStatus.failure,
-          error: failure.message,
-          action: WordsAction.request,
-        ),
+        state.copyWith(error: failure.message, status: WordStatus.failure),
       ),
-      (words) => emit(
-        state.copyWith(
-          status: WordsStatus.success,
-          words: [...state.words, ...words],
-          lastDocId: words.isNotEmpty ? words.last.id : state.lastDocId,
-          hasReachedMax: words.length < pageSize,
-          action: WordsAction.request,
-        ),
-      ),
+      (words) {
+        emit(state.copyWith(
+          words: words,
+          status: WordStatus.success,
+          hasReachedMax: words.length < event.param.limit,
+        ));
+      },
     );
   }
 
-  Future<void> _onRefreshed(
-    WordsRefreshed event,
+  Future<void> _onWordsLoadMore(
+    WordsLoadMore event,
     Emitter<WordsState> emit,
   ) async {
-    emit(const WordsState());
-    add(WordsRequested(param: event.param));
+    if (state.hasReachedMax) return;
+
+    emit(state.copyWith(status: WordStatus.loading));
+
+    final result = await _getDictionaryWordsUseCase(event.param);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(error: failure.message, status: WordStatus.failure),
+      ),
+      (words) {
+        final List<Word> updatedWords = List.of(state.words)..addAll(words);
+
+        emit(state.copyWith(
+          words: updatedWords,
+          status: WordStatus.success,
+          hasReachedMax: words.length < event.param.limit,
+        ));
+      },
+    );
   }
 }
