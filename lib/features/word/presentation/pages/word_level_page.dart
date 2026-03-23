@@ -153,39 +153,60 @@ class _WordLevelPageState extends State<WordLevelPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorApp.linenWhite,
-      body: SafeArea(
-        child: RefreshIndicator(
-          color: _accentColor,
-          onRefresh: _refresh,
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverToBoxAdapter(
-                child: WordLevelPageHeaderWidget(
-                  title: _title,
-                  subtitle: _subtitle,
-                  accentColor: _accentColor,
-                  onBack: () => context.pop(),
-                  onAdd: _isMyWords
-                      ? () => context.push(
-                            '${Routes.words}/${Routes.wordsAdd}',
-                          )
-                      : null,
+    return BlocListener<UserWordBloc, UserWordState>(
+      listener: (context, state) {
+        if (state is UserWordCreateSuccess) {
+          SnackBarHelper.showSuccess(
+            context,
+            'Added "${state.word}" to your words',
+          );
+          // Global refresh of UserWordsBloc to ensure My Words list is updated everywhere
+          context.read<UserWordsBloc>().add(
+                UserWordsRefreshed(
+                  param: GetUserWordsUseCaseParams(
+                    userId: _account.uid,
+                    limit: pageSize,
+                  ),
                 ),
-              ),
-              if (_isMyWords)
-                MyWordsListWidget(
-                  accentColor: _accentColor,
-                  onRefresh: _refresh,
-                )
-              else
-                OxfordWordsListWidget(
-                  topic: widget.topic,
-                  accentColor: _accentColor,
+              );
+        } else if (state is UserWordFailure) {
+          SnackBarHelper.showFailure(context, state.error);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: ColorApp.linenWhite,
+        body: SafeArea(
+          child: RefreshIndicator(
+            color: _accentColor,
+            onRefresh: _refresh,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: WordLevelPageHeaderWidget(
+                    title: _title,
+                    subtitle: _subtitle,
+                    accentColor: _accentColor,
+                    onBack: () => context.pop(),
+                    onAdd: _isMyWords
+                        ? () => context.push(
+                              '${Routes.words}/${Routes.wordsAdd}',
+                            )
+                        : null,
+                  ),
                 ),
-            ],
+                if (_isMyWords)
+                  MyWordsListWidget(
+                    accentColor: _accentColor,
+                    onRefresh: _refresh,
+                  )
+                else
+                  OxfordWordsListWidget(
+                    topic: widget.topic,
+                    accentColor: _accentColor,
+                  ),
+              ],
+            ),
           ),
         ),
       ),

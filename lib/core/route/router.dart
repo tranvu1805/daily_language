@@ -87,12 +87,21 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
                   ),
                   GoRoute(
                     path: Routes.wordsLevelDetail,
-                    builder: (context, state) =>
-                        OxfordWordDetailPage(word: state.extra as Word),
-                  ),
-                  GoRoute(
-                    path: Routes.wordsAdd,
-                    builder: (context, state) => const WordAddPage(),
+                    builder: (context, state) {
+                      final extra = state.extra;
+                      if (extra is Word) {
+                        return OxfordWordDetailPage(word: extra);
+                      }
+                      if (extra is Map<String, dynamic>) {
+                        return OxfordWordDetailPage(
+                          word: extra['word'] as Word,
+                          showAddButton: extra['showAddButton'] as bool? ?? true,
+                        );
+                      }
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid Extra')),
+                      );
+                    },
                   ),
                   GoRoute(
                     path: Routes.wordsReview,
@@ -172,12 +181,6 @@ class AppRouter {
               GoRoute(
                 path: Routes.words,
                 builder: (context, state) => const WordPage(),
-                routes: [
-                  GoRoute(
-                    path: Routes.wordsAdd,
-                    builder: (context, state) => const WordAddPage(),
-                  ),
-                ],
               ),
             ],
           ),

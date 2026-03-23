@@ -57,9 +57,10 @@ class WordReposImpl implements WordRepos {
   @override
   ResultFuture<Word> getDictionaryWordById({
     required String id,
+    String? level,
   }) {
     return ApiService.handle(() async {
-      final model = await _localDataSource.getWordByIdFromAllAssets(id: id);
+      final model = await _localDataSource.getWordByIdFromAllAssets(id: id, level: level);
       if (model == null) {
         throw Exception('Word not found in dictionary');
       }

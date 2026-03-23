@@ -18,6 +18,7 @@ class CreateUserWordUseCaseParams extends Equatable {
   final String userId;
   final String wordId;
   final String word;
+  final String level;
   final int repetitionCount;
   final int wrongCount;
   final int stage;
@@ -31,6 +32,7 @@ class CreateUserWordUseCaseParams extends Equatable {
     required this.wordId,
     required this.word,
     required this.repetitionCount,
+    required this.level,
     required this.wrongCount,
     required this.stage,
     required this.lastReviewed,
@@ -46,6 +48,7 @@ class CreateUserWordUseCaseParams extends Equatable {
     word,
     repetitionCount,
     wrongCount,
+    level,
     stage,
     lastReviewed,
     nextReview,

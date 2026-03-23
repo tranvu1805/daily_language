@@ -90,6 +90,16 @@ class UserWordRemoteDataSourceImpl implements UserWordRemoteDataSource {
     required String userId,
     required UserWordModel word,
   }) async {
+    final snapshot = await _userWordListCollection(userId)
+        .where('wordId', isEqualTo: word.wordId)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      throwServerException(
+        message: 'Word already exists in your collection',
+        statusCode: 400,
+      );
+    }
     await _userWordListCollection(userId).add(word.toCreateJson());
   }
 

@@ -22,6 +22,7 @@ class ServerFailure extends Failure {
     final message = switch (exception.message.toLowerCase()) {
       'not found' => 'Dữ liệu không tồn tại',
       'google sign-in failed' => 'Đăng nhập Google thất bại',
+      'word already exists in your collection' => 'Từ này đã có trong bộ sưu tập của bạn',
       _ => 'Lỗi không xác định: ${exception.message}',
     };
     return ServerFailure(message: message, statusCode: exception.statusCode);

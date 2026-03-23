@@ -5,6 +5,7 @@ class UserWord extends Equatable {
   final String userId;
   final String wordId;
   final String word;
+  final String level;
   final int repetitionCount;
   final int wrongCount;
   final int stage;
@@ -17,6 +18,7 @@ class UserWord extends Equatable {
     required this.id,
     required this.userId,
     required this.wordId,
+    required this.level,
     required this.repetitionCount,
     required this.wrongCount,
     required this.stage,
@@ -35,6 +37,7 @@ class UserWord extends Equatable {
     this.wrongCount = 0,
     this.word = '',
     this.stage = 0,
+    this.level = '',
     DateTime? lastReviewed,
     DateTime? nextReview,
     this.easeFactor = 2.5,
@@ -47,6 +50,7 @@ class UserWord extends Equatable {
     String? userId,
     String? wordId,
     String? word,
+    String? level,
     int? repetitionCount,
     int? wrongCount,
     int? stage,
@@ -60,6 +64,7 @@ class UserWord extends Equatable {
       userId: userId ?? this.userId,
       wordId: wordId ?? this.wordId,
       word: word ?? this.word,
+      level: level ?? this.level,
       repetitionCount: repetitionCount ?? this.repetitionCount,
       wrongCount: wrongCount ?? this.wrongCount,
       stage: stage ?? this.stage,
@@ -75,6 +80,7 @@ class UserWord extends Equatable {
     id,
     userId,
     wordId,
+    level,
     repetitionCount,
     wrongCount,
     stage,

@@ -14,8 +14,13 @@ import 'package:path_provider/path_provider.dart';
 
 class OxfordWordDetailPage extends StatefulWidget {
   final Word word;
+  final bool showAddButton;
 
-  const OxfordWordDetailPage({super.key, required this.word});
+  const OxfordWordDetailPage({
+    super.key,
+    required this.word,
+    this.showAddButton = true,
+  });
 
   @override
   State<OxfordWordDetailPage> createState() => _OxfordWordDetailPageState();
@@ -72,6 +77,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
         param: CreateUserWordUseCaseParams(
           userId: account.uid,
           wordId: wordId,
+          level: widget.word.level,
           word: widget.word.content,
           repetitionCount: 0,
           wrongCount: 0,
@@ -79,7 +85,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
           easeFactor: 2.5,
           interval: 1,
           lastReviewed: now,
-          nextReview: now.add(const Duration(days: 1)),
+          nextReview: now.add(const Duration(hours: 8)),
         ),
       ),
     );
@@ -253,39 +259,40 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
               ),
 
               // Add Button
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, -4),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: _addWord,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorApp.primary,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
+              if (widget.showAddButton)
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
                   ),
-                  icon: const Icon(Icons.add_circle_rounded),
-                  label: Text(
-                    'Add to My Words',
-                    style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  child: ElevatedButton.icon(
+                    onPressed: _addWord,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorApp.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 56),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 0,
+                    ),
+                    icon: const Icon(Icons.add_circle_rounded),
+                    label: Text(
+                      'Add to My Words',
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

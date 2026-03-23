@@ -22,7 +22,7 @@ class OxfordWordsListWidget extends StatelessWidget {
       builder: (context, state) {
         if (state.status == WordStatus.loading && state.words.isEmpty) {
           return const SliverFillRemaining(
-            child: Center(child: CircularProgressIndicator()),
+            child: AppCircularProgressIndicator(),
           );
         } else if (state.status == WordStatus.failure && state.words.isEmpty) {
           return SliverFillRemaining(
@@ -49,10 +49,7 @@ class OxfordWordsListWidget extends StatelessWidget {
                 );
               }
               final word = state.words[index];
-              return OxfordWordCard(
-                word: word,
-                accentColor: accentColor,
-              );
+              return OxfordWordCard(word: word, accentColor: accentColor);
             },
             separatorBuilder: (context, index) {
               if (index == state.words.length - 1 && showLoader) {
@@ -70,10 +67,7 @@ class OxfordWordsListWidget extends StatelessWidget {
   void _refresh(BuildContext context) {
     context.read<WordsBloc>().add(
       WordsRequested(
-        param: GetDictionaryWordsUseCaseParams(
-          level: topic,
-          limit: pageSize,
-        ),
+        param: GetDictionaryWordsUseCaseParams(level: topic, limit: pageSize),
       ),
     );
   }

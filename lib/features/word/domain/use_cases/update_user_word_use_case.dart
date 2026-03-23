@@ -19,6 +19,7 @@ class UpdateUserWordUseCaseParams extends Equatable {
   final String userId;
   final String wordId;
   final String word;
+  final String level;
   final int repetitionCount;
   final int wrongCount;
   final int stage;
@@ -39,6 +40,7 @@ class UpdateUserWordUseCaseParams extends Equatable {
     required this.nextReview,
     required this.easeFactor,
     required this.interval,
+    required this.level,
   });
 
   @override
@@ -46,6 +48,7 @@ class UpdateUserWordUseCaseParams extends Equatable {
     id,
     userId,
     wordId,
+    level,
     word,
     repetitionCount,
     wrongCount,

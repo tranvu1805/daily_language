@@ -11,14 +11,15 @@ class GetDictionaryWordByIdUseCase
 
   @override
   ResultFuture<Word> call(GetDictionaryWordByIdUseCaseParams params) async =>
-      await _repository.getDictionaryWordById(id: params.id);
+      await _repository.getDictionaryWordById(id: params.id, level: params.level);
 }
 
 class GetDictionaryWordByIdUseCaseParams extends Equatable {
   final String id;
+  final String? level;
 
-  const GetDictionaryWordByIdUseCaseParams({required this.id});
+  const GetDictionaryWordByIdUseCaseParams({required this.id, this.level});
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, level];
 }

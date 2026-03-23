@@ -17,6 +17,7 @@ abstract interface class WordLocalDataSource {
 
   Future<WordModel?> getWordByIdFromAllAssets({
     required String id,
+    String? level,
   });
 }
 
@@ -74,10 +75,15 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
   @override
   Future<WordModel?> getWordByIdFromAllAssets({
     required String id,
+    String? level,
   }) async {
+    if (level != null && level.isNotEmpty && level != 'my_words') {
+      return getWordFromAssets(level: level, id: id);
+    }
+
     final levels = ['a1', 'a2', 'b1', 'b2', 'c1'];
-    for (final level in levels) {
-      final assetPath = 'assets/data/oxford3000_$level.json';
+    for (final l in levels) {
+      final assetPath = 'assets/data/oxford3000_$l.json';
       try {
         final jsonStr = await _assetLoader.loadString(assetPath);
         final List<dynamic> jsonList = jsonDecode(jsonStr);

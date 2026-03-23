@@ -11,7 +11,14 @@ final class UserWordInitial extends UserWordState {}
 
 final class UserWordInProgress extends UserWordState {}
 
-final class UserWordCreateSuccess extends UserWordState {}
+final class UserWordCreateSuccess extends UserWordState {
+  final String word;
+
+  const UserWordCreateSuccess({required this.word});
+
+  @override
+  List<Object> get props => [word];
+}
 
 final class UserWordUpdateSuccess extends UserWordState {}
 

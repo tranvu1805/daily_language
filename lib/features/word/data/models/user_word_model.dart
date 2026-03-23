@@ -7,6 +7,7 @@ class UserWordModel extends Equatable {
   final String? userId;
   final String? wordId;
   final String? word;
+  final String? level;
   final int? repetitionCount;
   final int? wrongCount;
   final int? stage;
@@ -21,6 +22,7 @@ class UserWordModel extends Equatable {
     this.wordId,
     this.repetitionCount,
     this.wrongCount,
+    this.level,
     this.word,
     this.stage,
     this.lastReviewed,
@@ -33,6 +35,7 @@ class UserWordModel extends Equatable {
     id: id ?? '',
     userId: userId ?? '',
     wordId: wordId ?? '',
+    level: level ?? '',
     repetitionCount: repetitionCount ?? 0,
     wrongCount: wrongCount ?? 0,
     stage: stage ?? 0,
@@ -56,6 +59,7 @@ class UserWordModel extends Equatable {
       easeFactor: json['easeFactor'] as num?,
       interval: json['interval'] as num?,
       word: json['word'] as String?,
+      level: json['level'] as String?,
     );
   }
 
@@ -71,6 +75,7 @@ class UserWordModel extends Equatable {
       'easeFactor': easeFactor,
       'interval': interval,
       'word': word,
+      'level': level,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
@@ -89,6 +94,7 @@ class UserWordModel extends Equatable {
       'easeFactor': easeFactor,
       'interval': interval,
       'word': word,
+      'level': level,
       'updatedAt': FieldValue.serverTimestamp(),
     };
   }
@@ -103,6 +109,7 @@ class UserWordModel extends Equatable {
       userId: params.userId,
       wordId: params.wordId,
       word: params.word,
+      level: params.level,
       repetitionCount: params.repetitionCount,
       wrongCount: params.wrongCount,
       stage: params.stage,
@@ -118,6 +125,7 @@ class UserWordModel extends Equatable {
       id: params.id,
       userId: params.userId,
       wordId: params.wordId,
+      level: params.level,
       word: params.word,
       repetitionCount: params.repetitionCount,
       wrongCount: params.wrongCount,
@@ -138,6 +146,7 @@ class UserWordModel extends Equatable {
     id,
     userId,
     wordId,
+    level,
     repetitionCount,
     wrongCount,
     stage,

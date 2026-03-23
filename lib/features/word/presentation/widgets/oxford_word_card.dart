@@ -23,7 +23,10 @@ class OxfordWordCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('${Routes.words}/${Routes.wordsLevelDetail}', extra: word);
+        context.push(
+          '${Routes.words}/${Routes.wordsLevelDetail}',
+          extra: word,
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -90,12 +93,12 @@ class OxfordWordCard extends StatelessWidget {
                 final account = getAccountFromState(context);
                 final now = DateTime.now();
                 final wordId = word.id.toLowerCase().replaceAll(' ', '_');
-
                 context.read<UserWordBloc>().add(
                   UserWordCreated(
                     param: CreateUserWordUseCaseParams(
                       userId: account.uid,
                       wordId: wordId,
+                      level: word.level,
                       word: word.content,
                       repetitionCount: 0,
                       wrongCount: 0,
@@ -103,14 +106,9 @@ class OxfordWordCard extends StatelessWidget {
                       easeFactor: 2.5,
                       interval: 1,
                       lastReviewed: now,
-                      nextReview: now.add(const Duration(days: 1)),
+                      nextReview: now.add(const Duration(hours: 8)),
                     ),
                   ),
-                );
-
-                SnackBarHelper.showSuccess(
-                  context,
-                  'Added "${word.content}" to your words',
                 );
               },
               icon: Icon(

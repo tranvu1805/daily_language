@@ -1,6 +1,5 @@
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:equatable/equatable.dart';
-import 'package:uuid/uuid.dart';
 
 class WordModel extends Equatable {
   final String? word;
@@ -28,7 +27,7 @@ class WordModel extends Equatable {
     this.antonym,
     this.meaningVi,
     this.definitionVi,
-  }) : id = const Uuid().v4();
+  }) : id = '${word}_${type}_$level'.toLowerCase().replaceAll(' ', '_');
   Word toEntity() => Word(
     content: word ?? '',
     type: type ?? '',

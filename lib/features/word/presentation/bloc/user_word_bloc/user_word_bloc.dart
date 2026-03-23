@@ -48,7 +48,7 @@ class UserWordBloc extends Bloc<UserWordEvent, UserWordState> {
     emit(UserWordInProgress());
     final result = await _createUserWordUseCase(event.param);
     result.fold((failure) => emit(UserWordFailure(error: failure.message)), (_) {
-      emit(UserWordCreateSuccess());
+      emit(UserWordCreateSuccess(word: event.param.word));
     });
   }
 
