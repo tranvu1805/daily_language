@@ -10,9 +10,7 @@ abstract interface class WordRepos {
     required GetDictionaryWordsUseCaseParams params,
   });
 
-  ResultFuture<Word> getDictionaryWordById({
-    required String id,
-  });
+  ResultFuture<Word> getDictionaryWordById({required String word});
 
   ResultFuture<UserWord> getWord({required GetUserWordUseCaseParams params});
 

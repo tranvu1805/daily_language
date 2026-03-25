@@ -19,8 +19,6 @@ class WordPage extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // ── Header ──────────────────────────────────────────────────
-            const SliverToBoxAdapter(child: WordTopicHeaderWidget()),
             // ── Section title ────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
@@ -37,9 +35,8 @@ class WordPage extends StatelessWidget {
             // ── Review Card ─────────────────────────────────────────────
             SliverToBoxAdapter(
               child: ReviewCardWidget(
-                onTap: () => context.push(
-                  '${Routes.words}/${Routes.wordsReview}',
-                ),
+                onTap: () =>
+                    context.push('${Routes.words}/${Routes.wordsReview}'),
               ),
             ),
             // ── My Words card (full width) ───────────────────────────────

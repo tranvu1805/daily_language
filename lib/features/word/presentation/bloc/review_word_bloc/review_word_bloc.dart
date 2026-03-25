@@ -16,10 +16,10 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
     required GetUserWordsUseCase getUserWordsUseCase,
     required GetDictionaryWordByIdUseCase getDictionaryWordByIdUseCase,
     required UpdateUserWordUseCase updateUserWordUseCase,
-  })  : _getUserWordsUseCase = getUserWordsUseCase,
-        _getDictionaryWordByIdUseCase = getDictionaryWordByIdUseCase,
-        _updateUserWordUseCase = updateUserWordUseCase,
-        super(const ReviewWordState()) {
+  }) : _getUserWordsUseCase = getUserWordsUseCase,
+       _getDictionaryWordByIdUseCase = getDictionaryWordByIdUseCase,
+       _updateUserWordUseCase = updateUserWordUseCase,
+       super(const ReviewWordState()) {
     on<ReviewWordLoaded>(_onReviewWordLoaded);
     on<ReviewWordAnswerSubmitted>(_onAnswerSubmitted);
     on<ReviewWordNextRequested>(_onNextRequested);
@@ -55,12 +55,7 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
           return;
         }
 
-        emit(
-          state.copyWith(
-            reviewWords: reviewWords,
-            currentIndex: 0,
-          ),
-        );
+        emit(state.copyWith(reviewWords: reviewWords, currentIndex: 0));
 
         await _loadCurrentWordDetails(emit);
       },
@@ -72,7 +67,7 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
 
     // UserWord only contains the word string, we need details like meanings.
     final result = await _getDictionaryWordByIdUseCase(
-      GetDictionaryWordByIdUseCaseParams(id: userWord.wordId),
+      GetDictionaryWordByIdUseCaseParams(word: userWord.word),
     );
 
     result.fold(
@@ -103,7 +98,9 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
   ) async {
     if (state.currentDictionaryWord == null) return;
 
-    final correctAnswer = state.currentDictionaryWord!.content.trim().toLowerCase();
+    final correctAnswer = state.currentDictionaryWord!.content
+        .trim()
+        .toLowerCase();
     final userAnswer = event.answer.trim().toLowerCase();
     final isCorrect = correctAnswer == userAnswer;
 
@@ -176,24 +173,24 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
       stage = 0;
       repetitionCount = 0;
       interval = 1; // Review again tomorrow (or in a few minutes in a real app)
-      
+
       // Decrease ease factor
       easeFactor = (easeFactor - 0.2).clamp(1.3, 2.5);
     }
 
     // Cap values if needed (Mochi has 5-7 stages usually)
     // For now, keep it simple.
-    
+
     // Mochi style durations often increase exponentially based on stage.
     // Stage 1: 1m, 2: 12m, 3: 1d, 4: 4d, 5: 9d, etc.
     // For simplicity, we use day-based calculation here as SM-2.
-    
+
     DateTime nextReview;
     if (isCorrect) {
-        nextReview = now.add(Duration(days: interval.toInt()));
+      nextReview = now.add(Duration(days: interval.toInt()));
     } else {
-        // Review again in 10 minutes if wrong
-        nextReview = now.add(const Duration(minutes: 10));
+      // Review again in 10 minutes if wrong
+      nextReview = now.add(const Duration(minutes: 10));
     }
 
     return userWord.copyWith(

@@ -11,8 +11,8 @@ class WordReposImpl implements WordRepos {
   WordReposImpl({
     required UserWordRemoteDataSource remoteDataSource,
     required WordLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   @override
   ResultFuture<List<UserWord>> getWords({
@@ -55,11 +55,9 @@ class WordReposImpl implements WordRepos {
   }
 
   @override
-  ResultFuture<Word> getDictionaryWordById({
-    required String id,
-  }) {
+  ResultFuture<Word> getDictionaryWordById({required String word}) {
     return ApiService.handle(() async {
-      final model = await _localDataSource.getWordByIdFromAllAssets(id: id);
+      final model = await _localDataSource.getWordByIdFromAllAssets(word: word);
       if (model == null) {
         throw Exception('Word not found in dictionary');
       }
