@@ -11,7 +11,7 @@ abstract interface class WordRepos {
   });
 
   ResultFuture<Word> getDictionaryWordById({
-    required String id,
+    required String word,
     String? level,
   });
 

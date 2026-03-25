@@ -1,10 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
-import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
-import 'package:daily_language/features/account/presentation/widgets/widgets.dart';
-import 'package:daily_language/features/authentication/domain/domain.dart';
-import 'package:daily_language/features/authentication/presentation/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:daily_language/features/account/presentation/presentation.dart';
+import 'package:daily_language/features/authentication/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

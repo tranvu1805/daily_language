@@ -16,7 +16,7 @@ abstract interface class WordLocalDataSource {
   });
 
   Future<WordModel?> getWordByIdFromAllAssets({
-    required String id,
+    required String word,
     String? level,
   });
 }
@@ -74,11 +74,11 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
 
   @override
   Future<WordModel?> getWordByIdFromAllAssets({
-    required String id,
+    required String word,
     String? level,
   }) async {
     if (level != null && level.isNotEmpty && level != 'my_words') {
-      return getWordFromAssets(level: level, id: id);
+      return getWordFromAssets(level: level, id: word);
     }
 
     final levels = ['a1', 'a2', 'b1', 'b2', 'c1'];

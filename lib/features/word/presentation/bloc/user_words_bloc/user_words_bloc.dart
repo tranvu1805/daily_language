@@ -10,19 +10,59 @@ part 'user_words_state.dart';
 
 class UserWordsBloc extends Bloc<UserWordsEvent, UserWordsState> {
   final GetUserWordsUseCase _getUserWordsUseCase;
+  final GetDictionaryWordByIdUseCase _getDictionaryWordByIdUseCase;
 
-  UserWordsBloc({required GetUserWordsUseCase getUserWordsUseCase})
-    : _getUserWordsUseCase = getUserWordsUseCase,
-      super(const UserWordsState()) {
+  UserWordsBloc({
+    required GetUserWordsUseCase getUserWordsUseCase,
+    required GetDictionaryWordByIdUseCase getDictionaryWordByIdUseCase,
+  }) : _getUserWordsUseCase = getUserWordsUseCase,
+       _getDictionaryWordByIdUseCase = getDictionaryWordByIdUseCase,
+       super(const UserWordsState()) {
     on<UserWordsRequested>(_onRequested);
     on<UserWordsRefreshed>(_onRefreshed);
+    on<UserWordDetailRequested>(_onDetailRequested);
+  }
+
+  Future<void> _onDetailRequested(
+    UserWordDetailRequested event,
+    Emitter<UserWordsState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: UserWordsStatus.loading,
+        action: UserWordsAction.detail,
+        selectedWordDetail: null,
+      ),
+    );
+    final result = await _getDictionaryWordByIdUseCase(event.params);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: UserWordsStatus.failure,
+          action: UserWordsAction.detail,
+          error: failure.message,
+        ),
+      ),
+      (word) => emit(
+        state.copyWith(
+          status: UserWordsStatus.success,
+          action: UserWordsAction.detail,
+          selectedWordDetail: word,
+        ),
+      ),
+    );
   }
 
   Future<void> _onRequested(
     UserWordsRequested event,
     Emitter<UserWordsState> emit,
   ) async {
-    if (state.hasReachedMax || state.status == UserWordsStatus.loading) return;
+    if (state.hasReachedMax ||
+        (state.status == UserWordsStatus.loading &&
+            state.action == UserWordsAction.request)) {
+      return;
+    }
+
     if (state.status == UserWordsStatus.initial) {
       emit(
         state.copyWith(

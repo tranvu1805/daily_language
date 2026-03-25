@@ -43,7 +43,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     context.read<ReviewWordBloc>().add(ReviewWordNextRequested());
     // Auto focus after a short delay to let animations/rebuild finish
     Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted) _focusNode.requestFocus();
+      if (mounted) _focusNode.requestFocus();
     });
   }
 
@@ -54,33 +54,66 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     return BlocConsumer<ReviewWordBloc, ReviewWordState>(
       listener: (context, state) {
         if (state.status == ReviewWordStatus.finished) {
-           _showCompletionDialog();
+          _showCompletionDialog();
         }
-        if (state.error.isNotEmpty && state.status == ReviewWordStatus.failure) {
-            SnackBarHelper.showFailure(context, state.error);
+        if (state.error.isNotEmpty &&
+            state.status == ReviewWordStatus.failure) {
+          SnackBarHelper.showFailure(context, state.error);
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: ColorApp.linenWhite,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            title: Text(
-              'Review Words',
-              style: textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            final shouldPop = await DialogHelper.showConfirmDialog(
+              context: context,
+              title: 'Stop Reviewing?',
+              message:
+                  'Are you sure you want to exit? Your progress for this session will be lost.',
+              confirmText: 'Exit',
+              cancelText: 'Continue',
+              confirmColor: Colors.redAccent,
+            );
+
+            if (shouldPop == true && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Scaffold(
+            backgroundColor: ColorApp.linenWhite,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              title: Text(
+                'Review Words',
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.textPrimary,
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.close_rounded),
                 color: ColorApp.textPrimary,
+                onPressed: () async {
+                  final shouldPop = await DialogHelper.showConfirmDialog(
+                    context: context,
+                    title: 'Stop Reviewing?',
+                    message:
+                        'Are you sure you want to exit? Your progress for this session will be lost.',
+                    confirmText: 'Exit',
+                    cancelText: 'Continue',
+                    confirmColor: Colors.redAccent,
+                  );
+                  if (shouldPop == true && context.mounted) {
+                    context.pop();
+                  }
+                },
               ),
             ),
-            leading: IconButton(
-              icon: const Icon(Icons.close_rounded),
-              color: ColorApp.textPrimary,
-              onPressed: () => context.pop(),
-            ),
+            body: _buildBody(context, state),
           ),
-          body: _buildBody(context, state),
         );
       },
     );
@@ -96,12 +129,18 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded, size: 64, color: Colors.grey),
+            const Icon(
+              Icons.error_outline_rounded,
+              size: 64,
+              color: Colors.grey,
+            ),
             const SizedBox(height: 16),
             Text('Failed to load words: ${state.error}'),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.read<ReviewWordBloc>().add(ReviewWordLoaded(userId: account.uid)),
+              onPressed: () => context.read<ReviewWordBloc>().add(
+                ReviewWordLoaded(userId: account.uid),
+              ),
               child: const Text('Retry'),
             ),
           ],
@@ -110,11 +149,11 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     }
 
     if (state.status == ReviewWordStatus.finished) {
-        return const SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     if (state.currentDictionaryWord == null) {
-        return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     final word = state.currentDictionaryWord!;
@@ -129,9 +168,9 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
               Text(
                 'Word ${state.currentIndex + 1} of ${state.reviewWords.length}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: ColorApp.textSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: ColorApp.textSecondary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -162,34 +201,38 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
             ),
             child: Column(
               children: [
-                const Icon(Icons.lightbulb_outline_rounded, color: ColorApp.primary, size: 32),
+                const Icon(
+                  Icons.lightbulb_outline_rounded,
+                  color: ColorApp.primary,
+                  size: 32,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   'Definition',
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: ColorApp.textSecondary,
-                        letterSpacing: 1.2,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: ColorApp.textSecondary,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   word.meaningEn,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: ColorApp.textPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: ColorApp.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 if (state.isShowingAnswer && word.meaningVi.isNotEmpty) ...[
-                    const Divider(height: 32),
-                    Text(
-                      word.meaningVi,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: ColorApp.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  const Divider(height: 32),
+                  Text(
+                    word.meaningVi,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: ColorApp.primary,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
                 ],
               ],
             ),
@@ -197,37 +240,47 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
           const SizedBox(height: 48),
 
           _buildWordInput(word.content, state),
-          
+
           const SizedBox(height: 48),
 
           if (state.isShowingAnswer) ...[
-             _buildFeedback(state),
-             const SizedBox(height: 24),
-             ElevatedButton(
-                onPressed: _next,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorApp.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 60),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 5,
-                  shadowColor: ColorApp.primary.withValues(alpha: 0.3),
+            _buildFeedback(state),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _next,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorApp.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 60),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Text('Next Word', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-             ),
+                elevation: 5,
+                shadowColor: ColorApp.primary.withValues(alpha: 0.3),
+              ),
+              child: const Text(
+                'Next Word',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
           ] else ...[
-             ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorApp.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 60),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 5,
-                  shadowColor: ColorApp.primary.withValues(alpha: 0.3),
+            ElevatedButton(
+              onPressed: _submit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorApp.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 60),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Text('Check Answer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-             ),
+                elevation: 5,
+                shadowColor: ColorApp.primary.withValues(alpha: 0.3),
+              ),
+              child: const Text(
+                'Check Answer',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
           ],
         ],
       ),
@@ -236,16 +289,16 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
 
   Widget _buildWordInput(String content, ReviewWordState state) {
     if (state.isShowingAnswer) {
-        return Center(
-          child: Text(
-            content,
-            style: Theme.of(context).textTheme.displayMedium?.copyWith(
-              color: state.isCorrect ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4,
-            ),
+      return Center(
+        child: Text(
+          content,
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: state.isCorrect ? Colors.green : Colors.red,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 4,
           ),
-        );
+        ),
+      );
     }
 
     return Column(
@@ -257,10 +310,10 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
           children: List.generate(content.length, (index) {
             final char = content[index];
             if (char == ' ') return const SizedBox(width: 20);
-            
+
             String displayChar = '_';
             if (_controller.text.length > index) {
-                displayChar = _controller.text[index];
+              displayChar = _controller.text[index];
             }
 
             return Container(
@@ -270,19 +323,25 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: _controller.text.length == index ? ColorApp.primary : Colors.grey.shade300,
+                    color: _controller.text.length == index
+                        ? ColorApp.primary
+                        : Colors.grey.shade300,
                     width: _controller.text.length == index ? 3 : 1.5,
                   ),
                 ),
               ),
               child: Text(
                 _controller.text.length > index ? displayChar : '',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: ColorApp.textPrimary),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.textPrimary,
+                ),
               ),
             );
           }),
         ),
-        
+
         Opacity(
           opacity: 0,
           child: TextField(
@@ -290,10 +349,10 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
             focusNode: _focusNode,
             autofocus: true,
             onChanged: (val) {
-                if (val.length > content.length) {
-                    _controller.text = val.substring(0, content.length);
-                }
-                setState(() {});
+              if (val.length > content.length) {
+                _controller.text = val.substring(0, content.length);
+              }
+              setState(() {});
             },
             onSubmitted: (_) => _submit(),
           ),
@@ -306,7 +365,9 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: state.isCorrect ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+        color: state.isCorrect
+            ? Colors.green.withValues(alpha: 0.1)
+            : Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -318,9 +379,13 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
           ),
           const SizedBox(width: 12),
           Text(
-            state.isCorrect ? 'Correct! Keep it up!' : 'Oops! The correct word is above.',
+            state.isCorrect
+                ? 'Correct! Keep it up!'
+                : 'Oops! The correct word is above.',
             style: TextStyle(
-              color: state.isCorrect ? Colors.green.shade700 : Colors.red.shade700,
+              color: state.isCorrect
+                  ? Colors.green.shade700
+                  : Colors.red.shade700,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -350,7 +415,9 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: ColorApp.primary,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: const Text('Back to My Learning'),
             ),

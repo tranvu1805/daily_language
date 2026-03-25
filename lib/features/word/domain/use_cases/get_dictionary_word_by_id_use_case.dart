@@ -16,9 +16,10 @@ class GetDictionaryWordByIdUseCase
 
 class GetDictionaryWordByIdUseCaseParams extends Equatable {
   final String word;
+  final String? level;
 
-  const GetDictionaryWordByIdUseCaseParams({required this.word});
+  const GetDictionaryWordByIdUseCaseParams({required this.word, this.level});
 
   @override
-  List<Object?> get props => [word];
+  List<Object?> get props => [word, level];
 }

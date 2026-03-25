@@ -28,8 +28,9 @@ class _WordLevelPageState extends State<WordLevelPage> {
 
   String get _title => _isMyWords ? 'My Words' : 'Oxford ${widget.topic}';
 
-  String get _subtitle =>
-      _isMyWords ? 'Your personal vocabulary' : _levelSubtitles[widget.topic] ?? '';
+  String get _subtitle => _isMyWords
+      ? 'Your personal vocabulary'
+      : _levelSubtitles[widget.topic] ?? '';
 
   static const _levelSubtitles = {
     'A1': 'Beginner · 500 words',
@@ -48,8 +49,7 @@ class _WordLevelPageState extends State<WordLevelPage> {
     'C1': ColorApp.levelC1,
   };
 
-  Color get _accentColor =>
-      _levelColors[widget.topic] ?? ColorApp.primary;
+  Color get _accentColor => _levelColors[widget.topic] ?? ColorApp.primary;
 
   @override
   void initState() {
@@ -89,10 +89,7 @@ class _WordLevelPageState extends State<WordLevelPage> {
   void _loadWords() {
     context.read<UserWordsBloc>().add(
       UserWordsRequested(
-        param: GetUserWordsUseCaseParams(
-          userId: _account.uid,
-          limit: 20,
-        ),
+        param: GetUserWordsUseCaseParams(userId: _account.uid, limit: 20),
       ),
     );
   }
@@ -162,13 +159,13 @@ class _WordLevelPageState extends State<WordLevelPage> {
           );
           // Global refresh of UserWordsBloc to ensure My Words list is updated everywhere
           context.read<UserWordsBloc>().add(
-                UserWordsRefreshed(
-                  param: GetUserWordsUseCaseParams(
-                    userId: _account.uid,
-                    limit: pageSize,
-                  ),
-                ),
-              );
+            UserWordsRefreshed(
+              param: GetUserWordsUseCaseParams(
+                userId: _account.uid,
+                limit: pageSize,
+              ),
+            ),
+          );
         } else if (state is UserWordFailure) {
           SnackBarHelper.showFailure(context, state.error);
         }
@@ -189,9 +186,8 @@ class _WordLevelPageState extends State<WordLevelPage> {
                     accentColor: _accentColor,
                     onBack: () => context.pop(),
                     onAdd: _isMyWords
-                        ? () => context.push(
-                              '${Routes.words}/${Routes.wordsAdd}',
-                            )
+                        ? () =>
+                              context.push('${Routes.words}/${Routes.wordsAdd}')
                         : null,
                   ),
                 ),

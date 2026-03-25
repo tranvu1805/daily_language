@@ -24,3 +24,11 @@ final class UserWordsRefreshed extends UserWordsEvent {
   @override
   List<Object> get props => [param];
 }
+final class UserWordDetailRequested extends UserWordsEvent {
+  final GetDictionaryWordByIdUseCaseParams params;
+
+  const UserWordDetailRequested({required this.params});
+
+  @override
+  List<Object> get props => [params];
+}

@@ -1,4 +1,3 @@
-import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
@@ -22,74 +21,85 @@ class MyWordsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserWordsBloc, UserWordsState>(
-      builder: (context, state) {
-        if (state.status == UserWordsStatus.loading) {
-          return const SliverToBoxAdapter(
-            child: AppCircularProgressIndicator(),
-          );
+    return BlocListener<UserWordsBloc, UserWordsState>(
+      listenWhen: (previous, current) =>
+          previous.action != current.action ||
+          previous.status != current.status,
+      listener: (context, state) {
+        if (state.action == UserWordsAction.detail) {
+          if (state.status == UserWordsStatus.success &&
+              state.selectedWordDetail != null) {
+            context.push(
+              '${Routes.words}/${Routes.wordsLevelDetail}',
+              extra: {'word': state.selectedWordDetail, 'showAddButton': false},
+            );
+          } else if (state.status == UserWordsStatus.failure) {
+            SnackBarHelper.showFailure(context, state.error);
+          }
         }
-
-        if (state.status == UserWordsStatus.failure) {
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: AppRetryWidget(message: state.error, onRetry: onRefresh),
-            ),
-          );
-        }
-
-        if (state.status == UserWordsStatus.success &&
-            state.userWords.isEmpty) {
-          return SliverToBoxAdapter(
-            child: WordLevelEmptyWordsWidget(accentColor: accentColor),
-          );
-        }
-
-        if (state.status == UserWordsStatus.success) {
-          return SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            sliver: SliverList.separated(
-              itemCount: state.hasReachedMax
-                  ? state.userWords.length
-                  : state.userWords.length + 1,
-              itemBuilder: (context, index) {
-                if (index >= state.userWords.length) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(color: accentColor),
-                    ),
-                  );
-                }
-                final word = state.userWords[index];
-                return WordCard(
-                  word: word,
-                  onTap: () async {
-                    final result = await sl<GetDictionaryWordByIdUseCase>()(
-                      GetDictionaryWordByIdUseCaseParams(
-                        id: word.wordId,
-                        level: word.level,
-                      ),
-                    );
-                    result.fold(
-                      (failure) =>
-                          SnackBarHelper.showFailure(context, failure.message),
-                      (wordDetail) => context.push(
-                        '${Routes.words}/${Routes.wordsLevelDetail}',
-                        extra: {'word': wordDetail, 'showAddButton': false},
-                      ),
-                    );
-                  },
-                );
-              },
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-            ),
-          );
-        }
-
-        return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
+      child: BlocBuilder<UserWordsBloc, UserWordsState>(
+        builder: (context, state) {
+          if (state.status == UserWordsStatus.loading &&
+              state.action != UserWordsAction.request) {
+            return const SliverToBoxAdapter(
+              child: AppCircularProgressIndicator(),
+            );
+          }
+
+          if (state.status == UserWordsStatus.failure &&
+              state.action != UserWordsAction.request) {
+            return SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: AppRetryWidget(message: state.error, onRetry: onRefresh),
+              ),
+            );
+          }
+
+          if (state.status == UserWordsStatus.success &&
+              state.userWords.isEmpty) {
+            return SliverToBoxAdapter(
+              child: WordLevelEmptyWordsWidget(accentColor: accentColor),
+            );
+          }
+
+          if (state.status == UserWordsStatus.success ||
+              (state.status == UserWordsStatus.loading &&
+                  state.action == UserWordsAction.request)) {
+            return SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              sliver: SliverList.separated(
+                itemCount: state.hasReachedMax
+                    ? state.userWords.length
+                    : state.userWords.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= state.userWords.length) {
+                    return const AppCircularProgressIndicator();
+                  }
+                  final word = state.userWords[index];
+                  return WordCard(
+                    word: word,
+                    onTap: () {
+                      context.read<UserWordsBloc>().add(
+                        UserWordDetailRequested(
+                          params: GetDictionaryWordByIdUseCaseParams(
+                            word: word.word,
+                            level: word.level,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+              ),
+            );
+          }
+
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        },
+      ),
     );
   }
 }

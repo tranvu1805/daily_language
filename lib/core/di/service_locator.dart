@@ -161,7 +161,10 @@ class DI {
       ),
     );
     sl.registerFactory<UserWordsBloc>(
-      () => UserWordsBloc(getUserWordsUseCase: sl()),
+      () => UserWordsBloc(
+        getUserWordsUseCase: sl(),
+        getDictionaryWordByIdUseCase: sl(),
+      ),
     );
     sl.registerFactory<WordsBloc>(
       () => WordsBloc(getDictionaryWordsUseCase: sl()),

@@ -2,7 +2,7 @@ part of 'user_words_bloc.dart';
 
 enum UserWordsStatus { initial, loading, success, failure }
 
-enum UserWordsAction { none, request, refresh }
+enum UserWordsAction { none, request, refresh, detail }
 
 final class UserWordsState extends Equatable {
   const UserWordsState({
@@ -12,6 +12,7 @@ final class UserWordsState extends Equatable {
     this.lastDocId,
     this.action = UserWordsAction.none,
     this.error = '',
+    this.selectedWordDetail,
   });
 
   final List<UserWord> userWords;
@@ -20,6 +21,7 @@ final class UserWordsState extends Equatable {
   final bool hasReachedMax;
   final String? lastDocId;
   final UserWordsStatus status;
+  final Word? selectedWordDetail;
 
   UserWordsState copyWith({
     List<UserWord>? userWords,
@@ -28,6 +30,7 @@ final class UserWordsState extends Equatable {
     String? lastDocId,
     UserWordsAction? action,
     String? error,
+    Word? selectedWordDetail,
   }) {
     return UserWordsState(
       userWords: userWords ?? this.userWords,
@@ -36,6 +39,7 @@ final class UserWordsState extends Equatable {
       action: action ?? this.action,
       status: status ?? this.status,
       error: error ?? this.error,
+      selectedWordDetail: selectedWordDetail ?? this.selectedWordDetail,
     );
   }
 
@@ -47,5 +51,6 @@ final class UserWordsState extends Equatable {
     lastDocId,
     action,
     error,
+    selectedWordDetail,
   ];
 }
