@@ -13,4 +13,8 @@ abstract interface class RecordRepos {
   ResultVoid updateRecord({required UpdateRecordUseCaseParams params});
 
   ResultVoid deleteRecord({required String id});
+
+  ResultFuture<String> translateVietnameseToEnglish({
+    required TranslateVietnameseToEnglishUseCaseParams params,
+  });
 }

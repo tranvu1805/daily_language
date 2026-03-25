@@ -64,12 +64,10 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
 
   Future<void> _loadCurrentWordDetails(Emitter<ReviewWordState> emit) async {
     final userWord = state.reviewWords[state.currentIndex];
-
     // UserWord only contains the word string, we need details like meanings.
     final result = await _getDictionaryWordByIdUseCase(
       GetDictionaryWordByIdUseCaseParams(word: userWord.word),
     );
-
     result.fold(
       (failure) {
         emit(
@@ -97,13 +95,11 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
     Emitter<ReviewWordState> emit,
   ) async {
     if (state.currentDictionaryWord == null) return;
-
     final correctAnswer = state.currentDictionaryWord!.content
         .trim()
         .toLowerCase();
     final userAnswer = event.answer.trim().toLowerCase();
     final isCorrect = correctAnswer == userAnswer;
-
     final userWord = state.reviewWords[state.currentIndex];
     final updatedUserWord = _calculateNextReview(userWord, isCorrect);
 
@@ -132,7 +128,6 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
         // Update local state words list
         final updatedReviewWords = List<UserWord>.from(state.reviewWords);
         updatedReviewWords[state.currentIndex] = updatedUserWord;
-
         emit(
           state.copyWith(
             reviewWords: updatedReviewWords,

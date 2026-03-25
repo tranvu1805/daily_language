@@ -41,3 +41,14 @@ final class RecordDeleted extends RecordEvent {
   @override
   List<Object> get props => [id];
 }
+
+final class RecordVietnameseTranslatedRequested extends RecordEvent {
+  final TranslateVietnameseToEnglishUseCaseParams param;
+
+  const RecordVietnameseTranslatedRequested({
+    required this.param,
+  });
+
+  @override
+  List<Object> get props => [param];
+}
