@@ -88,7 +88,7 @@ class WordLocalDataSourceImpl implements WordLocalDataSource {
         final jsonStr = await _assetLoader.loadString(assetPath);
         final List<dynamic> jsonList = jsonDecode(jsonStr);
         final item = jsonList.firstWhere(
-          (item) => item['word'] == id,
+          (item) => item['word'] == word,
           orElse: () => null,
         );
         if (item != null) return WordModel.fromJson(item);

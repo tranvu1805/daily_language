@@ -17,6 +17,17 @@ final class RecordUpdateSuccess extends RecordState {}
 
 final class RecordDeleteSuccess extends RecordState {}
 
+final class RecordTranslateInProgress extends RecordState {}
+
+final class RecordTranslateSuccess extends RecordState {
+  final String translatedContent;
+
+  const RecordTranslateSuccess({required this.translatedContent});
+
+  @override
+  List<Object> get props => [translatedContent];
+}
+
 final class RecordSuccess extends RecordState {
   final Record record;
 

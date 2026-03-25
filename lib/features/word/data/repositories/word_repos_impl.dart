@@ -11,8 +11,8 @@ class WordReposImpl implements WordRepos {
   WordReposImpl({
     required UserWordRemoteDataSource remoteDataSource,
     required WordLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   @override
   ResultFuture<List<UserWord>> getWords({

@@ -17,6 +17,7 @@ class RecordAddPage extends StatefulWidget {
 
 class _RecordAddPageState extends State<RecordAddPage> {
   late final TextEditingController _contentController;
+  late final TextEditingController _translatedContentController;
   String _selectedEmotion = '';
   String _selectedType = '';
   late final stt.SpeechToText _speech;
@@ -39,12 +40,14 @@ class _RecordAddPageState extends State<RecordAddPage> {
   void initState() {
     super.initState();
     _contentController = TextEditingController();
+    _translatedContentController = TextEditingController();
     _speech = stt.SpeechToText();
   }
 
   @override
   void dispose() {
     _contentController.dispose();
+    _translatedContentController.dispose();
     super.dispose();
   }
 
@@ -64,6 +67,9 @@ class _RecordAddPageState extends State<RecordAddPage> {
         }
         if (state is RecordFailure) {
           SnackBarHelper.showFailure(context, state.error);
+        }
+        if (state is RecordTranslateSuccess) {
+          _translatedContentController.text = state.translatedContent;
         }
       },
       child: Scaffold(
@@ -160,6 +166,9 @@ class _RecordAddPageState extends State<RecordAddPage> {
                         onTap: () {
                           setState(() {
                             _sttLocale = _sttLocale == 'vi_VN' ? 'en_US' : 'vi_VN';
+                            if (_sttLocale == 'en_US') {
+                              _translatedContentController.clear();
+                            }
                           });
                         },
                         child: Container(
@@ -207,6 +216,32 @@ class _RecordAddPageState extends State<RecordAddPage> {
                   ),
                 ),
               ),
+              if (_sttLocale == 'vi_VN') ...[
+                const SizedBox(height: 16),
+                Text('English translation', style: textTheme.labelLarge),
+                const SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: ColorApp.darkGray.withAlpha(20)),
+                  ),
+                  child: TextField(
+                    controller: _translatedContentController,
+                    maxLines: 5,
+                    readOnly: true,
+                    style: textTheme.bodySmall,
+                    decoration: InputDecoration(
+                      hintText: 'Translated content will appear here',
+                      hintStyle: textTheme.bodySmall?.copyWith(
+                        color: ColorApp.taupeGray,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(16),
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 32),
 
               // Save Button
@@ -245,12 +280,32 @@ class _RecordAddPageState extends State<RecordAddPage> {
       _speech.listen(
         onResult: (result) async {
           if (result.finalResult) {
+            final recognizedWords = result.recognizedWords.trim();
+            if (!mounted) return;
             setState(() {
-              _contentController.text = result.recognizedWords;
               _isListening = false;
             });
             _speech.stop();
             context.pop();
+            if (recognizedWords.isEmpty) {
+              _contentController.clear();
+              _translatedContentController.clear();
+              return;
+            }
+            if (_sttLocale == 'vi_VN') {
+              _contentController.text = recognizedWords;
+              _translatedContentController.clear();
+              context.read<RecordBloc>().add(
+                RecordVietnameseTranslatedRequested(
+                  param: TranslateVietnameseToEnglishUseCaseParams(
+                    content: recognizedWords,
+                  ),
+                ),
+              );
+              return;
+            }
+            _translatedContentController.clear();
+            _contentController.text = recognizedWords;
           }
         },
         listenFor: const Duration(seconds: 30),
@@ -260,10 +315,10 @@ class _RecordAddPageState extends State<RecordAddPage> {
         ),
       );
     } else {
+      if (!mounted) return;
       setState(() { _isListening = false; });
       SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
       context.pop();
     }
   }
 }
-

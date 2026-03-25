@@ -74,4 +74,15 @@ class RecordReposImpl implements RecordRepos {
   ResultVoid deleteRecord({required String id}) {
     throw UnimplementedError();
   }
+
+  @override
+  ResultFuture<String> translateVietnameseToEnglish({
+    required TranslateVietnameseToEnglishUseCaseParams params,
+  }) {
+    return ApiService.handle(() async {
+      return _remoteDataSource.translateVietnameseToEnglish(
+        content: params.content,
+      );
+    });
+  }
 }

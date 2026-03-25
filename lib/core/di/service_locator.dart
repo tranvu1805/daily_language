@@ -14,6 +14,7 @@ import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 final sl = GetIt.I;
 
@@ -86,8 +87,9 @@ class DI {
   }
 
   void _initRecordFeature() {
+    sl.registerLazySingleton<http.Client>(() => http.Client());
     sl.registerLazySingleton<RecordRemoteDataSource>(
-      () => RecordRemoteDataSourceImpl(sl()),
+      () => RecordRemoteDataSourceImpl(sl(), sl()),
     );
     sl.registerLazySingleton<RecordRepos>(
       () => RecordReposImpl(remoteDataSource: sl()),
@@ -103,12 +105,16 @@ class DI {
     sl.registerLazySingleton<DeleteRecordUseCase>(
       () => DeleteRecordUseCase(sl()),
     );
+    sl.registerLazySingleton<TranslateVietnameseToEnglishUseCase>(
+      () => TranslateVietnameseToEnglishUseCase(sl()),
+    );
     sl.registerFactory<RecordBloc>(
       () => RecordBloc(
         getRecordUseCase: sl(),
         createRecordUseCase: sl(),
         updateRecordUseCase: sl(),
         deleteRecordUseCase: sl(),
+        translateUseCase: sl(),
       ),
     );
     sl.registerFactory<RecordsBloc>(() => RecordsBloc(getRecordsUseCase: sl()));

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_language/core/utils/helper/method_utils.dart';
 import 'package:daily_language/features/record/data/data.dart';
+import 'package:http/http.dart' as http;
 
 abstract interface class RecordRemoteDataSource {
   Future<List<RecordModel>> getRecords({
@@ -22,12 +25,15 @@ abstract interface class RecordRemoteDataSource {
   });
 
   Future<void> deleteRecord({required String userId, required String id});
+
+  Future<String> translateVietnameseToEnglish({required String content});
 }
 
 class RecordRemoteDataSourceImpl implements RecordRemoteDataSource {
   final FirebaseFirestore _database;
+  final http.Client _httpClient;
 
-  RecordRemoteDataSourceImpl(this._database);
+  RecordRemoteDataSourceImpl(this._database, this._httpClient);
 
   CollectionReference<Map<String, dynamic>> _recordsCollection(String userId) {
     return _database.collection('records').doc(userId).collection('records');
@@ -104,5 +110,33 @@ class RecordRemoteDataSourceImpl implements RecordRemoteDataSource {
       throwServerException(message: 'not found', statusCode: 404);
     }
     await docRef.delete();
+  }
+
+  @override
+  Future<String> translateVietnameseToEnglish({required String content}) async {
+    final uri = Uri.https('translate.googleapis.com', '/translate_a/single', {
+      'client': 'gtx',
+      'sl': 'vi',
+      'tl': 'en',
+      'dt': 't',
+      'q': content,
+    });
+    final response = await _httpClient
+        .get(uri)
+        .timeout(const Duration(seconds: 10));
+    if (response.statusCode != 200) {
+      throwServerException(message: 'translate failed', statusCode: 500);
+    }
+    final dynamic decoded = jsonDecode(utf8.decode(response.bodyBytes));
+    if (decoded is! List || decoded.isEmpty || decoded.first is! List) {
+      throwServerException(message: 'translate failed', statusCode: 500);
+    }
+    final buffer = StringBuffer();
+    for (final segment in decoded.first as List<dynamic>) {
+      if (segment is List && segment.isNotEmpty && segment.first is String) {
+        buffer.write(segment.first as String);
+      }
+    }
+    return buffer.toString().trim();
   }
 }

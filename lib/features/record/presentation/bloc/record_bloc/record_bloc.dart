@@ -12,21 +12,27 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
   final CreateRecordUseCase _createRecordUseCase;
   final UpdateRecordUseCase _updateRecordUseCase;
   final DeleteRecordUseCase _deleteRecordUseCase;
+  final TranslateVietnameseToEnglishUseCase _translateUseCase;
 
   RecordBloc({
     required GetRecordUseCase getRecordUseCase,
     required CreateRecordUseCase createRecordUseCase,
     required UpdateRecordUseCase updateRecordUseCase,
     required DeleteRecordUseCase deleteRecordUseCase,
+    required TranslateVietnameseToEnglishUseCase translateUseCase,
   }) : _getRecordUseCase = getRecordUseCase,
        _createRecordUseCase = createRecordUseCase,
        _updateRecordUseCase = updateRecordUseCase,
        _deleteRecordUseCase = deleteRecordUseCase,
+       _translateUseCase = translateUseCase,
        super(RecordInitial()) {
     on<RecordRequested>(_onRecordRequested);
     on<RecordCreated>(_onCreated);
     on<RecordUpdated>(_onUpdated);
     on<RecordDeleted>(_onDeleted);
+    on<RecordVietnameseTranslatedRequested>(
+      _onVietnameseTranslatedRequested,
+    );
   }
 
   Future<void> _onRecordRequested(
@@ -72,5 +78,18 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     result.fold((failure) => emit(RecordFailure(error: failure.message)), (_) {
       emit(RecordDeleteSuccess());
     });
+  }
+
+  Future<void> _onVietnameseTranslatedRequested(
+    RecordVietnameseTranslatedRequested event,
+    Emitter<RecordState> emit,
+  ) async {
+    emit(RecordTranslateInProgress());
+    final result = await _translateUseCase(event.param);
+    result.fold(
+      (_) => emit(const RecordTranslateSuccess(translatedContent: '')),
+      (translated) =>
+          emit(RecordTranslateSuccess(translatedContent: translated)),
+    );
   }
 }
