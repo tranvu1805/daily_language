@@ -60,7 +60,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
                   children: [
                     TextFormField(
                       controller: _fullNameController,
-                      style: textTheme.bodyMedium?.copyWith(fontSize: 18),
+                      style: textTheme.bodyLarge,
                       decoration: InputDecoration(
                         labelText: context.l10n.fullName,
                       ),
@@ -72,11 +72,11 @@ class _AccountEditPageState extends State<AccountEditPage> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
-                      style: textTheme.bodyMedium?.copyWith(fontSize: 18),
+                      style: textTheme.bodyLarge,
                       decoration: InputDecoration(
                         labelText: context.l10n.phoneNumber,
                       ),
-                      keyboardType: .phone,
+                      keyboardType: TextInputType.phone,
                       validator: (value) => ValidatorHelper.validatePhone(
                         value,
                         context.l10n.required,

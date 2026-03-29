@@ -11,10 +11,10 @@ class SettingsSectionLabel extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Text(
       label,
-      style: textTheme.bodySmall?.copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
+      style: textTheme.labelSmall?.copyWith(
         color: ColorApp.taupeGray,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 1.1,
       ),
     );
   }

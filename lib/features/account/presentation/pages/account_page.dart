@@ -2,10 +2,12 @@ import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/features/account/presentation/presentation.dart';
+import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:daily_language/features/account/presentation/widgets/widgets.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +26,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
     return SafeArea(
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (context, state) {
@@ -45,7 +48,7 @@ class _AccountPageState extends State<AccountPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 24),
-                        const SettingsSectionLabel(label: 'Chức năng'),
+                        SettingsSectionLabel(label: l10n.functions),
                         const SizedBox(height: 12),
                         SettingsCard(
                           children: [
@@ -59,17 +62,26 @@ class _AccountPageState extends State<AccountPage> {
                                 }
 
                                 return SettingsTile(
-                                  onTap: () => _showLanguagePicker(
-                                    context,
-                                    currentLocale,
-                                  ),
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(24),
+                                        ),
+                                      ),
+                                      builder: (context) => LanguagePickerSheet(
+                                        currentLocale: currentLocale,
+                                      ),
+                                    );
+                                  },
                                   icon: Icons.translate,
                                   iconBgColor: const Color(0xFFE0F2FE),
                                   iconColor: Colors.lightBlue,
-                                  title: 'Ngôn ngữ ứng dụng',
+                                  title: l10n.appLanguage,
                                   subtitle: currentLocale == 'en'
-                                      ? 'English'
-                                      : 'Tiếng Việt',
+                                      ? context.l10n.english
+                                      : context.l10n.vietnamese,
                                   trailing: const SettingsChevron(),
                                 );
                               },
@@ -77,25 +89,25 @@ class _AccountPageState extends State<AccountPage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const SettingsSectionLabel(label: 'Thông tin cá nhân'),
+                        SettingsSectionLabel(label: l10n.personalInfo),
                         const SizedBox(height: 12),
                         SettingsCard(
                           onTap: () {
                             context.push(Routes.account + Routes.accountEdit);
                           },
-                          children: const [
+                          children: [
                             SettingsTile(
                               icon: Icons.person_outline,
-                              iconBgColor: Color(0xFFDCFCE7),
+                              iconBgColor: const Color(0xFFDCFCE7),
                               iconColor: ColorApp.green,
-                              title: 'Cập nhật hồ sơ',
-                              subtitle: 'Thông tin cá nhân',
-                              trailing: SettingsChevron(),
+                              title: l10n.updateProfile,
+                              subtitle: l10n.personalInfo,
+                              trailing: const SettingsChevron(),
                             ),
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const SettingsSectionLabel(label: 'Thông báo'),
+                        SettingsSectionLabel(label: l10n.notifications),
                         const SizedBox(height: 12),
                         SettingsCard(
                           children: [
@@ -103,7 +115,7 @@ class _AccountPageState extends State<AccountPage> {
                               icon: Icons.notifications_outlined,
                               iconBgColor: const Color(0xFFF3E8FF),
                               iconColor: ColorApp.purple,
-                              title: 'Nhắc nhở học tập',
+                              title: l10n.learningReminders,
                               trailing: Switch(
                                 value: _notificationsEnabled,
                                 onChanged: (value) async {
@@ -128,17 +140,17 @@ class _AccountPageState extends State<AccountPage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const SettingsSectionLabel(label: 'Trợ giúp'),
+                        SettingsSectionLabel(label: l10n.help),
                         const SizedBox(height: 12),
                         SettingsCard(
                           onTap: () {},
-                          children: const [
+                          children: [
                             SettingsTile(
                               icon: Icons.help_outline,
-                              iconBgColor: Color(0xFFFFEDD5),
+                              iconBgColor: const Color(0xFFFFEDD5),
                               iconColor: ColorApp.orange,
-                              title: 'Hướng dẫn & FAQ',
-                              trailing: SettingsChevron(),
+                              title: l10n.guidesAndFAQ,
+                              trailing: const SettingsChevron(),
                             ),
                           ],
                         ),
@@ -148,11 +160,10 @@ class _AccountPageState extends State<AccountPage> {
                             final confirmed =
                                 await DialogHelper.showConfirmDialog(
                                   context: context,
-                                  title: 'Đăng xuất',
-                                  message:
-                                      'Bạn có chắc chắn muốn đăng xuất không?',
-                                  confirmText: 'Đăng xuất',
-                                  cancelText: 'Hủy',
+                                  title: l10n.logOut,
+                                  message: l10n.logoutConfirm,
+                                  confirmText: l10n.logOut,
+                                  cancelText: l10n.cancel,
                                   confirmColor: const Color(0xFFDC2626),
                                 );
                             if (confirmed == true && context.mounted) {
@@ -165,10 +176,9 @@ class _AccountPageState extends State<AccountPage> {
                         const SizedBox(height: 16),
                         Center(
                           child: Text(
-                            'Phiên bản 2.1.0',
+                            '${l10n.version} 2.1.0',
                             style: textTheme.bodySmall?.copyWith(
                               color: ColorApp.taupeGray,
-                              fontSize: 12,
                             ),
                           ),
                         ),
@@ -182,89 +192,6 @@ class _AccountPageState extends State<AccountPage> {
           }
           return Container();
         },
-      ),
-    );
-  }
-
-  void _showLanguagePicker(BuildContext context, String currentLocale) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Chọn ngôn ngữ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              _buildLanguageOption(
-                context: context,
-                title: 'English',
-                localeCode: 'en',
-                isSelected: currentLocale == 'en',
-              ),
-              const SizedBox(height: 12),
-              _buildLanguageOption(
-                context: context,
-                title: 'Tiếng Việt',
-                localeCode: 'vi',
-                isSelected: currentLocale == 'vi',
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildLanguageOption({
-    required BuildContext context,
-    required String title,
-    required String localeCode,
-    required bool isSelected,
-  }) {
-    return InkWell(
-      onTap: () {
-        context.read<LocaleBloc>().add(LocaleChanged(localeCode));
-        Navigator.pop(context);
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? ColorApp.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? ColorApp.primary : Colors.grey.shade200,
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? ColorApp.primary : ColorApp.textPrimary,
-              ),
-            ),
-            const Spacer(),
-            if (isSelected)
-              const Icon(Icons.check_circle, color: ColorApp.primary, size: 24),
-          ],
-        ),
       ),
     );
   }

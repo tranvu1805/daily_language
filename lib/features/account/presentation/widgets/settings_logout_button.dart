@@ -1,3 +1,4 @@
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:flutter/material.dart';
 
 class SettingsLogoutButton extends StatelessWidget {
@@ -24,11 +25,10 @@ class SettingsLogoutButton extends StatelessWidget {
             const Icon(Icons.logout, color: Color(0xFFDC2626), size: 20),
             const SizedBox(width: 8),
             Text(
-              'Đăng xuất',
-              style: textTheme.labelLarge?.copyWith(
+              context.l10n.logOut,
+              style: textTheme.titleMedium?.copyWith(
                 color: const Color(0xFFDC2626),
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

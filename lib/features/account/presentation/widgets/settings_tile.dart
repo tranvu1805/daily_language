@@ -48,18 +48,15 @@ class SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodySmall?.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                    style: textTheme.bodyLarge?.copyWith(
                       color: ColorApp.darkGray,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   if (subtitle != null)
                     Text(
                       subtitle!,
-                      style: textTheme.bodySmall?.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      style: textTheme.bodyMedium?.copyWith(
                         color: ColorApp.taupeGray,
                       ),
                     ),
