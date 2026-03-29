@@ -18,7 +18,8 @@ class CreateRecordUseCaseParams extends Equatable {
   final String userId;
   final String emotion;
   final String type;
-  final String content;
+  final String englishContent;
+  final String vietnameseContent;
   final List<String>? imageUrls;
   final String? voiceUrl;
 
@@ -26,7 +27,8 @@ class CreateRecordUseCaseParams extends Equatable {
     required this.userId,
     required this.emotion,
     required this.type,
-    required this.content,
+    required this.englishContent,
+    required this.vietnameseContent,
     this.imageUrls,
     this.voiceUrl,
   });
@@ -35,11 +37,13 @@ class CreateRecordUseCaseParams extends Equatable {
     this.userId = '',
     this.emotion = '',
     this.type = '',
-    this.content = '',
+    this.englishContent = '',
+    this.vietnameseContent = '',
     this.imageUrls,
     this.voiceUrl,
   });
 
   @override
-  List<Object?> get props => [userId, emotion, type, content, imageUrls, voiceUrl];
+  List<Object?> get props =>
+      [userId, emotion, type, englishContent, vietnameseContent, imageUrls, voiceUrl];
 }

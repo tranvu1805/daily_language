@@ -5,7 +5,8 @@ import 'package:equatable/equatable.dart';
 class RecordModel extends Equatable {
   final String? emotion;
   final String? type;
-  final String? content;
+  final String? englishContent;
+  final String? vietnameseContent;
   final List<String>? imageUrls;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -15,7 +16,8 @@ class RecordModel extends Equatable {
   const RecordModel({
     this.emotion,
     this.type,
-    this.content,
+    this.englishContent,
+    this.vietnameseContent,
     this.imageUrls,
     this.createdAt,
     this.updatedAt,
@@ -26,7 +28,8 @@ class RecordModel extends Equatable {
   const RecordModel.empty({
     this.emotion = '',
     this.type = '',
-    this.content = '',
+    this.englishContent = '',
+    this.vietnameseContent = '',
     this.imageUrls = const <String>[],
     this.createdAt,
     this.updatedAt,
@@ -37,7 +40,8 @@ class RecordModel extends Equatable {
   const RecordModel.toCreate({
     required this.emotion,
     required this.type,
-    required this.content,
+    required this.englishContent,
+    required this.vietnameseContent,
     this.imageUrls,
     this.createdAt,
     this.updatedAt,
@@ -48,7 +52,8 @@ class RecordModel extends Equatable {
   const RecordModel.toUpdate({
     required this.emotion,
     required this.type,
-    required this.content,
+    required this.englishContent,
+    required this.vietnameseContent,
     this.imageUrls,
     this.createdAt,
     this.updatedAt,
@@ -57,21 +62,23 @@ class RecordModel extends Equatable {
   });
 
   Record toEntity() => Record(
-    emotion: emotion ?? '',
-    type: type ?? '',
-    content: content ?? '',
-    imageUrls: imageUrls ?? <String>[],
-    createdAt: createdAt ?? DateTime.now(),
-    updatedAt: updatedAt ?? DateTime.now(),
-    voiceUrl: voiceUrl ?? '',
-    id: id ?? '',
-  );
+        emotion: emotion ?? '',
+        type: type ?? '',
+        englishContent: englishContent ?? '',
+        vietnameseContent: vietnameseContent ?? '',
+        imageUrls: imageUrls ?? <String>[],
+        createdAt: createdAt ?? DateTime.now(),
+        updatedAt: updatedAt ?? DateTime.now(),
+        voiceUrl: voiceUrl ?? '',
+        id: id ?? '',
+      );
 
   Map<String, dynamic> toCreateJson() {
     final map = <String, dynamic>{};
     map['emotion'] = emotion;
     map['type'] = type;
-    map['content'] = content;
+    map['englishContent'] = englishContent;
+    map['vietnameseContent'] = vietnameseContent;
     map['imageUrls'] = imageUrls;
     map['voiceUrl'] = voiceUrl;
     map['createdAt'] = FieldValue.serverTimestamp();
@@ -82,7 +89,8 @@ class RecordModel extends Equatable {
     final map = <String, dynamic>{};
     map['emotion'] = emotion;
     map['type'] = type;
-    map['content'] = content;
+    map['englishContent'] = englishContent;
+    map['vietnameseContent'] = vietnameseContent;
     map['imageUrls'] = imageUrls;
     map['voiceUrl'] = voiceUrl;
     map['updatedAt'] = FieldValue.serverTimestamp();
@@ -93,10 +101,12 @@ class RecordModel extends Equatable {
     : this(
         emotion: json['emotion'] as String?,
         type: json['type'] as String?,
-        content: json['content'] as String?,
-        imageUrls: (json['imageUrls'] as List<dynamic>?)
-            ?.map((e) => e as String)
-            .toList(),
+        englishContent: (json['englishContent'] as String?) ?? (json['content'] as String?),
+        vietnameseContent: json['vietnameseContent'] as String?,
+        imageUrls:
+            (json['imageUrls'] as List<dynamic>?)
+                ?.map((e) => e as String)
+                .toList(),
         createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
         updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
         voiceUrl: json['voiceUrl'] as String?,
@@ -107,7 +117,8 @@ class RecordModel extends Equatable {
   List<Object?> get props => [
     emotion,
     type,
-    content,
+    englishContent,
+    vietnameseContent,
     imageUrls,
     createdAt,
     updatedAt,

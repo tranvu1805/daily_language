@@ -41,7 +41,8 @@ class RecordReposImpl implements RecordRepos {
       final recordModel = RecordModel.toCreate(
         emotion: params.emotion,
         type: params.type,
-        content: params.content,
+        englishContent: params.englishContent,
+        vietnameseContent: params.vietnameseContent,
         imageUrls: params.imageUrls,
         voiceUrl: params.voiceUrl,
       );
@@ -59,7 +60,8 @@ class RecordReposImpl implements RecordRepos {
         id: params.id,
         emotion: params.emotion,
         type: params.type,
-        content: params.content,
+        englishContent: params.englishContent,
+        vietnameseContent: params.vietnameseContent,
         imageUrls: params.imageUrls,
         voiceUrl: params.voiceUrl,
       );

@@ -1,4 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/di/service_locator.dart';
+import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
@@ -6,7 +9,6 @@ import 'package:daily_language/features/record/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class RecordAddPage extends StatefulWidget {
   const RecordAddPage({super.key});
@@ -20,9 +22,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   late final TextEditingController _translatedContentController;
   String _selectedEmotion = '';
   String _selectedType = '';
-  late final stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _sttLocale = 'vi_VN';
+  String _sttLocale = 'en_US';
 
   Account get _account => getAccountFromState(context);
 
@@ -41,7 +41,6 @@ class _RecordAddPageState extends State<RecordAddPage> {
     super.initState();
     _contentController = TextEditingController();
     _translatedContentController = TextEditingController();
-    _speech = stt.SpeechToText();
   }
 
   @override
@@ -49,6 +48,33 @@ class _RecordAddPageState extends State<RecordAddPage> {
     _contentController.dispose();
     _translatedContentController.dispose();
     super.dispose();
+  }
+
+  void _onLocaleToggle() {
+    setState(() {
+      _sttLocale = _sttLocale == 'vi_VN' ? 'en_US' : 'vi_VN';
+      if (_sttLocale == 'en_US') {
+        _translatedContentController.clear();
+      }
+    });
+  }
+
+  void _onAIReviewPressed() {
+    if (_sttLocale == 'vi_VN') {
+      SnackBarHelper.showFailure(
+        context,
+        'AI Review only support English, please change to English mode',
+      );
+      return;
+    }
+
+    final content = _contentController.text.trim();
+    if (content.isEmpty) {
+      SnackBarHelper.showFailure(context, 'Please enter some text to review');
+      return;
+    }
+
+    context.push(Routes.diary + Routes.grammar, extra: content);
   }
 
   @override
@@ -63,6 +89,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
               param: GetRecordsUseCaseParams(userId: _account.uid),
             ),
           );
+          sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           context.pop();
         }
         if (state is RecordFailure) {
@@ -154,94 +181,13 @@ class _RecordAddPageState extends State<RecordAddPage> {
               ),
               const SizedBox(height: 24),
 
-              // Content Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Write your thoughts', style: textTheme.labelLarge),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _sttLocale = _sttLocale == 'vi_VN' ? 'en_US' : 'vi_VN';
-                            if (_sttLocale == 'en_US') {
-                              _translatedContentController.clear();
-                            }
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: ColorApp.primary.withAlpha(20),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            _sttLocale == 'vi_VN' ? 'VN' : 'EN',
-                            style: textTheme.labelSmall?.copyWith(
-                              color: ColorApp.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        onPressed: _onMicPressed,
-                        icon: const Icon(Icons.mic, size: 20, color: ColorApp.taupeGray),
-                      ),
-                    ],
-                  ),
-                ],
+              // Speech Input (mic + content + translation)
+              SpeechInputWidget(
+                contentController: _contentController,
+                translatedController: _translatedContentController,
+                locale: _sttLocale,
+                onLocaleToggle: _onLocaleToggle,
               ),
-              const SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: ColorApp.darkGray.withAlpha(20)),
-                ),
-                child: TextField(
-                  controller: _contentController,
-                  maxLines: 8,
-                  style: textTheme.bodySmall,
-                  decoration: InputDecoration(
-                    hintText: 'What happened today?',
-                    hintStyle: textTheme.bodySmall?.copyWith(
-                      color: ColorApp.taupeGray,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.all(16),
-                  ),
-                ),
-              ),
-              if (_sttLocale == 'vi_VN') ...[
-                const SizedBox(height: 16),
-                Text('English translation', style: textTheme.labelLarge),
-                const SizedBox(height: 12),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: ColorApp.darkGray.withAlpha(20)),
-                  ),
-                  child: TextField(
-                    controller: _translatedContentController,
-                    maxLines: 5,
-                    readOnly: true,
-                    style: textTheme.bodySmall,
-                    decoration: InputDecoration(
-                      hintText: 'Translated content will appear here',
-                      hintStyle: textTheme.bodySmall?.copyWith(
-                        color: ColorApp.taupeGray,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(16),
-                    ),
-                  ),
-                ),
-              ],
               const SizedBox(height: 32),
 
               // Save Button
@@ -249,13 +195,29 @@ class _RecordAddPageState extends State<RecordAddPage> {
             ],
           ),
         ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 70),
+          child: FloatingActionButton(
+            heroTag: 'ai_review_add',
+            onPressed: _onAIReviewPressed,
+            backgroundColor: ColorApp.primary,
+            shape: const CircleBorder(),
+            child: const Icon(Icons.auto_awesome, color: Colors.white),
+          ),
+        ),
       ),
     );
   }
 
   void _onSave() {
-    final content = _contentController.text.trim();
-    if (content.isEmpty) {
+    final englishContent = _sttLocale == 'en_US'
+        ? _contentController.text.trim()
+        : _translatedContentController.text.trim();
+    final vietnameseContent = _sttLocale == 'vi_VN'
+        ? _contentController.text.trim()
+        : '';
+
+    if (englishContent.isEmpty && vietnameseContent.isEmpty) {
       SnackBarHelper.showFailure(context, 'Please write something');
       return;
     }
@@ -266,59 +228,10 @@ class _RecordAddPageState extends State<RecordAddPage> {
           userId: _account.uid,
           emotion: _selectedEmotion,
           type: _selectedType,
-          content: content,
+          englishContent: englishContent,
+          vietnameseContent: vietnameseContent,
         ),
       ),
     );
-  }
-
-  Future<void> _onMicPressed() async {
-    DialogHelper.showMicListeningDialog(context: context);
-    setState(() { _isListening = true; });
-    bool available = await _speech.initialize();
-    if (available) {
-      _speech.listen(
-        onResult: (result) async {
-          if (result.finalResult) {
-            final recognizedWords = result.recognizedWords.trim();
-            if (!mounted) return;
-            setState(() {
-              _isListening = false;
-            });
-            _speech.stop();
-            context.pop();
-            if (recognizedWords.isEmpty) {
-              _contentController.clear();
-              _translatedContentController.clear();
-              return;
-            }
-            if (_sttLocale == 'vi_VN') {
-              _contentController.text = recognizedWords;
-              _translatedContentController.clear();
-              context.read<RecordBloc>().add(
-                RecordVietnameseTranslatedRequested(
-                  param: TranslateVietnameseToEnglishUseCaseParams(
-                    content: recognizedWords,
-                  ),
-                ),
-              );
-              return;
-            }
-            _translatedContentController.clear();
-            _contentController.text = recognizedWords;
-          }
-        },
-        listenFor: const Duration(seconds: 30),
-        localeId: _sttLocale,
-        listenOptions: stt.SpeechListenOptions(
-          cancelOnError: true,
-        ),
-      );
-    } else {
-      if (!mounted) return;
-      setState(() { _isListening = false; });
-      SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
-      context.pop();
-    }
   }
 }

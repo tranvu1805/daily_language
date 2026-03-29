@@ -1,8 +1,12 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class MicListeningWidget extends StatefulWidget {
-  const MicListeningWidget({super.key});
+  final bool isLoading;
+  final VoidCallback? onStop;
+
+  const MicListeningWidget({super.key, this.isLoading = false, this.onStop});
 
   @override
   State<MicListeningWidget> createState() => _MicListeningWidgetState();
@@ -14,11 +18,9 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
   static const _minHeight = 8.0;
   static const _maxHeight = 44.0;
 
-  /// Each bar has its own controller so they animate at staggered phases.
   late final List<AnimationController> _controllers;
   late final List<Animation<double>> _animations;
 
-  /// Different durations make the bars feel organic / not robotic.
   static const _durations = [
     Duration(milliseconds: 520),
     Duration(milliseconds: 380),
@@ -42,7 +44,6 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
       ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
     }).toList();
 
-    // Stagger the start of each bar so they don't all peak at once.
     for (var i = 0; i < _barCount; i++) {
       Future.delayed(Duration(milliseconds: i * 80), () {
         if (mounted) _controllers[i].repeat(reverse: true);
@@ -60,14 +61,29 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isLoading) {
+      return const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppCircularProgressIndicator(),
+          SizedBox(height: 24),
+          Text(
+            'Processing…',
+            style: TextStyle(
+              color: ColorApp.primary,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Pulsing mic icon
         _PulsingMicIcon(),
         const SizedBox(height: 24),
-
-        // Waveform bars
         SizedBox(
           height: _maxHeight,
           child: Row(
@@ -98,7 +114,6 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
           ),
         ),
         const SizedBox(height: 20),
-
         Text(
           'Listening…',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -113,6 +128,38 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
             context,
           ).textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
           textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 32),
+        GestureDetector(
+          onTap: widget.onStop,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            decoration: BoxDecoration(
+              color: ColorApp.primary,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorApp.primary.withAlpha(80),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.stop_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  'Stop Recording',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

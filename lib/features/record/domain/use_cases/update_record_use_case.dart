@@ -19,7 +19,8 @@ class UpdateRecordUseCaseParams extends Equatable {
   final String id;
   final String emotion;
   final String type;
-  final String content;
+  final String englishContent;
+  final String vietnameseContent;
   final List<String>? imageUrls;
   final String? voiceUrl;
 
@@ -28,7 +29,8 @@ class UpdateRecordUseCaseParams extends Equatable {
     required this.id,
     required this.emotion,
     required this.type,
-    required this.content,
+    required this.englishContent,
+    required this.vietnameseContent,
     this.imageUrls,
     this.voiceUrl,
   });
@@ -38,11 +40,13 @@ class UpdateRecordUseCaseParams extends Equatable {
     this.id = '',
     this.emotion = '',
     this.type = '',
-    this.content = '',
+    this.englishContent = '',
+    this.vietnameseContent = '',
     this.imageUrls,
     this.voiceUrl,
   });
 
   @override
-  List<Object?> get props => [userId, id, emotion, type, content, imageUrls, voiceUrl];
+  List<Object?> get props =>
+      [userId, id, emotion, type, englishContent, vietnameseContent, imageUrls, voiceUrl];
 }

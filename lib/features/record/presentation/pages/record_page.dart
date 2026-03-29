@@ -77,12 +77,6 @@ class _RecordPageState extends State<RecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorApp.linenWhite,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('${Routes.diary}/${Routes.diaryAdd}'),
-        backgroundColor: ColorApp.primary,
-        heroTag: 'record_add',
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
       body: SafeArea(
         child: BlocBuilder<RecordsBloc, RecordsState>(
           builder: (context, state) {
@@ -117,7 +111,10 @@ class _RecordPageState extends State<RecordPage> {
                     return RecordCard(
                       record: record,
                       onTap: () {
-                        // TODO: Navigate to record detail
+                        context.push(
+                          '${Routes.diary}/${Routes.diaryEdit}',
+                          extra: record,
+                        );
                       },
                     );
                   },

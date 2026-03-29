@@ -3,7 +3,8 @@ import 'package:equatable/equatable.dart';
 class Record extends Equatable {
   final String emotion;
   final String type;
-  final String content;
+  final String englishContent;
+  final String vietnameseContent;
   final List<String> imageUrls;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -13,7 +14,8 @@ class Record extends Equatable {
   const Record({
     required this.emotion,
     required this.type,
-    required this.content,
+    required this.englishContent,
+    required this.vietnameseContent,
     required this.imageUrls,
     required this.createdAt,
     required this.voiceUrl,
@@ -24,7 +26,8 @@ class Record extends Equatable {
   Record.empty({
     this.emotion = '',
     this.type = '',
-    this.content = '',
+    this.englishContent = '',
+    this.vietnameseContent = '',
     this.imageUrls = const <String>[],
     this.voiceUrl = '',
     this.id = '',
@@ -35,7 +38,8 @@ class Record extends Equatable {
   List<Object> get props => [
     emotion,
     type,
-    content,
+    englishContent,
+    vietnameseContent,
     imageUrls,
     createdAt,
     updatedAt,

@@ -55,10 +55,10 @@ class RecordCard extends StatelessWidget {
                   ),
               ],
             ),
-            if (record.content.isNotEmpty) ...[
+            if (record.englishContent.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                record.content,
+                record.englishContent,
                 style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
