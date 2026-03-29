@@ -28,16 +28,6 @@ class _RecordEditPageState extends State<RecordEditPage> {
 
   Account get _account => getAccountFromState(context);
 
-  static const _emotions = [
-    '😊 Happy',
-    '😢 Sad',
-    '😡 Angry',
-    '😨 Scared',
-    '😌 Calm',
-    '🤔 Thinking',
-  ];
-  static const _types = ['Daily', 'Study', 'Work', 'Travel', 'Food', 'Other'];
-
   @override
   void initState() {
     super.initState();
@@ -76,16 +66,13 @@ class _RecordEditPageState extends State<RecordEditPage> {
 
   void _onAIReviewPressed() {
     if (_sttLocale == 'vi_VN') {
-      SnackBarHelper.showFailure(
-        context,
-        'AI Review only support English, please change to English mode',
-      );
+      SnackBarHelper.showFailure(context, context.l10n.aiOnlyEnglish);
       return;
     }
 
     final content = _contentController.text.trim();
     if (content.isEmpty) {
-      SnackBarHelper.showFailure(context, 'Please enter some text to review');
+      SnackBarHelper.showFailure(context, context.l10n.enterTextReview);
       return;
     }
 
@@ -95,6 +82,7 @@ class _RecordEditPageState extends State<RecordEditPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
 
     return BlocListener<RecordBloc, RecordState>(
       listener: (context, state) {
@@ -104,7 +92,9 @@ class _RecordEditPageState extends State<RecordEditPage> {
               param: GetRecordsUseCaseParams(userId: _account.uid),
             ),
           );
-          context.read<AccountBloc>().add(AccountStreakUpdated(account: _account));
+          context.read<AccountBloc>().add(
+            AccountStreakUpdated(account: _account),
+          );
           sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           context.pop();
         }
@@ -125,8 +115,11 @@ class _RecordEditPageState extends State<RecordEditPage> {
             child: const Icon(Icons.close, color: ColorApp.darkGray),
           ),
           title: Text(
-            'Edit Record',
-            style: textTheme.titleMedium?.copyWith(color: ColorApp.darkGray),
+            l10n.editRecord,
+            style: textTheme.titleLarge?.copyWith(
+              color: ColorApp.darkGray,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           actions: [
@@ -146,10 +139,13 @@ class _RecordEditPageState extends State<RecordEditPage> {
                               color: ColorApp.primary,
                             ),
                           )
-                        : Text(
-                            'Update',
-                            style: textTheme.labelLarge?.copyWith(
-                              color: ColorApp.primary,
+                        : Center(
+                            child: Text(
+                              l10n.update,
+                              style: textTheme.labelLarge?.copyWith(
+                                color: ColorApp.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                   ),
@@ -164,36 +160,34 @@ class _RecordEditPageState extends State<RecordEditPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Emotion Section
-              Text('How are you feeling?', style: textTheme.labelLarge),
+              Text(
+                l10n.emotionQuestion,
+                style: textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.charcoalBlue,
+                ),
+              ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _emotions.map((emotion) {
-                  final isSelected = _selectedEmotion == emotion;
-                  return EmotionChip(
-                    label: emotion,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedEmotion = emotion),
-                  );
-                }).toList(),
+              EmotionSelector(
+                selectedEmotion: _selectedEmotion,
+                onEmotionSelected: (emotion) =>
+                    setState(() => _selectedEmotion = emotion),
               ),
               const SizedBox(height: 24),
 
               // Type Section
-              Text('Category', style: textTheme.labelLarge),
+              Text(
+                l10n.category,
+                style: textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.charcoalBlue,
+                ),
+              ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _types.map((type) {
-                  final isSelected = _selectedType == type;
-                  return TypeChip(
-                    label: type,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedType = type),
-                  );
-                }).toList(),
+              CategorySelector(
+                selectedCategory: _selectedType,
+                onCategorySelected: (category) =>
+                    setState(() => _selectedType = category),
               ),
               const SizedBox(height: 24),
 
@@ -206,7 +200,12 @@ class _RecordEditPageState extends State<RecordEditPage> {
               ),
               const SizedBox(height: 32),
 
-              PrimaryButton(onPressed: _onSave, label: 'Update Record'),
+              Center(
+                child: PrimaryButton(
+                  onPressed: _onSave,
+                  label: l10n.updateRecord,
+                ),
+              ),
             ],
           ),
         ),
@@ -233,7 +232,7 @@ class _RecordEditPageState extends State<RecordEditPage> {
         : '';
 
     if (englishContent.isEmpty && vietnameseContent.isEmpty) {
-      SnackBarHelper.showFailure(context, 'Please write something');
+      SnackBarHelper.showFailure(context, context.l10n.emptyError);
       return;
     }
 

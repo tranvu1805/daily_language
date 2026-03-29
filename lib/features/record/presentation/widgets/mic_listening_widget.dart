@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -62,13 +63,13 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading) {
-      return const Column(
+      return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppCircularProgressIndicator(),
+          const AppCircularProgressIndicator(),
           SizedBox(height: 24),
           Text(
-            'Processing…',
+            context.l10n.processing,
             style: TextStyle(
               color: ColorApp.primary,
               fontWeight: FontWeight.w600,
@@ -115,7 +116,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
         ),
         const SizedBox(height: 20),
         Text(
-          'Listening…',
+          context.l10n.listening,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             color: ColorApp.primary,
             fontWeight: FontWeight.w600,
@@ -123,7 +124,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
         ),
         const SizedBox(height: 6),
         Text(
-          'Speak now — we\'ll transcribe your words.',
+          context.l10n.speakNow,
           style: Theme.of(
             context,
           ).textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
@@ -145,13 +146,13 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
                 ),
               ],
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.stop_rounded, color: Colors.white, size: 20),
-                SizedBox(width: 8),
+                const Icon(Icons.stop_rounded, color: Colors.white, size: 20),
+                const SizedBox(width: 8),
                 Text(
-                  'Stop Recording',
+                  context.l10n.stopRecording,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

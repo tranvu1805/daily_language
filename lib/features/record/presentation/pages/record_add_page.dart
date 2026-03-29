@@ -1,6 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
@@ -25,16 +26,6 @@ class _RecordAddPageState extends State<RecordAddPage> {
   String _sttLocale = 'en_US';
 
   Account get _account => getAccountFromState(context);
-
-  static const _emotions = [
-    '😊 Happy',
-    '😢 Sad',
-    '😡 Angry',
-    '😨 Scared',
-    '😌 Calm',
-    '🤔 Thinking',
-  ];
-  static const _types = ['Daily', 'Study', 'Work', 'Travel', 'Food', 'Other'];
 
   @override
   void initState() {
@@ -63,14 +54,14 @@ class _RecordAddPageState extends State<RecordAddPage> {
     if (_sttLocale == 'vi_VN') {
       SnackBarHelper.showFailure(
         context,
-        'AI Review only support English, please change to English mode',
+        context.l10n.aiReviewSupport,
       );
       return;
     }
 
     final content = _contentController.text.trim();
     if (content.isEmpty) {
-      SnackBarHelper.showFailure(context, 'Please enter some text to review');
+      SnackBarHelper.showFailure(context, context.l10n.enterTextToReview);
       return;
     }
 
@@ -80,6 +71,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
 
     return BlocListener<RecordBloc, RecordState>(
       listener: (context, state) {
@@ -110,8 +102,11 @@ class _RecordAddPageState extends State<RecordAddPage> {
             child: const Icon(Icons.close, color: ColorApp.darkGray),
           ),
           title: Text(
-            'New Record',
-            style: textTheme.titleMedium?.copyWith(color: ColorApp.darkGray),
+            l10n.addRecord,
+            style: textTheme.titleLarge?.copyWith(
+              color: ColorApp.darkGray,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           actions: [
@@ -131,10 +126,13 @@ class _RecordAddPageState extends State<RecordAddPage> {
                               color: ColorApp.primary,
                             ),
                           )
-                        : Text(
-                            'Save',
-                            style: textTheme.labelLarge?.copyWith(
-                              color: ColorApp.primary,
+                        : Center(
+                            child: Text(
+                              l10n.save,
+                              style: textTheme.labelLarge?.copyWith(
+                                color: ColorApp.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                   ),
@@ -149,36 +147,34 @@ class _RecordAddPageState extends State<RecordAddPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Emotion Section
-              Text('How are you feeling?', style: textTheme.labelLarge),
+              Text(
+                l10n.emotionQuestion,
+                style: textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.charcoalBlue,
+                ),
+              ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _emotions.map((emotion) {
-                  final isSelected = _selectedEmotion == emotion;
-                  return EmotionChip(
-                    label: emotion,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedEmotion = emotion),
-                  );
-                }).toList(),
+              EmotionSelector(
+                selectedEmotion: _selectedEmotion,
+                onEmotionSelected: (emotion) =>
+                    setState(() => _selectedEmotion = emotion),
               ),
               const SizedBox(height: 24),
 
               // Type Section
-              Text('Category', style: textTheme.labelLarge),
+              Text(
+                l10n.category,
+                style: textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: ColorApp.charcoalBlue,
+                ),
+              ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _types.map((type) {
-                  final isSelected = _selectedType == type;
-                  return TypeChip(
-                    label: type,
-                    isSelected: isSelected,
-                    onTap: () => setState(() => _selectedType = type),
-                  );
-                }).toList(),
+              CategorySelector(
+                selectedCategory: _selectedType,
+                onCategorySelected: (category) =>
+                    setState(() => _selectedType = category),
               ),
               const SizedBox(height: 24),
 
@@ -192,7 +188,12 @@ class _RecordAddPageState extends State<RecordAddPage> {
               const SizedBox(height: 32),
 
               // Save Button
-              PrimaryButton(onPressed: _onSave, label: 'Save Record'),
+              Center(
+                child: PrimaryButton(
+                  onPressed: _onSave,
+                  label: l10n.saveRecord,
+                ),
+              ),
             ],
           ),
         ),
@@ -219,7 +220,7 @@ class _RecordAddPageState extends State<RecordAddPage> {
         : '';
 
     if (englishContent.isEmpty && vietnameseContent.isEmpty) {
-      SnackBarHelper.showFailure(context, 'Please write something');
+      SnackBarHelper.showFailure(context, context.l10n.emptyError);
       return;
     }
 

@@ -19,7 +19,7 @@ class RecordCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: ColorApp.darkGray.withAlpha(20)),
+          border: Border.all(color: ColorApp.darkGray.withValues(alpha: 0.08)),
         ),
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -30,14 +30,17 @@ class RecordCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    DateTimeHelper.formatDate(record.createdAt),
+                    DateTimeHelper.formatDate(
+                      record.createdAt,
+                      Localizations.localeOf(context).languageCode,
+                    ),
                     style: textTheme.labelLarge,
                   ),
                 ),
                 if (record.emotion.isNotEmpty)
                   Container(
                     decoration: BoxDecoration(
-                      color: ColorApp.primary.withAlpha(25),
+                      color: ColorApp.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     padding: const EdgeInsets.symmetric(
@@ -46,10 +49,9 @@ class RecordCard extends StatelessWidget {
                     ),
                     child: Text(
                       record.emotion,
-                      style: textTheme.bodySmall?.copyWith(
+                      style: textTheme.labelSmall?.copyWith(
                         color: ColorApp.primary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -59,7 +61,10 @@ class RecordCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 record.englishContent,
-                style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: ColorApp.taupeGray,
+                  height: 1.5,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
 import 'package:daily_language/features/record/presentation/presentation.dart';
@@ -116,7 +117,7 @@ class _SpeechInputWidgetState extends State<SpeechInputWidget> {
     } else {
       if (!mounted) return;
       if (Navigator.of(context).canPop()) context.pop();
-      SnackBarHelper.showFailure(context, 'Speech recognition unavailable');
+      SnackBarHelper.showFailure(context, context.l10n.speechUnavailable);
     }
   }
 
@@ -193,7 +194,7 @@ class _SpeechInputWidgetState extends State<SpeechInputWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Write your thoughts', style: textTheme.labelLarge),
+            Text(context.l10n.writeThoughts, style: textTheme.labelLarge),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -222,7 +223,7 @@ class _SpeechInputWidgetState extends State<SpeechInputWidget> {
         // Translation field — shown only in VN mode
         if (widget.locale == 'vi_VN') ...[
           const SizedBox(height: 16),
-          Text('English translation', style: textTheme.labelLarge),
+          Text(context.l10n.englishTranslation, style: textTheme.labelLarge),
           const SizedBox(height: 12),
           _TranslationTextField(controller: widget.translatedController),
         ],
@@ -279,7 +280,7 @@ class _ContentTextField extends StatelessWidget {
         maxLines: 8,
         style: Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
-          hintText: 'What happened today?',
+          hintText: context.l10n.whatHappenedToday,
           hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: ColorApp.taupeGray,
               ),
@@ -310,7 +311,7 @@ class _TranslationTextField extends StatelessWidget {
         readOnly: true,
         style: Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
-          hintText: 'Translated content will appear here',
+          hintText: context.l10n.translationHint,
           hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: ColorApp.taupeGray,
               ),

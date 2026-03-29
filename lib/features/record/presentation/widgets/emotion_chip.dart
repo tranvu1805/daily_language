@@ -21,19 +21,19 @@ class EmotionChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? ColorApp.primary.withAlpha(25) : Colors.white,
+          color: isSelected ? ColorApp.primary.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected
                 ? ColorApp.primary
-                : ColorApp.darkGray.withAlpha(30),
+                : ColorApp.darkGray.withValues(alpha: 0.1),
           ),
         ),
         child: Text(
           label,
-          style: textTheme.bodySmall?.copyWith(
+          style: textTheme.labelMedium?.copyWith(
             color: isSelected ? ColorApp.primary : ColorApp.darkGray,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
           ),
         ),
       ),

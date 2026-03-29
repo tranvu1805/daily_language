@@ -26,14 +26,14 @@ class TypeChip extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? ColorApp.primary
-                : ColorApp.darkGray.withAlpha(30),
+                : ColorApp.darkGray.withValues(alpha: 0.1),
           ),
         ),
         child: Text(
           label,
-          style: textTheme.bodySmall?.copyWith(
+          style: textTheme.labelMedium?.copyWith(
             color: isSelected ? Colors.white : ColorApp.darkGray,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
           ),
         ),
       ),
