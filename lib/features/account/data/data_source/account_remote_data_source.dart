@@ -72,12 +72,8 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<void> updateAccount({required AccountModel account}) async {
-    // final response = await db.post(
-    //   Uri.parse('$baseUrl/account:update').replace(queryParameters: {'filterByTk': account.uid}),
-    //   headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-    //   body: jsonEncode(account.toJsonForCreate()),
-    // );
-    // throwServerException(response, 200);
+    final ref = _database.collection('users').doc(account.uid);
+    await ref.update(account.toUpdateJson());
   }
 
   @override

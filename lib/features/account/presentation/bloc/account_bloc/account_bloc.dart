@@ -52,6 +52,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     final result = await _updateAccountUseCase(event.param);
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
       emit(AccountUpdateSuccess());
+      add(AccountRequested(uid: event.param.uid));
     });
   }
 

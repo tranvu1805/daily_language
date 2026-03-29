@@ -1,9 +1,14 @@
+import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -13,7 +18,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  bool _notificationsEnabled = true;
+  bool _notificationsEnabled = sl<LocalStorageHelper>().areNotificationsEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +63,9 @@ class _AccountPageState extends State<AccountPage> {
                         const SettingsSectionLabel(label: 'Thông tin cá nhân'),
                         const SizedBox(height: 12),
                         SettingsCard(
-                          onTap: () {},
+                          onTap: () {
+                            context.push(Routes.account + Routes.accountEdit);
+                          },
                           children: const [
                             SettingsTile(
                               icon: Icons.person_outline,
@@ -82,10 +89,17 @@ class _AccountPageState extends State<AccountPage> {
                               title: 'Nhắc nhở học tập',
                               trailing: Switch(
                                 value: _notificationsEnabled,
-                                onChanged: (value) {
+                                onChanged: (value) async {
                                   setState(() {
                                     _notificationsEnabled = value;
                                   });
+                                  await sl<LocalStorageHelper>().setNotificationsEnabled(value);
+                                  if (value) {
+                                    await sl<NotificationHelper>().requestPermission();
+                                    await sl<NotificationHelper>().scheduleDailyReminder();
+                                  } else {
+                                    await sl<NotificationHelper>().cancelAll();
+                                  }
                                 },
                                 activeThumbColor: Colors.white,
                                 activeTrackColor: ColorApp.primary,

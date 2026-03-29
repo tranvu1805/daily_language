@@ -33,12 +33,10 @@ class AccountReposImpl implements AccountRepos {
 
   @override
   ResultVoid updateAccount({required UpdateAccountUseCaseParams params}) {
-    throw UnimplementedError();
-    // return ApiService.handle(() async {
-    //   final model = AccountModel.toUpdate();
-    //   final token = await _authLocalDataSource.getToken();
-    //   await _remoteDataSource.updateAccount(account: model, token: token);
-    // });
+    return ApiService.handle(() async {
+      final model = AccountModel.fromUpdateParams(params);
+      await _remoteDataSource.updateAccount(account: model);
+    });
   }
 
   @override

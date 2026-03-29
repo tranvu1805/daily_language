@@ -66,6 +66,21 @@ class AccountModel extends Equatable {
     return map;
   }
 
+  Map<String, dynamic> toUpdateJson() {
+    final map = <String, dynamic>{};
+    map['fullName'] = fullName;
+    map['phoneNumber'] = phoneNumber;
+    return map;
+  }
+
+  factory AccountModel.fromUpdateParams(UpdateAccountUseCaseParams p) {
+    return AccountModel(
+      uid: p.uid,
+      fullName: p.fullName,
+      phoneNumber: p.phoneNumber,
+    );
+  }
+
   AccountModel.fromJson(dynamic json)
     : this(
         uid: json['uid'] as String?,
