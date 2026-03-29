@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'firebase_options.dart';
 
+import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 
 Future<void> main() async {
@@ -51,13 +52,26 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider.value(value: _authBloc),
         BlocProvider(create: (context) => sl<AccountBloc>()),
+        BlocProvider(create: (context) => sl<LocaleBloc>()),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        theme: appTheme,
-        routerConfig: router(_authRefresh),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+      child: BlocBuilder<LocaleBloc, LocaleState>(
+        builder: (context, localeState) {
+          String localeCode = 'en';
+          if (localeState is LocaleInitial) {
+            localeCode = localeState.localeCode;
+          } else if (localeState is LocaleLoaded) {
+            localeCode = localeState.localeCode;
+          }
+
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: appTheme,
+            routerConfig: router(_authRefresh),
+            locale: Locale(localeCode),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          );
+        },
       ),
     );
   }

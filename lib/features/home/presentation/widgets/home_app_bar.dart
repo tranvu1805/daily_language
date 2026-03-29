@@ -86,6 +86,14 @@ class HomeAppBar extends StatelessWidget {
                         fontSize: 28,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Highest: ${account.maxStreak} days',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white60,
+                        fontSize: 10,
+                      ),
+                    ),
                   ],
                 ),
                 const Icon(

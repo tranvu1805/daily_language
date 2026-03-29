@@ -1,5 +1,6 @@
-import 'package:daily_language/core/di/service_locator.dart';
+import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
@@ -47,15 +48,31 @@ class _AccountPageState extends State<AccountPage> {
                         const SettingsSectionLabel(label: 'Chức năng'),
                         const SizedBox(height: 12),
                         SettingsCard(
-                          onTap: () {},
-                          children: const [
-                            SettingsTile(
-                              icon: Icons.language,
-                              iconBgColor: Color(0xFFDBEAFE),
-                              iconColor: ColorApp.primary,
-                              title: 'Ngôn ngữ học tập',
-                              subtitle: 'Tiếng Anh',
-                              trailing: SettingsChevron(),
+                          children: [
+                            BlocBuilder<LocaleBloc, LocaleState>(
+                              builder: (context, state) {
+                                String currentLocale = 'en';
+                                if (state is LocaleInitial) {
+                                  currentLocale = state.localeCode;
+                                } else if (state is LocaleLoaded) {
+                                  currentLocale = state.localeCode;
+                                }
+
+                                return SettingsTile(
+                                  onTap: () => _showLanguagePicker(
+                                    context,
+                                    currentLocale,
+                                  ),
+                                  icon: Icons.translate,
+                                  iconBgColor: const Color(0xFFE0F2FE),
+                                  iconColor: Colors.lightBlue,
+                                  title: 'Ngôn ngữ ứng dụng',
+                                  subtitle: currentLocale == 'en'
+                                      ? 'English'
+                                      : 'Tiếng Việt',
+                                  trailing: const SettingsChevron(),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -93,10 +110,13 @@ class _AccountPageState extends State<AccountPage> {
                                   setState(() {
                                     _notificationsEnabled = value;
                                   });
-                                  await sl<LocalStorageHelper>().setNotificationsEnabled(value);
+                                  await sl<LocalStorageHelper>()
+                                      .setNotificationsEnabled(value);
                                   if (value) {
-                                    await sl<NotificationHelper>().requestPermission();
-                                    await sl<NotificationHelper>().scheduleDailyReminder();
+                                    await sl<NotificationHelper>()
+                                        .requestPermission();
+                                    await sl<NotificationHelper>()
+                                        .scheduleDailyReminder();
                                   } else {
                                     await sl<NotificationHelper>().cancelAll();
                                   }
@@ -162,6 +182,89 @@ class _AccountPageState extends State<AccountPage> {
           }
           return Container();
         },
+      ),
+    );
+  }
+
+  void _showLanguagePicker(BuildContext context, String currentLocale) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Chọn ngôn ngữ',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              _buildLanguageOption(
+                context: context,
+                title: 'English',
+                localeCode: 'en',
+                isSelected: currentLocale == 'en',
+              ),
+              const SizedBox(height: 12),
+              _buildLanguageOption(
+                context: context,
+                title: 'Tiếng Việt',
+                localeCode: 'vi',
+                isSelected: currentLocale == 'vi',
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption({
+    required BuildContext context,
+    required String title,
+    required String localeCode,
+    required bool isSelected,
+  }) {
+    return InkWell(
+      onTap: () {
+        context.read<LocaleBloc>().add(LocaleChanged(localeCode));
+        Navigator.pop(context);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? ColorApp.primary.withValues(alpha: 0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? ColorApp.primary : Colors.grey.shade200,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? ColorApp.primary : ColorApp.textPrimary,
+              ),
+            ),
+            const Spacer(),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: ColorApp.primary, size: 24),
+          ],
+        ),
       ),
     );
   }

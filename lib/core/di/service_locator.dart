@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/features/account/data/data.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
@@ -49,6 +50,7 @@ class DI {
 
     sl.registerLazySingleton<LocalStorageHelper>(() => LocalStorageHelper(sl()));
     sl.registerLazySingleton<NotificationHelper>(() => NotificationHelper(sl()));
+    sl.registerFactory<LocaleBloc>(() => LocaleBloc(sl()));
   }
 
   void _initAuthenticationFeature() {

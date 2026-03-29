@@ -17,19 +17,35 @@ class UpdateAccountUseCaseParams extends Equatable {
   final String uid;
   final String fullName;
   final String phoneNumber;
+  final int? streak;
+  final int? maxStreak;
+  final DateTime? lastActivityAt;
 
   const UpdateAccountUseCaseParams({
     required this.uid,
     required this.fullName,
     required this.phoneNumber,
+    this.streak,
+    this.maxStreak,
+    this.lastActivityAt,
   });
 
   const UpdateAccountUseCaseParams.empty({
     this.uid = '',
     this.fullName = '',
     this.phoneNumber = '',
+    this.streak,
+    this.maxStreak,
+    this.lastActivityAt,
   });
 
   @override
-  List<Object> get props => [uid, fullName, phoneNumber];
+  List<Object?> get props => [
+    uid,
+    fullName,
+    phoneNumber,
+    streak,
+    maxStreak,
+    lastActivityAt,
+  ];
 }

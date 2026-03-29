@@ -3,7 +3,7 @@ import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
+import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
 import 'package:daily_language/features/record/presentation/presentation.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +104,7 @@ class _RecordEditPageState extends State<RecordEditPage> {
               param: GetRecordsUseCaseParams(userId: _account.uid),
             ),
           );
+          context.read<AccountBloc>().add(AccountStreakUpdated(account: _account));
           sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           context.pop();
         }

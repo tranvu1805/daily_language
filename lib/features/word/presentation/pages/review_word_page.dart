@@ -2,7 +2,7 @@ import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
+import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/word/presentation/bloc/review_word_bloc/review_word_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,6 +56,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     return BlocConsumer<ReviewWordBloc, ReviewWordState>(
       listener: (context, state) {
         if (state.status == ReviewWordStatus.finished) {
+          context.read<AccountBloc>().add(AccountStreakUpdated(account: account));
           sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           _showCompletionDialog();
         }

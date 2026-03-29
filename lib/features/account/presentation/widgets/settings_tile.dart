@@ -10,6 +10,7 @@ class SettingsTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.trailing,
+    this.onTap,
   });
 
   final IconData icon;
@@ -18,50 +19,56 @@ class SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              shape: BoxShape.circle,
+    return InkWell(
+      onTap: onTap,
+      splashColor: ColorApp.linenWhite,
+      highlightColor: ColorApp.linenWhite,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 20),
             ),
-            child: Icon(icon, color: iconColor, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: textTheme.bodySmall?.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: ColorApp.darkGray,
-                  ),
-                ),
-                if (subtitle != null)
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    subtitle!,
+                    title,
                     style: textTheme.bodySmall?.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: ColorApp.taupeGray,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: ColorApp.darkGray,
                     ),
                   ),
-              ],
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: textTheme.bodySmall?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: ColorApp.taupeGray,
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          trailing,
-        ],
+            trailing,
+          ],
+        ),
       ),
     );
   }

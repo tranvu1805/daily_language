@@ -8,6 +8,8 @@ class AccountModel extends Equatable {
   final String? email;
   final String? phoneNumber;
   final int? streak;
+  final int? maxStreak;
+  final DateTime? lastActivityAt;
 
   const AccountModel({
     this.uid,
@@ -15,6 +17,8 @@ class AccountModel extends Equatable {
     this.email,
     this.phoneNumber,
     this.streak,
+    this.maxStreak,
+    this.lastActivityAt,
     this.avatarUrl,
   });
 
@@ -23,7 +27,9 @@ class AccountModel extends Equatable {
     this.fullName = '',
     this.email = '',
     this.phoneNumber = '',
-    this.streak = -1,
+    this.streak = 0,
+    this.maxStreak = 0,
+    this.lastActivityAt,
     this.avatarUrl = '',
   });
 
@@ -33,7 +39,9 @@ class AccountModel extends Equatable {
     required this.fullName,
     required this.avatarUrl,
     this.phoneNumber = '',
-    this.streak,
+    this.streak = 0,
+    this.maxStreak = 0,
+    this.lastActivityAt,
   });
 
   Account toEntity() => Account(
@@ -42,6 +50,8 @@ class AccountModel extends Equatable {
     email: email ?? '',
     phoneNumber: phoneNumber ?? '',
     streak: streak ?? 0,
+    maxStreak: maxStreak ?? 0,
+    lastActivityAt: lastActivityAt,
     avatarUrl: avatarUrl ?? '',
   );
 
@@ -53,6 +63,8 @@ class AccountModel extends Equatable {
     map['avatarUrl'] = avatarUrl;
     map['phoneNumber'] = phoneNumber;
     map['streak'] = streak;
+    map['maxStreak'] = maxStreak;
+    map['lastActivityAt'] = lastActivityAt;
     return map;
   }
 
@@ -63,6 +75,9 @@ class AccountModel extends Equatable {
     map['email'] = email;
     map['avatarUrl'] = avatarUrl;
     map['phoneNumber'] = phoneNumber;
+    map['streak'] = 0;
+    map['maxStreak'] = 0;
+    map['lastActivityAt'] = DateTime.now();
     return map;
   }
 
@@ -70,6 +85,9 @@ class AccountModel extends Equatable {
     final map = <String, dynamic>{};
     map['fullName'] = fullName;
     map['phoneNumber'] = phoneNumber;
+    if (streak != null) map['streak'] = streak;
+    if (maxStreak != null) map['maxStreak'] = maxStreak;
+    if (lastActivityAt != null) map['lastActivityAt'] = lastActivityAt;
     return map;
   }
 
@@ -78,6 +96,9 @@ class AccountModel extends Equatable {
       uid: p.uid,
       fullName: p.fullName,
       phoneNumber: p.phoneNumber,
+      streak: p.streak,
+      maxStreak: p.maxStreak,
+      lastActivityAt: p.lastActivityAt,
     );
   }
 
@@ -88,9 +109,22 @@ class AccountModel extends Equatable {
         email: json['email'] as String?,
         phoneNumber: json['phoneNumber'] as String?,
         streak: json['streak'] as int?,
+        maxStreak: json['maxStreak'] as int?,
+        lastActivityAt: json['lastActivityAt'] != null 
+            ? (json['lastActivityAt'] as dynamic).toDate() as DateTime? 
+            : null,
         avatarUrl: json['avatarUrl'] as String?,
       );
 
   @override
-  List<Object?> get props => [uid, fullName, email, phoneNumber, streak];
+  List<Object?> get props => [
+    uid,
+    fullName,
+    email,
+    phoneNumber,
+    streak,
+    maxStreak,
+    lastActivityAt,
+    avatarUrl,
+  ];
 }

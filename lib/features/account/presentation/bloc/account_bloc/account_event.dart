@@ -41,3 +41,11 @@ final class AccountDeleted extends AccountEvent {
   @override
   List<Object> get props => [id];
 }
+final class AccountStreakUpdated extends AccountEvent {
+  final Account account;
+
+  const AccountStreakUpdated({required this.account});
+
+  @override
+  List<Object> get props => [account];
+}
