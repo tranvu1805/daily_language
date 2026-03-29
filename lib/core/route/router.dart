@@ -5,7 +5,9 @@ import 'package:daily_language/core/route/app_shell.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
+import 'package:daily_language/features/grammar/presentation/presentation.dart';
 import 'package:daily_language/features/home/presentation/pages/home_page.dart';
+import 'package:daily_language/features/record/domain/domain.dart' as diary;
 import 'package:daily_language/features/record/presentation/presentation.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
@@ -47,6 +49,7 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
             BlocProvider(create: (context) => sl<WordsBloc>()),
             BlocProvider(create: (context) => sl<UserWordsBloc>()),
             BlocProvider(create: (context) => sl<ReviewWordBloc>()),
+            BlocProvider(create: (context) => sl<GrammarBloc>()),
           ],
           child: AppPage(navigationShell: shellRoutes),
         ),
@@ -68,6 +71,16 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
                   GoRoute(
                     path: Routes.diaryAdd,
                     builder: (context, state) => const RecordAddPage(),
+                  ),
+                  GoRoute(
+                    path: Routes.diaryEdit,
+                    builder: (context, state) =>
+                        RecordEditPage(record: state.extra as diary.Record),
+                  ),
+                  GoRoute(
+                    path: Routes.grammar,
+                    builder: (context, state) =>
+                        GrammarCheckPage(initialText: state.extra as String?),
                   ),
                 ],
               ),
@@ -92,10 +105,18 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
                       if (extra is Word) {
                         return OxfordWordDetailPage(word: extra);
                       }
+                      if (extra is UserWord) {
+                        return OxfordWordDetailPage(
+                          userWord: extra,
+                          showAddButton: false,
+                        );
+                      }
                       if (extra is Map<String, dynamic>) {
                         return OxfordWordDetailPage(
-                          word: extra['word'] as Word,
-                          showAddButton: extra['showAddButton'] as bool? ?? true,
+                          word: extra['word'] as Word?,
+                          userWord: extra['userWord'] as UserWord?,
+                          showAddButton:
+                              extra['showAddButton'] as bool? ?? true,
                         );
                       }
                       return const Scaffold(

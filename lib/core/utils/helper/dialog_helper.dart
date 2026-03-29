@@ -90,6 +90,8 @@ class DialogHelper {
 
   static Future<void> showMicListeningDialog({
     required BuildContext context,
+    required ValueNotifier<bool> isLoading,
+    VoidCallback? onStop,
   }) {
     return showDialog<void>(
       context: context,
@@ -97,9 +99,14 @@ class DialogHelper {
       builder: (_) => Dialog(
         backgroundColor: ColorApp.linenWhite,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: MicListeningWidget(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: ValueListenableBuilder<bool>(
+            valueListenable: isLoading,
+            builder: (context, loading, _) {
+              return MicListeningWidget(isLoading: loading, onStop: onStop);
+            },
+          ),
         ),
       ),
     );

@@ -11,10 +11,18 @@ import 'package:daily_language/features/record/presentation/presentation.dart';
 import 'package:daily_language/features/word/data/data.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
+import 'package:daily_language/features/grammar/data/data.dart';
+import 'package:daily_language/features/grammar/domain/domain.dart';
+import 'package:daily_language/features/grammar/presentation/presentation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
 
 final sl = GetIt.I;
 
@@ -24,10 +32,23 @@ class DI {
   DI._();
 
   Future<void> init() async {
+    await _initCore();
     _initAuthenticationFeature();
     _initAccountFeature();
     _initRecordFeature();
     _initWordFeature();
+    _initGrammarFeature();
+  }
+
+  Future<void> _initCore() async {
+    final prefs = await SharedPreferences.getInstance();
+    sl.registerLazySingleton<SharedPreferences>(() => prefs);
+    sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+      () => FlutterLocalNotificationsPlugin(),
+    );
+
+    sl.registerLazySingleton<LocalStorageHelper>(() => LocalStorageHelper(sl()));
+    sl.registerLazySingleton<NotificationHelper>(() => NotificationHelper(sl()));
   }
 
   void _initAuthenticationFeature() {
@@ -175,6 +196,21 @@ class DI {
         getDictionaryWordByIdUseCase: sl(),
         updateUserWordUseCase: sl(),
       ),
+    );
+  }
+
+  void _initGrammarFeature() {
+    sl.registerLazySingleton<GrammarRemoteDataSource>(
+      () => GrammarRemoteDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<GrammarRepository>(
+      () => GrammarRepositoryImpl(sl()),
+    );
+    sl.registerLazySingleton<CorrectGrammarUseCase>(
+      () => CorrectGrammarUseCase(sl()),
+    );
+    sl.registerFactory<GrammarBloc>(
+      () => GrammarBloc(correctGrammarUseCase: sl()),
     );
   }
 }

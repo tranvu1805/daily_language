@@ -58,4 +58,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty => 'No data available';
+
+  @override
+  String get required => 'This field is required';
+
+  @override
+  String get invalidPhoneNumber => 'Invalid phone number';
+
+  @override
+  String get invalidEmail => 'Invalid email';
+
+  @override
+  String get updateSuccess => 'Updated successfully';
 }

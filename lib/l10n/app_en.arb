@@ -15,5 +15,9 @@
   "cancel": "Cancel",
   "save": "Save",
   "logOut": "Log Out",
-  "empty": "No data available"
+  "empty": "No data available",
+  "required": "This field is required",
+  "invalidPhoneNumber": "Invalid phone number",
+  "invalidEmail": "Invalid email",
+  "updateSuccess": "Updated successfully"
 }

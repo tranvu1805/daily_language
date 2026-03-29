@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,7 @@ class _AppPageState extends State<AppPage> {
       backgroundColor: ColorApp.pureWhite,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        onPressed: () {},
+        onPressed: () => context.push('${Routes.diary}/${Routes.diaryAdd}'),
         backgroundColor: ColorApp.primary,
         elevation: 4,
         child: const Icon(Icons.add, color: ColorApp.pureWhite),

@@ -10,9 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'firebase_options.dart';
 
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DI.instance.init();
+  await sl<NotificationHelper>().init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Bloc.observer = AppBlocObserver();
   runApp(const MyApp());
