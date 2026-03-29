@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:flutter/material.dart';
 
 class MyWordsTopicCardWidget extends StatelessWidget {
@@ -49,7 +50,7 @@ class MyWordsTopicCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'My Words',
+                    context.l10n.myWords,
                     style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -57,7 +58,7 @@ class MyWordsTopicCardWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Your personal vocabulary list',
+                    context.l10n.personalVocabulary,
                     style: textTheme.bodySmall?.copyWith(
                       fontSize: 13,
                       color: Colors.white70,
@@ -74,7 +75,7 @@ class MyWordsTopicCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'Tap to review →',
+                      context.l10n.tapToReview,
                       style: textTheme.labelSmall?.copyWith(
                         fontSize: 12,
                         color: Colors.white,

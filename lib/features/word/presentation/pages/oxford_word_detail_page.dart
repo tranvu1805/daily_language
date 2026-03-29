@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
@@ -77,7 +78,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
       await _audioPlayer.play(DeviceFileSource(file.path));
     } catch (e) {
       if (mounted) {
-        SnackBarHelper.showFailure(context, 'Could not play audio');
+        SnackBarHelper.showFailure(context, context.l10n.audioError);
       }
     }
   }
@@ -111,7 +112,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
     return BlocListener<UserWordBloc, UserWordState>(
       listener: (context, state) {
         if (state is UserWordCreateSuccess) {
-          SnackBarHelper.showSuccess(context, 'Word added to My Words');
+          SnackBarHelper.showSuccess(context, context.l10n.wordAdded);
           context.pop();
         }
         if (state is UserWordFailure) {
@@ -125,7 +126,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            'Word Details',
+            context.l10n.wordDetails,
             style: textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: ColorApp.textPrimary,
@@ -162,131 +163,82 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
                     },
                   );
                 }
-                return const Center(child: Text('Word not found'));
+                return Center(child: Text(context.l10n.wordNotFound));
               }
               return Column(
                 children: [
-                  Expanded(
+                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Header
-                          Container(
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.05),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  word.content,
-                                  style: textTheme.displaySmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorApp.primary,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      word.pronunciation,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: ColorApp.textSecondary,
-                                      ),
-                                    ),
-                                    if (word.audioUs.isNotEmpty) ...[
-                                      const SizedBox(width: 8),
-                                      IconButton(
-                                        onPressed: () =>
-                                            _playAudio(word.audioUs),
-                                        icon: const Icon(
-                                          Icons.volume_up_rounded,
-                                          color: ColorApp.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  alignment: WrapAlignment.center,
-                                  children: [
-                                    _buildChip(
-                                      word.type,
-                                      ColorApp.cyanBlue,
-                                      ColorApp.charcoalBlue,
-                                      textTheme,
-                                    ),
-                                    _buildChip(
-                                      word.level.toUpperCase(),
-                                      ColorApp.lightOrange,
-                                      ColorApp.orange,
-                                      textTheme,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          WordDetailHeader(
+                            word: word,
+                            onPlayAudio: word.audioUs.isNotEmpty
+                                ? () => _playAudio(word.audioUs)
+                                : null,
                           ),
                           const SizedBox(height: 24),
 
                           // Meanings
-                          _buildSectionHeader(
-                            'English Meaning',
-                            Icons.g_translate_rounded,
-                            textTheme,
+                          WordDetailSectionHeader(
+                            title: context.l10n.englishMeaning,
+                            icon: Icons.g_translate_rounded,
                           ),
-                          _buildText(word.meaningEn, textTheme),
+                          if (word.meaningEn.isNotEmpty)
+                            Text(
+                              word.meaningEn,
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: ColorApp.textSecondary,
+                              ),
+                            ),
                           if (word.example.isNotEmpty) ...[
                             const SizedBox(height: 12),
-                            _buildExample(word.example, textTheme),
+                            WordDetailExampleCard(example: word.example),
                           ],
                           const SizedBox(height: 24),
-                          _buildSectionHeader(
-                            'Vietnamese Meaning',
-                            Icons.translate_rounded,
-                            textTheme,
+                          
+                          WordDetailSectionHeader(
+                            title: context.l10n.vietnameseMeaning,
+                            icon: Icons.translate_rounded,
                           ),
-                          _buildText(word.meaningVi, textTheme, isBold: true),
+                          if (word.meaningVi.isNotEmpty)
+                            Text(
+                              word.meaningVi,
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: ColorApp.textSecondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           if (word.definitionVi.isNotEmpty) ...[
                             const SizedBox(height: 4),
-                            _buildText(word.definitionVi, textTheme),
+                            Text(
+                              word.definitionVi,
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: ColorApp.textSecondary,
+                              ),
+                            ),
                           ],
 
                           if (word.synonym.isNotEmpty ||
                               word.antonym.isNotEmpty) ...[
                             const SizedBox(height: 24),
-                            _buildSectionHeader(
-                              'Relations',
-                              Icons.link_rounded,
-                              textTheme,
+                            WordDetailSectionHeader(
+                              title: context.l10n.relations,
+                              icon: Icons.link_rounded,
                             ),
                             if (word.synonym.isNotEmpty)
-                              _buildRelationList(
-                                'Synonyms:',
-                                word.synonym,
-                                textTheme,
+                              WordDetailRelationList(
+                                label: context.l10n.synonyms,
+                                items: word.synonym,
                               ),
                             if (word.antonym.isNotEmpty) ...[
                               if (word.synonym.isNotEmpty)
                                 const SizedBox(height: 12),
-                              _buildRelationList(
-                                'Antonyms:',
-                                word.antonym,
-                                textTheme,
+                              WordDetailRelationList(
+                                label: context.l10n.antonyms,
+                                items: word.antonym,
                               ),
                             ],
                           ],
@@ -322,7 +274,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
                         ),
                         icon: const Icon(Icons.add_circle_rounded),
                         label: Text(
-                          'Add to My Words',
+                          context.l10n.addToMyWords,
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -336,127 +288,6 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildChip(
-    String label,
-    Color bgColor,
-    Color textColor,
-    TextTheme textTheme,
-  ) {
-    if (label.isEmpty) return const SizedBox.shrink();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: textTheme.labelSmall?.copyWith(
-          color: textColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title, IconData icon, TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: ColorApp.primary),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: ColorApp.textPrimary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildText(String text, TextTheme textTheme, {bool isBold = false}) {
-    if (text.isEmpty) return const SizedBox.shrink();
-    return Text(
-      text,
-      style: textTheme.bodyMedium?.copyWith(
-        color: ColorApp.textSecondary,
-        fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
-      ),
-    );
-  }
-
-  Widget _buildExample(String example, TextTheme textTheme) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: ColorApp.primary.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: ColorApp.primary.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.format_quote_rounded,
-            size: 20,
-            color: ColorApp.primary,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              example,
-              style: textTheme.bodyMedium?.copyWith(
-                color: ColorApp.textPrimary,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRelationList(
-    String label,
-    List<String> items,
-    TextTheme textTheme,
-  ) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: ColorApp.textPrimary,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: items
-                .map(
-                  (e) => Text(
-                    e,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: ColorApp.primary,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ],
     );
   }
 }

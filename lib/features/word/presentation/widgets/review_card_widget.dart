@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ReviewCardWidget extends StatelessWidget {
@@ -15,6 +16,7 @@ class ReviewCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final hasReview = reviewCount > 0;
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -26,7 +28,10 @@ class ReviewCardWidget extends StatelessWidget {
             gradient: LinearGradient(
               colors: hasReview
                   ? [ColorApp.primary, const Color(0xFF6E85E8)]
-                  : [ColorApp.taupeGray.withValues(alpha: 0.2), ColorApp.taupeGray.withValues(alpha: 0.1)],
+                  : [
+                      ColorApp.taupeGray.withValues(alpha: 0.2),
+                      ColorApp.taupeGray.withValues(alpha: 0.1)
+                    ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -63,7 +68,7 @@ class ReviewCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Daily Review',
+                      l10n.dailyReview,
                       style: textTheme.titleMedium?.copyWith(
                         color: hasReview ? Colors.white : ColorApp.textPrimary,
                         fontWeight: FontWeight.bold,
@@ -72,8 +77,8 @@ class ReviewCardWidget extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       hasReview
-                          ? 'You have $reviewCount words ready to review!'
-                          : 'No words to review today. Keep learning!',
+                          ? l10n.reviewReady(reviewCount)
+                          : l10n.noReviewToday,
                       style: textTheme.bodySmall?.copyWith(
                         color: hasReview
                             ? Colors.white.withValues(alpha: 0.8)

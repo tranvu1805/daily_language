@@ -1,6 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/helper/date_time_helper.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
+import 'package:daily_language/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class WordCard extends StatelessWidget {
@@ -12,6 +13,7 @@ class WordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
       onTap: onTap,
@@ -33,7 +35,7 @@ class WordCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        word.word.isEmpty ? 'Unknown' : word.word,
+                        word.word.isEmpty ? l10n.unknown : word.word,
                         style: textTheme.titleMedium?.copyWith(
                           color: ColorApp.textPrimary,
                           fontWeight: FontWeight.bold,
@@ -41,7 +43,7 @@ class WordCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Next review: ${DateTimeHelper.formatDate(word.nextReview)}',
+                        '${l10n.nextReview}: ${DateTimeHelper.formatDate(word.nextReview)}',
                         style: textTheme.bodySmall?.copyWith(
                           color: ColorApp.textSecondary,
                         ),
@@ -59,7 +61,7 @@ class WordCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    'Stage ${word.stage}',
+                    l10n.stage(word.stage),
                     style: textTheme.labelSmall?.copyWith(
                       color: ColorApp.primary,
                       fontWeight: FontWeight.bold,

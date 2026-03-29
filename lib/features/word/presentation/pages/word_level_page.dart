@@ -1,6 +1,7 @@
 import 'package:daily_language/core/constants/app.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
@@ -26,19 +27,27 @@ class _WordLevelPageState extends State<WordLevelPage> {
 
   bool get _isMyWords => widget.topic == 'my_words';
 
-  String get _title => _isMyWords ? 'My Words' : 'Oxford ${widget.topic}';
+  String _getTitle(BuildContext context) =>
+      _isMyWords ? context.l10n.myWords : context.l10n.oxfordTopic(widget.topic);
 
-  String get _subtitle => _isMyWords
-      ? 'Your personal vocabulary'
-      : _levelSubtitles[widget.topic] ?? '';
-
-  static const _levelSubtitles = {
-    'A1': 'Beginner · 500 words',
-    'A2': 'Elementary · 700 words',
-    'B1': 'Intermediate · 1200 words',
-    'B2': 'Upper-Intermediate · 1500 words',
-    'C1': 'Advanced · 1000 words',
-  };
+  String _getSubtitle(BuildContext context) {
+    if (_isMyWords) return context.l10n.personalVocabulary;
+    final l10n = context.l10n;
+    switch (widget.topic) {
+      case 'A1':
+        return l10n.levelWordsCount(l10n.beginner, 500);
+      case 'A2':
+        return l10n.levelWordsCount(l10n.elementary, 700);
+      case 'B1':
+        return l10n.levelWordsCount(l10n.intermediate, 1200);
+      case 'B2':
+        return l10n.levelWordsCount(l10n.upperIntermediate, 1500);
+      case 'C1':
+        return l10n.levelWordsCount(l10n.advanced, 1000);
+      default:
+        return '';
+    }
+  }
 
   static const _levelColors = {
     'my_words': ColorApp.primary,
@@ -155,7 +164,7 @@ class _WordLevelPageState extends State<WordLevelPage> {
         if (state is UserWordCreateSuccess) {
           SnackBarHelper.showSuccess(
             context,
-            'Added "${state.word}" to your words',
+            context.l10n.addedWordToMyWords(state.word),
           );
           // Global refresh of UserWordsBloc to ensure My Words list is updated everywhere
           context.read<UserWordsBloc>().add(
@@ -181,8 +190,8 @@ class _WordLevelPageState extends State<WordLevelPage> {
               slivers: [
                 SliverToBoxAdapter(
                   child: WordLevelPageHeaderWidget(
-                    title: _title,
-                    subtitle: _subtitle,
+                    title: _getTitle(context),
+                    subtitle: _getSubtitle(context),
                     accentColor: _accentColor,
                     onBack: () => context.pop(),
                     onAdd: _isMyWords

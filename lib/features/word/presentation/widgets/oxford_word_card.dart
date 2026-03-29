@@ -56,14 +56,14 @@ class OxfordWordCard extends StatelessWidget {
                         word.content,
                         style: textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: ColorApp.textPrimary,
+                          color: ColorApp.primary,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Flexible(
                         child: Text(
                           word.pronunciation,
-                          style: textTheme.bodySmall?.copyWith(
+                          style: textTheme.labelSmall?.copyWith(
                             color: ColorApp.textSecondary,
                           ),
                         ),
@@ -81,6 +81,7 @@ class OxfordWordCard extends StatelessWidget {
                   Text(
                     word.meaningVi,
                     style: textTheme.bodySmall?.copyWith(
+                      color: ColorApp.textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

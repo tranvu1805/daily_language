@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:flutter/material.dart';
 
 class WordLevelEmptyWordsWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class WordLevelEmptyWordsWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'No words yet',
+              context.l10n.noWordsYet,
               style: textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: ColorApp.textPrimary,
@@ -37,7 +38,7 @@ class WordLevelEmptyWordsWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Start adding words from your diary\nor tap + to add manually.',
+              context.l10n.startAddingWords,
               textAlign: TextAlign.center,
               style: textTheme.bodySmall?.copyWith(
                 color: ColorApp.textSecondary,
