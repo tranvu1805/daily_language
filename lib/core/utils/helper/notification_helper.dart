@@ -39,15 +39,16 @@ class NotificationHelper {
     // Cancel existing one first
     await _notificationsPlugin.cancel(id: 0);
 
-    // Schedule for 9:00 AM
+    // Schedule for custom time from LocalStorage
+    final localStorage = sl<LocalStorageHelper>();
     final now = tz.TZDateTime.now(tz.local);
     var scheduledDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
       now.day,
-      21,
-      30,
+      localStorage.reminderHour,
+      localStorage.reminderMinute,
     );
 
     if (forceTomorrow || scheduledDate.isBefore(now)) {

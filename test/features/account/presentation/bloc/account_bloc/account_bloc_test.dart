@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:daily_language/core/errors/failures.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';

@@ -20,7 +20,7 @@ class GrammarBloc extends Bloc<GrammarEvent, GrammarState> {
     Emitter<GrammarState> emit,
   ) async {
     emit(GrammarInProgress());
-    final result = await _correctGrammarUseCase(event.text);
+    final result = await _correctGrammarUseCase(event.param);
     result.fold(
       (failure) => emit(GrammarFailure(failure.message)),
       (correction) => emit(GrammarSuccess(correction)),

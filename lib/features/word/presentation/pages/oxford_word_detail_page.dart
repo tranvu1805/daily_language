@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
@@ -116,7 +115,10 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
           context.pop();
         }
         if (state is UserWordFailure) {
-          SnackBarHelper.showFailure(context, state.error);
+          SnackBarHelper.showFailure(
+            context,
+            state.error.toLocalizedError(context),
+          );
         }
       },
       child: Scaffold(
@@ -148,7 +150,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
                 }
                 if (state.status == UserWordsStatus.failure) {
                   return AppRetryWidget(
-                    message: state.error,
+                    message: state.error.toLocalizedError(context),
                     onRetry: () {
                       if (widget.userWord != null) {
                         context.read<UserWordsBloc>().add(
@@ -167,7 +169,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
               }
               return Column(
                 children: [
-                   Expanded(
+                  Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(24),
                       child: Column(
@@ -198,7 +200,7 @@ class _OxfordWordDetailPageState extends State<OxfordWordDetailPage> {
                             WordDetailExampleCard(example: word.example),
                           ],
                           const SizedBox(height: 24),
-                          
+
                           WordDetailSectionHeader(
                             title: context.l10n.vietnameseMeaning,
                             icon: Icons.translate_rounded,

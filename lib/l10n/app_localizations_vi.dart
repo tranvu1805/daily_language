@@ -455,4 +455,93 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noDiaryEntries => 'Chưa có nhật ký nào. Hãy viết ngay!';
+
+  @override
+  String get dataNotFound => 'Dữ liệu không tồn tại';
+
+  @override
+  String get googleSignInFailed => 'Đăng nhập Google thất bại';
+
+  @override
+  String get wordAlreadyExists => 'Từ này đã có trong bộ sưu tập của bạn';
+
+  @override
+  String unknownError(String message) {
+    return 'Lỗi không xác định: $message';
+  }
+
+  @override
+  String get permissionDenied => 'Bạn không có quyền thực hiện thao tác này';
+
+  @override
+  String get alreadyExists => 'Dữ liệu đã tồn tại';
+
+  @override
+  String get resourceExhausted => 'Đã vượt quá giới hạn, vui lòng thử lại sau';
+
+  @override
+  String get failedPrecondition => 'Thao tác không hợp lệ';
+
+  @override
+  String get aborted => 'Thao tác bị hủy, vui lòng thử lại';
+
+  @override
+  String get outOfRange => 'Giá trị nằm ngoài phạm vi cho phép';
+
+  @override
+  String get unavailable =>
+      'Dịch vụ tạm thời không khả dụng, vui lòng thử lại sau';
+
+  @override
+  String get dataLoss => 'Dữ liệu bị mất hoặc hỏng';
+
+  @override
+  String get deadlineExceeded => 'Yêu cầu đã hết thời gian chờ';
+
+  @override
+  String get cancelled => 'Yêu cầu đã bị hủy';
+
+  @override
+  String get userNotFound => 'Tài khoản không tồn tại';
+
+  @override
+  String get wrongPassword => 'Mật khẩu không chính xác';
+
+  @override
+  String get emailAlreadyInUse => 'Email đã được sử dụng';
+
+  @override
+  String get weakPassword => 'Mật khẩu quá yếu';
+
+  @override
+  String get userDisabled => 'Tài khoản đã bị vô hiệu hóa';
+
+  @override
+  String get tooManyRequests => 'Quá nhiều yêu cầu, vui lòng thử lại sau';
+
+  @override
+  String get operationNotAllowed => 'Thao tác không được phép';
+
+  @override
+  String get accountExistsWithDifferentCredential =>
+      'Tài khoản đã tồn tại với phương thức đăng nhập khác';
+
+  @override
+  String get invalidCredential => 'Thông tin xác thực không hợp lệ';
+
+  @override
+  String get networkRequestFailed => 'Lỗi kết nối mạng, vui lòng kiểm tra lại';
+
+  @override
+  String get connectionTimeout => 'Lỗi kết nối quá thời gian chờ';
+
+  @override
+  String cacheError(String message) {
+    return 'Lỗi bộ nhớ cache: $message';
+  }
+
+  @override
+  String reminderSetAt(String time) {
+    return 'Đã đặt nhắc nhở lúc $time';
+  }
 }

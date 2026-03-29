@@ -1,6 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/widget/primary_button.dart';
+import 'package:daily_language/features/grammar/domain/domain.dart';
 import 'package:daily_language/features/grammar/presentation/bloc/grammar_bloc.dart';
 import 'package:daily_language/features/grammar/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GrammarCheckPage extends StatefulWidget {
   final String? initialText;
+  final String? language;
 
-  const GrammarCheckPage({super.key, this.initialText});
+  const GrammarCheckPage({super.key, this.initialText, this.language});
 
   @override
   State<GrammarCheckPage> createState() => _GrammarCheckPageState();
@@ -22,10 +24,17 @@ class _GrammarCheckPageState extends State<GrammarCheckPage> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialText);
-    if (widget.initialText != null && widget.initialText!.isNotEmpty) {
+    if (widget.initialText != null &&
+        widget.language != null &&
+        widget.initialText!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<GrammarBloc>().add(
-          CorrectGrammarRequested(widget.initialText!),
+          CorrectGrammarRequested(
+            GetGrammarCorrectionParams(
+              text: widget.initialText!.trim(),
+              language: widget.language!,
+            ),
+          ),
         );
       });
     }
@@ -41,7 +50,8 @@ class _GrammarCheckPageState extends State<GrammarCheckPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
-    
+    final languageCode = Localizations.localeOf(context).languageCode;
+
     return Scaffold(
       backgroundColor: ColorApp.linenWhite,
       appBar: AppBar(
@@ -74,7 +84,12 @@ class _GrammarCheckPageState extends State<GrammarCheckPage> {
                   onPressed: () {
                     if (_controller.text.trim().isNotEmpty) {
                       context.read<GrammarBloc>().add(
-                        CorrectGrammarRequested(_controller.text.trim()),
+                        CorrectGrammarRequested(
+                          GetGrammarCorrectionParams(
+                            text: _controller.text.trim(),
+                            language: languageCode,
+                          ),
+                        ),
                       );
                     }
                   },
@@ -99,11 +114,14 @@ class _GrammarCheckPageState extends State<GrammarCheckPage> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.error_outline, color: ColorApp.failedRed),
+                        const Icon(
+                          Icons.error_outline,
+                          color: ColorApp.failedRed,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            state.error,
+                            state.error.toLocalizedError(context),
                             style: textTheme.bodyMedium?.copyWith(
                               color: ColorApp.failedRed,
                             ),

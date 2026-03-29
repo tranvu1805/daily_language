@@ -28,7 +28,7 @@ class OxfordWordsListWidget extends StatelessWidget {
           return SliverFillRemaining(
             child: AppRetryWidget(
               onRetry: () => _refresh(context),
-              message: state.error,
+              message: state.error.toLocalizedError(context),
             ),
           );
         } else if (state.words.isEmpty) {

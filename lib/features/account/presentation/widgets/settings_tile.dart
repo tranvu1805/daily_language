@@ -24,10 +24,8 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      splashColor: ColorApp.linenWhite,
-      highlightColor: ColorApp.linenWhite,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(

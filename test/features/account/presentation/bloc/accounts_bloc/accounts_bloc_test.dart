@@ -1,7 +1,6 @@
-import 'package:daily_language/core/errors/failures.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
-import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:daily_language/core/errors/failures.dart';
+import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
@@ -15,9 +14,7 @@ void main() {
 
   setUp(() {
     getAccountsUseCase = MockGetAccountsUseCase();
-    account = AccountsBloc(
-      getAccountsUseCase: getAccountsUseCase,
-    );
+    account = AccountsBloc(getAccountsUseCase: getAccountsUseCase);
   });
 
   group('AccountsRequested', () {
@@ -25,7 +22,9 @@ void main() {
       'should emit AccountsSuccess when successfully',
       build: () => account,
       setUp: () {
-        when(() => getAccountsUseCase(any())).thenAnswer((_) async => const Right(<Account>[]));
+        when(
+          () => getAccountsUseCase(any()),
+        ).thenAnswer((_) async => const Right(<Account>[]));
       },
       act: (bloc) => bloc.add(AccountsRequested()),
       expect: () => [
@@ -44,12 +43,14 @@ void main() {
       'should emit AccountsFailure when unsuccessfully',
       build: () => account,
       setUp: () {
-        when(() => getAccountsUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => getAccountsUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(AccountsRequested()),
       expect: () => [
         const AccountsState(status: AccountsStatus.loading),
-    AccountsState(
+        AccountsState(
           error: tFailure.message,
           status: AccountsStatus.failure,
           action: 'requested',
@@ -63,7 +64,9 @@ void main() {
       'should emit AccountsSuccess when successfully',
       build: () => account,
       setUp: () {
-        when(() => getAccountsUseCase(any())).thenAnswer((_) async => const Right(<Account>[]));
+        when(
+          () => getAccountsUseCase(any()),
+        ).thenAnswer((_) async => const Right(<Account>[]));
       },
       act: (bloc) => bloc.add(AccountsRefreshed()),
       expect: () => [
@@ -83,13 +86,15 @@ void main() {
       'should emit AccountsFailure when unsuccessfully',
       build: () => account,
       setUp: () {
-        when(() => getAccountsUseCase(any())).thenAnswer((_) async => const Left(tFailure));
+        when(
+          () => getAccountsUseCase(any()),
+        ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) => bloc.add(AccountsRefreshed()),
       expect: () => [
         const AccountsState(status: AccountsStatus.initial),
         const AccountsState(status: AccountsStatus.loading),
-    AccountsState(
+        AccountsState(
           error: tFailure.message,
           status: AccountsStatus.failure,
           action: 'requested',
@@ -97,5 +102,4 @@ void main() {
       ],
     );
   });
-
 }

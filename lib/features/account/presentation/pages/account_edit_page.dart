@@ -46,7 +46,10 @@ class _AccountEditPageState extends State<AccountEditPage> {
             context.pop();
           }
           if (state is AccountFailure) {
-            SnackBarHelper.showFailure(context, state.error);
+            SnackBarHelper.showFailure(
+              context,
+              state.error.toLocalizedError(context),
+            );
           }
         },
         builder: (context, state) {

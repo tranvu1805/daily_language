@@ -1,17 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_language/features/account/data/data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
 void main() {
-  late MockFirebaseFirestore database;
-  late AccountRemoteDataSource dataSource;
-
   setUp(() {
-    database = MockFirebaseFirestore();
-    dataSource = AccountRemoteDataSourceImpl(database);
     registerFallbackValue(Uri());
   });
 

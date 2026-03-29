@@ -201,5 +201,53 @@
   "definition": "Định nghĩa",
   "nextWord": "Từ tiếp theo",
   "checkAnswer": "Kiểm tra đáp án",
-  "noDiaryEntries": "Chưa có nhật ký nào. Hãy viết ngay!"
+  "noDiaryEntries": "Chưa có nhật ký nào. Hãy viết ngay!",
+  "dataNotFound": "Dữ liệu không tồn tại",
+  "googleSignInFailed": "Đăng nhập Google thất bại",
+  "wordAlreadyExists": "Từ này đã có trong bộ sưu tập của bạn",
+  "unknownError": "Lỗi không xác định: {message}",
+  "@unknownError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDenied": "Bạn không có quyền thực hiện thao tác này",
+  "alreadyExists": "Dữ liệu đã tồn tại",
+  "resourceExhausted": "Đã vượt quá giới hạn, vui lòng thử lại sau",
+  "failedPrecondition": "Thao tác không hợp lệ",
+  "aborted": "Thao tác bị hủy, vui lòng thử lại",
+  "outOfRange": "Giá trị nằm ngoài phạm vi cho phép",
+  "unavailable": "Dịch vụ tạm thời không khả dụng, vui lòng thử lại sau",
+  "dataLoss": "Dữ liệu bị mất hoặc hỏng",
+  "deadlineExceeded": "Yêu cầu đã hết thời gian chờ",
+  "cancelled": "Yêu cầu đã bị hủy",
+  "userNotFound": "Tài khoản không tồn tại",
+  "wrongPassword": "Mật khẩu không chính xác",
+  "emailAlreadyInUse": "Email đã được sử dụng",
+  "weakPassword": "Mật khẩu quá yếu",
+  "userDisabled": "Tài khoản đã bị vô hiệu hóa",
+  "tooManyRequests": "Quá nhiều yêu cầu, vui lòng thử lại sau",
+  "operationNotAllowed": "Thao tác không được phép",
+  "accountExistsWithDifferentCredential": "Tài khoản đã tồn tại với phương thức đăng nhập khác",
+  "invalidCredential": "Thông tin xác thực không hợp lệ",
+  "networkRequestFailed": "Lỗi kết nối mạng, vui lòng kiểm tra lại",
+  "connectionTimeout": "Lỗi kết nối quá thời gian chờ",
+  "cacheError": "Lỗi bộ nhớ cache: {message}",
+  "@cacheError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderSetAt": "Đã đặt nhắc nhở lúc {time}",
+  "@reminderSetAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -943,6 +943,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No diary entries yet. Start writing!'**
   String get noDiaryEntries;
+
+  /// No description provided for @dataNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Data does not exist'**
+  String get dataNotFound;
+
+  /// No description provided for @googleSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in failed'**
+  String get googleSignInFailed;
+
+  /// No description provided for @wordAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This word already exists in your collection'**
+  String get wordAlreadyExists;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error: {message}'**
+  String unknownError(String message);
+
+  /// No description provided for @permissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to perform this operation'**
+  String get permissionDenied;
+
+  /// No description provided for @alreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Data already exists'**
+  String get alreadyExists;
+
+  /// No description provided for @resourceExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Quota exceeded, please try again later'**
+  String get resourceExhausted;
+
+  /// No description provided for @failedPrecondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid operation'**
+  String get failedPrecondition;
+
+  /// No description provided for @aborted.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation aborted, please try again'**
+  String get aborted;
+
+  /// No description provided for @outOfRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Value out of range'**
+  String get outOfRange;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable, please try again later'**
+  String get unavailable;
+
+  /// No description provided for @dataLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Data loss or corruption'**
+  String get dataLoss;
+
+  /// No description provided for @deadlineExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out'**
+  String get deadlineExceeded;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled'**
+  String get cancelled;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Account does not exist'**
+  String get userNotFound;
+
+  /// No description provided for @wrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get wrongPassword;
+
+  /// No description provided for @emailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is already in use'**
+  String get emailAlreadyInUse;
+
+  /// No description provided for @weakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get weakPassword;
+
+  /// No description provided for @userDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Account has been disabled'**
+  String get userDisabled;
+
+  /// No description provided for @tooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests, please try again later'**
+  String get tooManyRequests;
+
+  /// No description provided for @operationNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation not allowed'**
+  String get operationNotAllowed;
+
+  /// No description provided for @accountExistsWithDifferentCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'Account exists with different sign-in method'**
+  String get accountExistsWithDifferentCredential;
+
+  /// No description provided for @invalidCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid credentials'**
+  String get invalidCredential;
+
+  /// No description provided for @networkRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error, please check your connection'**
+  String get networkRequestFailed;
+
+  /// No description provided for @connectionTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timed out'**
+  String get connectionTimeout;
+
+  /// No description provided for @cacheError.
+  ///
+  /// In en, this message translates to:
+  /// **'Cache error: {message}'**
+  String cacheError(String message);
+
+  /// No description provided for @reminderSetAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder set at {time}'**
+  String reminderSetAt(String time);
 }
 
 class _AppLocalizationsDelegate

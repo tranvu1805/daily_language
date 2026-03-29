@@ -201,5 +201,53 @@
   "definition": "Definition",
   "nextWord": "Next Word",
   "checkAnswer": "Check Answer",
-  "noDiaryEntries": "No diary entries yet. Start writing!"
+  "noDiaryEntries": "No diary entries yet. Start writing!",
+  "dataNotFound": "Data does not exist",
+  "googleSignInFailed": "Google sign-in failed",
+  "wordAlreadyExists": "This word already exists in your collection",
+  "unknownError": "Unknown error: {message}",
+  "@unknownError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDenied": "You do not have permission to perform this operation",
+  "alreadyExists": "Data already exists",
+  "resourceExhausted": "Quota exceeded, please try again later",
+  "failedPrecondition": "Invalid operation",
+  "aborted": "Operation aborted, please try again",
+  "outOfRange": "Value out of range",
+  "unavailable": "Service temporarily unavailable, please try again later",
+  "dataLoss": "Data loss or corruption",
+  "deadlineExceeded": "Request timed out",
+  "cancelled": "Request cancelled",
+  "userNotFound": "Account does not exist",
+  "wrongPassword": "Incorrect password",
+  "emailAlreadyInUse": "Email is already in use",
+  "weakPassword": "Password is too weak",
+  "userDisabled": "Account has been disabled",
+  "tooManyRequests": "Too many requests, please try again later",
+  "operationNotAllowed": "Operation not allowed",
+  "accountExistsWithDifferentCredential": "Account exists with different sign-in method",
+  "invalidCredential": "Invalid credentials",
+  "networkRequestFailed": "Network error, please check your connection",
+  "connectionTimeout": "Connection timed out",
+  "cacheError": "Cache error: {message}",
+  "@cacheError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderSetAt": "Reminder set at {time}",
+  "@reminderSetAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

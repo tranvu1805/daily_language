@@ -1,5 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
+import 'package:daily_language/core/utils/helper/snackbar_helper.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/authentication/presentation/bloc/authentication_bloc/authentication_bloc.dart';
@@ -20,9 +21,10 @@ class SplashPage extends StatelessWidget {
         child: BlocListener<AccountBloc, AccountState>(
           listener: (context, state) {
             if (state is AccountFailure) {
-              ScaffoldMessenger.of(
+              SnackBarHelper.showFailure(
                 context,
-              ).showSnackBar(SnackBar(content: Text(state.error)));
+                state.error.toLocalizedError(context),
+              );
             }
           },
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
@@ -39,9 +41,10 @@ class SplashPage extends StatelessWidget {
                   ),
                 );
               } else if (state is AuthenticationFailure) {
-                ScaffoldMessenger.of(
+                SnackBarHelper.showFailure(
                   context,
-                ).showSnackBar(SnackBar(content: Text(state.error)));
+                  state.error.toLocalizedError(context),
+                );
               }
             },
             builder: (context, state) {

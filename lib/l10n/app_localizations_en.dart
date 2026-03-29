@@ -453,4 +453,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noDiaryEntries => 'No diary entries yet. Start writing!';
+
+  @override
+  String get dataNotFound => 'Data does not exist';
+
+  @override
+  String get googleSignInFailed => 'Google sign-in failed';
+
+  @override
+  String get wordAlreadyExists => 'This word already exists in your collection';
+
+  @override
+  String unknownError(String message) {
+    return 'Unknown error: $message';
+  }
+
+  @override
+  String get permissionDenied =>
+      'You do not have permission to perform this operation';
+
+  @override
+  String get alreadyExists => 'Data already exists';
+
+  @override
+  String get resourceExhausted => 'Quota exceeded, please try again later';
+
+  @override
+  String get failedPrecondition => 'Invalid operation';
+
+  @override
+  String get aborted => 'Operation aborted, please try again';
+
+  @override
+  String get outOfRange => 'Value out of range';
+
+  @override
+  String get unavailable =>
+      'Service temporarily unavailable, please try again later';
+
+  @override
+  String get dataLoss => 'Data loss or corruption';
+
+  @override
+  String get deadlineExceeded => 'Request timed out';
+
+  @override
+  String get cancelled => 'Request cancelled';
+
+  @override
+  String get userNotFound => 'Account does not exist';
+
+  @override
+  String get wrongPassword => 'Incorrect password';
+
+  @override
+  String get emailAlreadyInUse => 'Email is already in use';
+
+  @override
+  String get weakPassword => 'Password is too weak';
+
+  @override
+  String get userDisabled => 'Account has been disabled';
+
+  @override
+  String get tooManyRequests => 'Too many requests, please try again later';
+
+  @override
+  String get operationNotAllowed => 'Operation not allowed';
+
+  @override
+  String get accountExistsWithDifferentCredential =>
+      'Account exists with different sign-in method';
+
+  @override
+  String get invalidCredential => 'Invalid credentials';
+
+  @override
+  String get networkRequestFailed =>
+      'Network error, please check your connection';
+
+  @override
+  String get connectionTimeout => 'Connection timed out';
+
+  @override
+  String cacheError(String message) {
+    return 'Cache error: $message';
+  }
+
+  @override
+  String reminderSetAt(String time) {
+    return 'Reminder set at $time';
+  }
 }

@@ -1,5 +1,9 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
+import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
+import 'package:daily_language/core/utils/helper/snackbar_helper.dart';
 import 'package:daily_language/features/account/domain/entities/account.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +16,7 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
-    
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -57,7 +61,33 @@ class HomeAppBar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Icon(Icons.notifications, color: Colors.white),
+              IconButton(
+                onPressed: () async {
+                  final localStorage = sl<LocalStorageHelper>();
+                  final initialTime = TimeOfDay(
+                    hour: localStorage.reminderHour,
+                    minute: localStorage.reminderMinute,
+                  );
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: initialTime,
+                  );
+                  if (selectedTime != null) {
+                    await localStorage.setReminderTime(
+                      selectedTime.hour,
+                      selectedTime.minute,
+                    );
+                    await sl<NotificationHelper>().scheduleDailyReminder();
+                    if (context.mounted) {
+                      SnackBarHelper.showSuccess(
+                        context,
+                        l10n.reminderSetAt(selectedTime.format(context)),
+                      );
+                    }
+                  }
+                },
+                icon: const Icon(Icons.alarm_add, color: Colors.white),
+              ),
             ],
           ),
           const SizedBox(height: 20),

@@ -1,5 +1,4 @@
 import 'package:daily_language/core/errors/exceptions.dart';
-import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

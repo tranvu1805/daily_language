@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:daily_language/l10n/app_localizations.dart';
 import 'package:equatable/equatable.dart';
 
 import 'exceptions.dart';
@@ -11,6 +12,41 @@ abstract class Failure extends Equatable {
 
   const Failure({required this.message, required this.statusCode});
 
+  String toMessage(AppLocalizations l10n) {
+    return switch (message) {
+      'dataNotFound' => l10n.dataNotFound,
+      'googleSignInFailed' => l10n.googleSignInFailed,
+      'wordAlreadyExists' => l10n.wordAlreadyExists,
+      'permissionDenied' => l10n.permissionDenied,
+      'alreadyExists' => l10n.alreadyExists,
+      'resourceExhausted' => l10n.resourceExhausted,
+      'failedPrecondition' => l10n.failedPrecondition,
+      'aborted' => l10n.aborted,
+      'outOfRange' => l10n.outOfRange,
+      'unavailable' => l10n.unavailable,
+      'dataLoss' => l10n.dataLoss,
+      'deadlineExceeded' => l10n.deadlineExceeded,
+      'cancelled' => l10n.cancelled,
+      'userNotFound' => l10n.userNotFound,
+      'wrongPassword' => l10n.wrongPassword,
+      'emailAlreadyInUse' => l10n.emailAlreadyInUse,
+      'weakPassword' => l10n.weakPassword,
+      'userDisabled' => l10n.userDisabled,
+      'tooManyRequests' => l10n.tooManyRequests,
+      'operationNotAllowed' => l10n.operationNotAllowed,
+      'accountExistsWithDifferentCredential' =>
+        l10n.accountExistsWithDifferentCredential,
+      'invalidCredential' => l10n.invalidCredential,
+      'networkRequestFailed' => l10n.networkRequestFailed,
+      'connectionTimeout' => l10n.connectionTimeout,
+      'cacheError' => l10n.cacheError(message),
+      _ =>
+        message.isEmpty
+            ? l10n.unknownError('Unknown')
+            : l10n.unknownError(message),
+    };
+  }
+
   @override
   List<Object> get props => [message, statusCode];
 }
@@ -20,42 +56,40 @@ class ServerFailure extends Failure {
 
   factory ServerFailure.fromException(ServerException exception) {
     final message = switch (exception.message.toLowerCase()) {
-      'not found' => 'Dữ liệu không tồn tại',
-      'google sign-in failed' => 'Đăng nhập Google thất bại',
-      'word already exists in your collection' => 'Từ này đã có trong bộ sưu tập của bạn',
-      _ => 'Lỗi không xác định: ${exception.message}',
+      'not found' => 'dataNotFound',
+      'google sign-in failed' => 'googleSignInFailed',
+      'word already exists in your collection' => 'wordAlreadyExists',
+      _ => exception.message,
     };
     return ServerFailure(message: message, statusCode: exception.statusCode);
   }
 
   factory ServerFailure.fromFirebaseException(FirebaseException exception) {
     final message = switch (exception.code) {
-      // Firestore errors
-      'permission-denied' => 'Bạn không có quyền thực hiện thao tác này',
-      'not-found' => 'Không tìm thấy dữ liệu',
-      'already-exists' => 'Dữ liệu đã tồn tại',
-      'resource-exhausted' => 'Đã vượt quá giới hạn, vui lòng thử lại sau',
-      'failed-precondition' => 'Thao tác không hợp lệ',
-      'aborted' => 'Thao tác bị hủy, vui lòng thử lại',
-      'out-of-range' => 'Giá trị nằm ngoài phạm vi cho phép',
-      'unavailable' => 'Dịch vụ tạm thời không khả dụng, vui lòng thử lại sau',
-      'data-loss' => 'Dữ liệu bị mất hoặc hỏng',
-      'deadline-exceeded' => 'Yêu cầu đã hết thời gian chờ',
-      'cancelled' => 'Yêu cầu đã bị hủy',
-      // Firebase Auth errors
-      'user-not-found' => 'Tài khoản không tồn tại',
-      'wrong-password' => 'Mật khẩu không chính xác',
-      'email-already-in-use' => 'Email đã được sử dụng',
-      'invalid-email' => 'Email không hợp lệ',
-      'weak-password' => 'Mật khẩu quá yếu',
-      'user-disabled' => 'Tài khoản đã bị vô hiệu hóa',
-      'too-many-requests' => 'Quá nhiều yêu cầu, vui lòng thử lại sau',
-      'operation-not-allowed' => 'Thao tác không được phép',
+      'permission-denied' => 'permissionDenied',
+      'not-found' => 'dataNotFound',
+      'already-exists' => 'alreadyExists',
+      'resource-exhausted' => 'resourceExhausted',
+      'failed-precondition' => 'failedPrecondition',
+      'aborted' => 'aborted',
+      'out-of-range' => 'outOfRange',
+      'unavailable' => 'unavailable',
+      'data-loss' => 'dataLoss',
+      'deadline-exceeded' => 'deadlineExceeded',
+      'cancelled' => 'cancelled',
+      'user-not-found' => 'userNotFound',
+      'wrong-password' => 'wrongPassword',
+      'email-already-in-use' => 'emailAlreadyInUse',
+      'invalid-email' => 'invalidEmail',
+      'weak-password' => 'weakPassword',
+      'user-disabled' => 'userDisabled',
+      'too-many-requests' => 'tooManyRequests',
+      'operation-not-allowed' => 'operationNotAllowed',
       'account-exists-with-different-credential' =>
-        'Tài khoản đã tồn tại với phương thức đăng nhập khác',
-      'invalid-credential' => 'Thông tin xác thực không hợp lệ',
-      'network-request-failed' => 'Lỗi kết nối mạng, vui lòng kiểm tra lại',
-      _ => 'Lỗi không xác định: ${exception.message}',
+        'accountExistsWithDifferentCredential',
+      'invalid-credential' => 'invalidCredential',
+      'network-request-failed' => 'networkRequestFailed',
+      _ => exception.message ?? 'unknownError',
     };
     return ServerFailure(message: message, statusCode: 500);
   }
@@ -65,10 +99,7 @@ class ConnectFailure extends Failure {
   const ConnectFailure({required super.message, required super.statusCode});
 
   factory ConnectFailure.fromException(TimeoutException exception) {
-    final message = switch (exception.message?.toLowerCase()) {
-      _ => 'Lỗi kết nối quá thời gian chờ',
-    };
-    return ConnectFailure(message: message, statusCode: 555);
+    return const ConnectFailure(message: 'connectionTimeout', statusCode: 555);
   }
 }
 
@@ -76,9 +107,6 @@ class CacheFailure extends Failure {
   const CacheFailure({required super.message, required super.statusCode});
 
   factory CacheFailure.fromException(Exception exception) {
-    final message = switch (exception.toString().toLowerCase()) {
-      _ => 'Lỗi bộ nhớ cache: ${exception.toString()}',
-    };
-    return CacheFailure(message: message, statusCode: 555);
+    return const CacheFailure(message: 'cacheError', statusCode: 555);
   }
 }

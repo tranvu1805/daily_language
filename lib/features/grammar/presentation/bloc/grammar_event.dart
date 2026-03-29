@@ -8,10 +8,10 @@ abstract class GrammarEvent extends Equatable {
 }
 
 class CorrectGrammarRequested extends GrammarEvent {
-  final String text;
+  final GetGrammarCorrectionParams param;
 
-  const CorrectGrammarRequested(this.text);
+  const CorrectGrammarRequested(this.param);
 
   @override
-  List<Object> get props => [text];
+  List<Object> get props => [param];
 }

@@ -84,7 +84,10 @@ class _RecordPageState extends State<RecordPage> {
               return const AppCircularProgressIndicator();
             }
             if (state.status == RecordsStatus.failure) {
-              return AppRetryWidget(message: state.error, onRetry: _refresh);
+              return AppRetryWidget(
+                message: state.error.toLocalizedError(context),
+                onRetry: _refresh,
+              );
             }
             if (state.status == RecordsStatus.success) {
               if (state.records.isEmpty) {

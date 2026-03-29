@@ -31,7 +31,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              state.error,
+              state.error.toLocalizedError(context),
               style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
             ),
           );

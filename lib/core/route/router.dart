@@ -79,8 +79,13 @@ GoRouter router(GoRouterRefreshStream goRouterRefreshStream) {
                   ),
                   GoRoute(
                     path: Routes.grammar,
-                    builder: (context, state) =>
-                        GrammarCheckPage(initialText: state.extra as String?),
+                    builder: (context, state) {
+                      final content = state.extra as (String?, String?);
+                      return GrammarCheckPage(
+                        initialText: content.$1,
+                        language: content.$2,
+                      );
+                    },
                   ),
                 ],
               ),

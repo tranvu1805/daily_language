@@ -1,5 +1,4 @@
 import 'package:daily_language/core/constants/colors_app.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -62,18 +61,18 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     if (widget.isLoading) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const AppCircularProgressIndicator(),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Text(
             context.l10n.processing,
-            style: TextStyle(
+            style: textTheme.titleMedium?.copyWith(
               color: ColorApp.primary,
               fontWeight: FontWeight.w600,
-              fontSize: 16,
             ),
           ),
         ],
@@ -117,7 +116,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
         const SizedBox(height: 20),
         Text(
           context.l10n.listening,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: textTheme.titleMedium?.copyWith(
             color: ColorApp.primary,
             fontWeight: FontWeight.w600,
           ),
@@ -125,9 +124,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
         const SizedBox(height: 6),
         Text(
           context.l10n.speakNow,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
+          style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
@@ -153,7 +150,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
                 const SizedBox(width: 8),
                 Text(
                   context.l10n.stopRecording,
-                  style: TextStyle(
+                  style: textTheme.labelLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

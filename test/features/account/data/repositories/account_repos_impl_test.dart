@@ -15,7 +15,6 @@ void main() {
   const tId = 'id';
   const tException = ServerException(message: 'Unknown error', statusCode: 555);
   const tCreateAccountUseCaseParams = CreateAccountUseCaseParams.empty();
-  const tUpdateAccountUseCaseParams = UpdateAccountUseCaseParams.empty();
   final tCreateAccountModel = AccountModel.toCreate(
     avatarUrl: tCreateAccountUseCaseParams.avatarUrl,
     uid: tCreateAccountUseCaseParams.uid,

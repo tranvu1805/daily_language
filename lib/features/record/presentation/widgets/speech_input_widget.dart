@@ -1,5 +1,4 @@
 import 'package:daily_language/core/constants/colors_app.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
 import 'package:daily_language/features/record/presentation/presentation.dart';
@@ -253,9 +252,9 @@ class _LocaleToggleWidget extends StatelessWidget {
         child: Text(
           locale == 'vi_VN' ? 'VN' : 'EN',
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: ColorApp.primary,
-                fontWeight: FontWeight.bold,
-              ),
+            color: ColorApp.primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -281,9 +280,9 @@ class _ContentTextField extends StatelessWidget {
         style: Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
           hintText: context.l10n.whatHappenedToday,
-          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: ColorApp.taupeGray,
-              ),
+          hintStyle: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(16),
         ),
@@ -312,9 +311,9 @@ class _TranslationTextField extends StatelessWidget {
         style: Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
           hintText: context.l10n.translationHint,
-          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: ColorApp.taupeGray,
-              ),
+          hintStyle: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(16),
         ),

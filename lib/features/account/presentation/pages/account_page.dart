@@ -2,10 +2,11 @@ import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
+import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/features/account/domain/use_cases/create_account_use_case.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/account/presentation/widgets/widgets.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
@@ -34,8 +35,23 @@ class _AccountPageState extends State<AccountPage> {
             return const AppCircularProgressIndicator();
           }
           if (state is AccountFailure) {
-            return Center(
-              child: Text(state.error, style: textTheme.bodyMedium),
+            return AppRetryWidget(
+              message: state.error.toLocalizedError(context),
+              onRetry: () {
+                final authState = context.read<AuthenticationBloc>().state;
+                if (authState is AuthenticationSuccess) {
+                  context.read<AccountBloc>().add(
+                    AccountCreated(
+                      param: CreateAccountUseCaseParams(
+                        uid: authState.user.id,
+                        email: authState.user.email,
+                        fullName: authState.user.username,
+                        avatarUrl: authState.user.avatarUrl,
+                      ),
+                    ),
+                  );
+                }
+              },
             );
           }
           if (state is AccountSuccess) {

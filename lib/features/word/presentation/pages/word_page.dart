@@ -3,6 +3,7 @@ import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class WordPage extends StatelessWidget {
@@ -34,9 +35,14 @@ class WordPage extends StatelessWidget {
             ),
             // ── Review Card ─────────────────────────────────────────────
             SliverToBoxAdapter(
-              child: ReviewCardWidget(
-                onTap: () =>
-                    context.push('${Routes.words}/${Routes.wordsReview}'),
+              child: BlocBuilder<ReviewWordBloc, ReviewWordState>(
+                builder: (context, state) {
+                  return ReviewCardWidget(
+                    reviewCount: state.reviewWords.length,
+                    onTap: () =>
+                        context.push('${Routes.words}/${Routes.wordsReview}'),
+                  );
+                },
               ),
             ),
             // ── My Words card (full width) ───────────────────────────────

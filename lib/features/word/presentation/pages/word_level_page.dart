@@ -1,7 +1,6 @@
 import 'package:daily_language/core/constants/app.dart';
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
@@ -27,8 +26,9 @@ class _WordLevelPageState extends State<WordLevelPage> {
 
   bool get _isMyWords => widget.topic == 'my_words';
 
-  String _getTitle(BuildContext context) =>
-      _isMyWords ? context.l10n.myWords : context.l10n.oxfordTopic(widget.topic);
+  String _getTitle(BuildContext context) => _isMyWords
+      ? context.l10n.myWords
+      : context.l10n.oxfordTopic(widget.topic);
 
   String _getSubtitle(BuildContext context) {
     if (_isMyWords) return context.l10n.personalVocabulary;
@@ -176,7 +176,10 @@ class _WordLevelPageState extends State<WordLevelPage> {
             ),
           );
         } else if (state is UserWordFailure) {
-          SnackBarHelper.showFailure(context, state.error);
+          SnackBarHelper.showFailure(
+            context,
+            state.error.toLocalizedError(context),
+          );
         }
       },
       child: Scaffold(

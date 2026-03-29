@@ -1,7 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/route/routes.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
@@ -50,12 +49,9 @@ class _RecordAddPageState extends State<RecordAddPage> {
     });
   }
 
-  void _onAIReviewPressed() {
+  void _onAIReviewPressed({required String languageCode}) {
     if (_sttLocale == 'vi_VN') {
-      SnackBarHelper.showFailure(
-        context,
-        context.l10n.aiReviewSupport,
-      );
+      SnackBarHelper.showFailure(context, context.l10n.aiReviewSupport);
       return;
     }
 
@@ -65,14 +61,14 @@ class _RecordAddPageState extends State<RecordAddPage> {
       return;
     }
 
-    context.push(Routes.diary + Routes.grammar, extra: content);
+    context.push(Routes.diary + Routes.grammar, extra: (content, languageCode));
   }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
-
+    final languageCode = Localizations.localeOf(context).languageCode;
     return BlocListener<RecordBloc, RecordState>(
       listener: (context, state) {
         if (state is RecordCreateSuccess) {
@@ -81,12 +77,17 @@ class _RecordAddPageState extends State<RecordAddPage> {
               param: GetRecordsUseCaseParams(userId: _account.uid),
             ),
           );
-          context.read<AccountBloc>().add(AccountStreakUpdated(account: _account));
+          context.read<AccountBloc>().add(
+            AccountStreakUpdated(account: _account),
+          );
           sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           context.pop();
         }
         if (state is RecordFailure) {
-          SnackBarHelper.showFailure(context, state.error);
+          SnackBarHelper.showFailure(
+            context,
+            state.error.toLocalizedError(context),
+          );
         }
         if (state is RecordTranslateSuccess) {
           _translatedContentController.text = state.translatedContent;
@@ -201,7 +202,9 @@ class _RecordAddPageState extends State<RecordAddPage> {
           padding: const EdgeInsets.only(bottom: 70),
           child: FloatingActionButton(
             heroTag: 'ai_review_add',
-            onPressed: _onAIReviewPressed,
+            onPressed: () {
+              _onAIReviewPressed(languageCode: languageCode);
+            },
             backgroundColor: ColorApp.primary,
             shape: const CircleBorder(),
             child: const Icon(Icons.auto_awesome, color: Colors.white),

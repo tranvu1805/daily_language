@@ -71,7 +71,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
         }
         if (state.error.isNotEmpty &&
             state.status == ReviewWordStatus.failure) {
-          SnackBarHelper.showFailure(context, state.error);
+          SnackBarHelper.showFailure(context, state.error.toLocalizedError(context));
         }
       },
       child: PopScope(
@@ -135,7 +135,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                   onRetry: () => context.read<ReviewWordBloc>().add(
                     ReviewWordLoaded(userId: account.uid),
                   ),
-                  message: l10n.failedToLoadWords(state.error),
+                  message: l10n.failedToLoadWords(state.error.toLocalizedError(context)),
                 );
               }
 
