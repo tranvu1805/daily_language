@@ -1,4 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/di/service_locator.dart';
+import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/bloc/review_word_bloc/review_word_bloc.dart';
@@ -54,6 +56,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
     return BlocConsumer<ReviewWordBloc, ReviewWordState>(
       listener: (context, state) {
         if (state.status == ReviewWordStatus.finished) {
+          sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
           _showCompletionDialog();
         }
         if (state.error.isNotEmpty &&

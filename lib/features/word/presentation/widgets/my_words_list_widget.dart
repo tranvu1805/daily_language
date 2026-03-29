@@ -1,7 +1,6 @@
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
-import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/bloc/user_words_bloc/user_words_bloc.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_card.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_level_empty_words_widget.dart';
@@ -21,24 +20,7 @@ class MyWordsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserWordsBloc, UserWordsState>(
-      listenWhen: (previous, current) =>
-          previous.action != current.action ||
-          previous.status != current.status,
-      listener: (context, state) {
-        if (state.action == UserWordsAction.detail) {
-          if (state.status == UserWordsStatus.success &&
-              state.selectedWordDetail != null) {
-            context.push(
-              '${Routes.words}/${Routes.wordsLevelDetail}',
-              extra: {'word': state.selectedWordDetail, 'showAddButton': false},
-            );
-          } else if (state.status == UserWordsStatus.failure) {
-            SnackBarHelper.showFailure(context, state.error);
-          }
-        }
-      },
-      child: BlocBuilder<UserWordsBloc, UserWordsState>(
+    return BlocBuilder<UserWordsBloc, UserWordsState>(
         builder: (context, state) {
           if (state.status == UserWordsStatus.loading &&
               state.action != UserWordsAction.request) {
@@ -81,13 +63,9 @@ class MyWordsListWidget extends StatelessWidget {
                   return WordCard(
                     word: word,
                     onTap: () {
-                      context.read<UserWordsBloc>().add(
-                        UserWordDetailRequested(
-                          params: GetDictionaryWordByIdUseCaseParams(
-                            word: word.word,
-                            level: word.level,
-                          ),
-                        ),
+                      context.push(
+                        '${Routes.words}/${Routes.wordsLevelDetail}',
+                        extra: word,
                       );
                     },
                   );
@@ -99,7 +77,6 @@ class MyWordsListWidget extends StatelessWidget {
 
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         },
-      ),
-    );
+      );
   }
 }
