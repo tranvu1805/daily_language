@@ -1,5 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/widget/app_circular_progress_indicator.dart';
 import 'package:daily_language/features/record/presentation/bloc/records_bloc/records_bloc.dart';
 import 'package:daily_language/features/record/presentation/widgets/record_card.dart';
@@ -36,7 +37,7 @@ class RecentRecordsSectionWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'No diary entries yet. Start writing!',
+              context.l10n.noDiaryEntries,
               style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
             ),
           );
@@ -44,7 +45,7 @@ class RecentRecordsSectionWidget extends StatelessWidget {
         final preview = state.records.take(3).toList();
         return ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
-          padding: const .symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index) {
             final record = preview[index];
             return RecordCard(

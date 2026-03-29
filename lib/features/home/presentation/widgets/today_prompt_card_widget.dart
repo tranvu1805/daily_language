@@ -1,5 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,9 @@ class TodayPromptCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
+    final locale = Localizations.localeOf(context).languageCode;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -45,10 +49,12 @@ class TodayPromptCardWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Today\'s Prompt', style: textTheme.labelLarge),
+                    Text(l10n.todayPrompt, style: textTheme.labelLarge),
                     Text(
-                      DateFormat('MMMM d, yyyy').format(DateTime.now()),
-                      style: textTheme.bodyMedium?.copyWith(fontSize: 12),
+                      DateFormat('MMMM d, yyyy', locale).format(DateTime.now()),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: ColorApp.taupeGray,
+                      ),
                     ),
                   ],
                 ),
@@ -56,8 +62,11 @@ class TodayPromptCardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '"What made you happy today?"',
-              style: textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+              '"${l10n.todayPromptQuestion}"',
+              style: textTheme.bodyMedium?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: ColorApp.textPrimary,
+              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -67,7 +76,7 @@ class TodayPromptCardWidget extends StatelessWidget {
                   '${Routes.diary}/${Routes.diaryAdd}',
                 ),
                 icon: const Icon(Icons.edit, size: 18),
-                label: const Text('Write'),
+                label: Text(l10n.write),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: ColorApp.primary,
                 ),

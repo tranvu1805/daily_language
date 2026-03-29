@@ -1,5 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/core/utils/widget/app_circular_progress_indicator.dart';
 import 'package:daily_language/features/word/presentation/bloc/user_words_bloc/user_words_bloc.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_card.dart';
@@ -13,6 +14,8 @@ class MyVocabularySectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
+    
     return BlocBuilder<UserWordsBloc, UserWordsState>(
       builder: (context, state) {
         if (state.status == UserWordsStatus.loading &&
@@ -38,7 +41,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'No words saved yet. Start building your vocabulary!',
+              l10n.noWordsYet,
               style: textTheme.bodySmall?.copyWith(color: ColorApp.taupeGray),
             ),
           );
@@ -63,10 +66,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     Container(
@@ -78,7 +78,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
                       child: const Icon(
                         Icons.bookmark,
                         color: ColorApp.primary,
-                        size: 22,
+                        size: 20,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -89,11 +89,14 @@ class MyVocabularySectionWidget extends StatelessWidget {
                           '$total',
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
+                            color: ColorApp.charcoalBlue,
                           ),
                         ),
                         Text(
-                          'Total saved words',
-                          style: textTheme.bodyMedium?.copyWith(fontSize: 12),
+                          l10n.personalVocabulary,
+                          style: textTheme.labelSmall?.copyWith(
+                            color: ColorApp.taupeGray,
+                          ),
                         ),
                       ],
                     ),
@@ -102,7 +105,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               ListView.separated(
-                padding: .zero,
+                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final word = preview[index];

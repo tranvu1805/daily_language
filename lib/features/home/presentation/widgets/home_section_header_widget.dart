@@ -21,17 +21,24 @@ class HomeSectionHeaderWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: textTheme.labelLarge),
-          GestureDetector(
-            onTap: onActionTap,
-            child: Text(
-              actionLabel,
-              style: textTheme.bodyMedium?.copyWith(
-                color: ColorApp.primary,
-                fontSize: 12,
-              ),
+          Text(
+            title,
+            style: textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: ColorApp.charcoalBlue,
             ),
           ),
+          if (onActionTap != null)
+            GestureDetector(
+              onTap: onActionTap,
+              child: Text(
+                actionLabel,
+                style: textTheme.labelMedium?.copyWith(
+                  color: ColorApp.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
         ],
       ),
     );

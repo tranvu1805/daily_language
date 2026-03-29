@@ -1,4 +1,5 @@
 import 'package:daily_language/core/constants/colors_app.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/features/account/domain/entities/account.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,9 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -37,17 +41,16 @@ class HomeAppBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome back',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        l10n.welcomeBack,
+                        style: textTheme.labelSmall?.copyWith(
                           color: Colors.white70,
-                          fontSize: 12,
                         ),
                       ),
                       Text(
                         account.fullName,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        style: textTheme.bodyLarge?.copyWith(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -72,26 +75,25 @@ class HomeAppBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Current Streak',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      l10n.currentStreak,
+                      style: textTheme.labelSmall?.copyWith(
                         color: Colors.white70,
-                        fontSize: 12,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${account.streak} days',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      '${account.streak} ${l10n.days}',
+                      style: textTheme.headlineMedium?.copyWith(
                         color: Colors.white,
-                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Highest: ${account.maxStreak} days',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      '${l10n.highestStreak}: ${account.maxStreak} ${l10n.days}',
+                      style: textTheme.labelSmall?.copyWith(
                         color: Colors.white60,
-                        fontSize: 10,
+                        fontSize: 11,
                       ),
                     ),
                   ],
@@ -99,7 +101,7 @@ class HomeAppBar extends StatelessWidget {
                 const Icon(
                   Icons.local_fire_department,
                   color: ColorApp.orange,
-                  size: 32,
+                  size: 40,
                 ),
               ],
             ),

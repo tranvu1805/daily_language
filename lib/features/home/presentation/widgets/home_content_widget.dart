@@ -1,4 +1,5 @@
 import 'package:daily_language/core/route/routes.dart';
+import 'package:daily_language/core/utils/extension/extension_method.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/home/presentation/widgets/home_app_bar.dart';
 import 'package:daily_language/features/home/presentation/widgets/home_section_header_widget.dart';
@@ -61,6 +62,7 @@ class _HomeContentWidgetState extends State<HomeContentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,16 +82,16 @@ class _HomeContentWidgetState extends State<HomeContentWidget> {
           ),
           const SizedBox(height: 24),
           HomeSectionHeaderWidget(
-            title: 'Recent Diary',
-            actionLabel: 'See All',
+            title: l10n.recentDiary,
+            actionLabel: l10n.seeAll,
             onActionTap: () => context.go(Routes.diary),
           ),
           const SizedBox(height: 12),
           const RecentRecordsSectionWidget(),
           const SizedBox(height: 24),
           HomeSectionHeaderWidget(
-            title: 'My Vocabulary',
-            actionLabel: 'Review',
+            title: l10n.myVocabulary,
+            actionLabel: l10n.review,
             onActionTap: () => context.go(Routes.words),
           ),
           const SizedBox(height: 12),
