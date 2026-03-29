@@ -1,6 +1,6 @@
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
 import 'package:daily_language/features/word/presentation/bloc/user_words_bloc/user_words_bloc.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_card.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_level_empty_words_widget.dart';

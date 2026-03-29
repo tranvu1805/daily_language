@@ -5,7 +5,7 @@ import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
 import 'package:daily_language/features/account/domain/use_cases/create_account_use_case.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/account/presentation/widgets/widgets.dart';

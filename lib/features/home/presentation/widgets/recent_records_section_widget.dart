@@ -1,7 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
-import 'package:daily_language/core/utils/widget/app_circular_progress_indicator.dart';
+import 'package:daily_language/core/utils/widgets/app_circular_progress_indicator.dart';
 import 'package:daily_language/features/record/presentation/bloc/records_bloc/records_bloc.dart';
 import 'package:daily_language/features/record/presentation/widgets/record_card.dart';
 import 'package:flutter/material.dart';

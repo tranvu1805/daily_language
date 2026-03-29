@@ -1,7 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/extension/extension_method.dart';
-import 'package:daily_language/core/utils/widget/app_circular_progress_indicator.dart';
+import 'package:daily_language/core/utils/widgets/app_circular_progress_indicator.dart';
 import 'package:daily_language/features/word/presentation/bloc/user_words_bloc/user_words_bloc.dart';
 import 'package:daily_language/features/word/presentation/widgets/word_card.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class MyVocabularySectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
-    
+
     return BlocBuilder<UserWordsBloc, UserWordsState>(
       builder: (context, state) {
         if (state.status == UserWordsStatus.loading &&

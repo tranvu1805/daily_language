@@ -1,6 +1,6 @@
 import 'package:daily_language/core/constants/app.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:flutter/material.dart';

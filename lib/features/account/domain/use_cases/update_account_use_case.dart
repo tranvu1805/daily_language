@@ -20,6 +20,10 @@ class UpdateAccountUseCaseParams extends Equatable {
   final int? streak;
   final int? maxStreak;
   final DateTime? lastActivityAt;
+  final int? aiReviewCount;
+  final int? aiReviewCoins;
+  final DateTime? lastAiReviewAt;
+  final bool? isPremium;
 
   const UpdateAccountUseCaseParams({
     required this.uid,
@@ -28,6 +32,10 @@ class UpdateAccountUseCaseParams extends Equatable {
     this.streak,
     this.maxStreak,
     this.lastActivityAt,
+    this.aiReviewCount,
+    this.aiReviewCoins,
+    this.lastAiReviewAt,
+    this.isPremium,
   });
 
   const UpdateAccountUseCaseParams.empty({
@@ -37,6 +45,10 @@ class UpdateAccountUseCaseParams extends Equatable {
     this.streak,
     this.maxStreak,
     this.lastActivityAt,
+    this.aiReviewCount,
+    this.aiReviewCoins,
+    this.lastAiReviewAt,
+    this.isPremium,
   });
 
   @override
@@ -47,5 +59,9 @@ class UpdateAccountUseCaseParams extends Equatable {
     streak,
     maxStreak,
     lastActivityAt,
+    aiReviewCount,
+    aiReviewCoins,
+    lastAiReviewAt,
+    isPremium,
   ];
 }

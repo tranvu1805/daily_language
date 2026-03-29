@@ -17,6 +17,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:label="daily_language">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5217504969864302~1250588867"/>
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

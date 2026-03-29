@@ -2,7 +2,7 @@ import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/di/service_locator.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
 import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,10 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
         }
         if (state.error.isNotEmpty &&
             state.status == ReviewWordStatus.failure) {
-          SnackBarHelper.showFailure(context, state.error.toLocalizedError(context));
+          SnackBarHelper.showFailure(
+            context,
+            state.error.toLocalizedError(context),
+          );
         }
       },
       child: PopScope(
@@ -135,7 +138,9 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                   onRetry: () => context.read<ReviewWordBloc>().add(
                     ReviewWordLoaded(userId: account.uid),
                   ),
-                  message: l10n.failedToLoadWords(state.error.toLocalizedError(context)),
+                  message: l10n.failedToLoadWords(
+                    state.error.toLocalizedError(context),
+                  ),
                 );
               }
 

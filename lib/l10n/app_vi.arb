@@ -171,6 +171,17 @@
   "other": "Khác",
   "aiReviewSupport": "AI Review chỉ hỗ trợ tiếng Anh, vui lòng đổi sang chế độ tiếng Anh",
   "enterTextToReview": "Vui lòng nhập văn bản để review",
+  "aiReviewLimitReached": "Đã đạt giới hạn AI Review hàng ngày (3/3)",
+  "getMoreTurns": "Thêm lượt",
+  "watchAdToGetTurn": "Xem quảng cáo để nhận thêm 1 lượt AI review",
+  "aiReviewTurnsLeft": "Số lượt AI Review còn lại: {count}",
+  "@aiReviewTurnsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "english": "Tiếng Anh",
   "vietnamese": "Tiếng Việt",
   "stopReviewingQuestion": "Bạn có chắc chắn muốn dừng ôn tập không?",

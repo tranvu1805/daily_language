@@ -83,7 +83,7 @@ class _MicListeningWidgetState extends State<MicListeningWidget>
       mainAxisSize: MainAxisSize.min,
       children: [
         _PulsingMicIcon(),
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
         SizedBox(
           height: _maxHeight,
           child: Row(

@@ -1,7 +1,7 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/core/utils/widget/app_retry_widget.dart';
+import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
 import 'package:daily_language/features/record/domain/domain.dart';
 import 'package:daily_language/features/record/presentation/presentation.dart';

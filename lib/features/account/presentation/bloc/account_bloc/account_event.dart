@@ -49,3 +49,21 @@ final class AccountStreakUpdated extends AccountEvent {
   @override
   List<Object> get props => [account];
 }
+
+final class AccountAiReviewUsed extends AccountEvent {
+  final Account account;
+
+  const AccountAiReviewUsed({required this.account});
+
+  @override
+  List<Object> get props => [account];
+}
+
+final class AccountAiReviewRewardEarned extends AccountEvent {
+  final Account account;
+
+  const AccountAiReviewRewardEarned({required this.account});
+
+  @override
+  List<Object> get props => [account];
+}

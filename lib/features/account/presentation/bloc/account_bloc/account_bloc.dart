@@ -28,13 +28,17 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     on<AccountUpdated>(_onUpdated);
     on<AccountDeleted>(_onDeleted);
     on<AccountStreakUpdated>(_onStreakUpdated);
+    on<AccountAiReviewUsed>(_onAiReviewUsed);
+    on<AccountAiReviewRewardEarned>(_onAiReviewRewardEarned);
   }
 
   Future<void> _onAccountRequested(
     AccountRequested event,
     Emitter<AccountState> emit,
   ) async {
-    emit(AccountInProgress());
+    if (state is! AccountSuccess) {
+      emit(AccountInProgress());
+    }
     final result = await _getAccountUseCase(event.uid);
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (
       account,
@@ -131,7 +135,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         streak: 0,
         maxStreak: account.maxStreak,
         lastActivityAt: account.lastActivityAt,
+        lastAiReviewAt: account.lastAiReviewAt,
+        aiReviewCount: account.aiReviewCount,
+        aiReviewCoins: account.aiReviewCoins,
         avatarUrl: account.avatarUrl,
+        isPremium: account.isPremium,
       );
     }
     return account;
@@ -153,10 +161,28 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     AccountUpdated event,
     Emitter<AccountState> emit,
   ) async {
-    emit(AccountInProgress());
+    if (state is AccountSuccess) {
+       final currentAcc = (state as AccountSuccess).account;
+       final param = event.param;
+       final newAcc = Account(
+         uid: currentAcc.uid,
+         fullName: param.fullName,
+         email: currentAcc.email,
+         phoneNumber: param.phoneNumber,
+         streak: param.streak ?? currentAcc.streak,
+         maxStreak: param.maxStreak ?? currentAcc.maxStreak,
+         lastActivityAt: param.lastActivityAt ?? currentAcc.lastActivityAt,
+         lastAiReviewAt: param.lastAiReviewAt ?? currentAcc.lastAiReviewAt,
+         aiReviewCount: param.aiReviewCount ?? currentAcc.aiReviewCount,
+         aiReviewCoins: param.aiReviewCoins ?? currentAcc.aiReviewCoins,
+         avatarUrl: currentAcc.avatarUrl,
+         isPremium: param.isPremium ?? currentAcc.isPremium,
+       );
+       emit(AccountSuccess(account: newAcc));
+    }
+
     final result = await _updateAccountUseCase(event.param);
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
-      emit(AccountUpdateSuccess());
       add(AccountRequested(uid: event.param.uid));
     });
   }
@@ -170,5 +196,60 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
       emit(AccountDeleteSuccess());
     });
+  }
+
+  Future<void> _onAiReviewUsed(
+    AccountAiReviewUsed event,
+    Emitter<AccountState> emit,
+  ) async {
+    final account = event.account;
+    final now = DateTime.now().toLocal();
+    final lastReview = account.lastAiReviewAt?.toLocal();
+    final isNewDay = lastReview == null ||
+        lastReview.day != now.day ||
+        lastReview.month != now.month ||
+        lastReview.year != now.year;
+
+    int newCount = isNewDay ? 1 : account.aiReviewCount + 1;
+    int newCoins = account.aiReviewCoins;
+
+    if (newCount > 3) {
+      if (newCoins > 0) {
+        newCoins--;
+      } else {
+        // This should be handled in UI, but safety check
+        return;
+      }
+    }
+
+    add(
+      AccountUpdated(
+        param: UpdateAccountUseCaseParams(
+          uid: account.uid,
+          fullName: account.fullName,
+          phoneNumber: account.phoneNumber,
+          aiReviewCount: newCount,
+          aiReviewCoins: newCoins,
+          lastAiReviewAt: now,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onAiReviewRewardEarned(
+    AccountAiReviewRewardEarned event,
+    Emitter<AccountState> emit,
+  ) async {
+    final account = event.account;
+    add(
+      AccountUpdated(
+        param: UpdateAccountUseCaseParams(
+          uid: account.uid,
+          fullName: account.fullName,
+          phoneNumber: account.phoneNumber,
+          aiReviewCoins: account.aiReviewCoins + 1,
+        ),
+      ),
+    );
   }
 }

@@ -171,6 +171,17 @@
   "other": "Other",
   "aiReviewSupport": "AI Review only supports English, please change to English mode",
   "enterTextToReview": "Please enter some text to review",
+  "aiReviewLimitReached": "Daily AI Review limit reached (3/3)",
+  "getMoreTurns": "Get More",
+  "watchAdToGetTurn": "Watch an ad to get 1 more AI review turn",
+  "aiReviewTurnsLeft": "AI Review turns left: {count}",
+  "@aiReviewTurnsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "english": "English",
   "vietnamese": "Vietnamese",
   "stopReviewingQuestion": "Are you sure you want to stop reviewing?",

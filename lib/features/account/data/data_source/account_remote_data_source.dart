@@ -73,7 +73,17 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<void> updateAccount({required AccountModel account}) async {
     final ref = _database.collection('users').doc(account.uid);
-    await ref.update(account.toUpdateJson());
+    final data = account.toUpdateJson();
+    
+    // Firestore update() converts mapped types, but DateTime requires explicit conversion to Timestamp
+    if (data['lastActivityAt'] is DateTime) {
+      data['lastActivityAt'] = Timestamp.fromDate(data['lastActivityAt'] as DateTime);
+    }
+    if (data['lastAiReviewAt'] is DateTime) {
+      data['lastAiReviewAt'] = Timestamp.fromDate(data['lastAiReviewAt'] as DateTime);
+    }
+    
+    await ref.update(data);
   }
 
   @override

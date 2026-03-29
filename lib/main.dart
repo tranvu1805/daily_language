@@ -12,9 +12,11 @@ import 'firebase_options.dart';
 
 import 'package:daily_language/core/bloc/locale_bloc/locale_bloc.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize();
   await DI.instance.init();
   await sl<NotificationHelper>().init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

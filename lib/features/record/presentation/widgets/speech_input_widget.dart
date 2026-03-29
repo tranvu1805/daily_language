@@ -75,9 +75,10 @@ class _SpeechInputWidgetState extends State<SpeechInputWidget> {
     DialogHelper.showMicListeningDialog(
       context: context,
       isLoading: isLoading,
-      onStop: () {
+      onStop: () async {
         _isManualStop = true;
-        _speech.stop();
+        await _speech.stop();
+        _finishRecording();
       },
     );
 
@@ -129,15 +130,15 @@ class _SpeechInputWidgetState extends State<SpeechInputWidget> {
 
     // Proactively cancel ~2s before the 30s limit so the OS status
     // callbacks reliably fire and we can restart seamlessly.
-    Future.delayed(const Duration(seconds: 28), () {
+    Future.delayed(const Duration(seconds: 28), () async {
       if (!_hasFinished && !_isManualStop && _speech.isListening) {
-        _speech.cancel();
+        await _speech.cancel();
       }
     });
 
     await _speech.listen(
       onResult: (result) {
-        if (!mounted) return;
+        if (!mounted || _isManualStop) return;
         _lastResultTime = DateTime.now();
         final words = result.recognizedWords.trim();
         if (words.isNotEmpty) {

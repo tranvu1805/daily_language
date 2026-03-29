@@ -9,6 +9,10 @@ class Account extends Equatable {
   final int streak;
   final int maxStreak;
   final DateTime? lastActivityAt;
+  final DateTime? lastAiReviewAt;
+  final int aiReviewCount;
+  final int aiReviewCoins;
+  final bool isPremium;
 
   const Account({
     required this.uid,
@@ -18,7 +22,11 @@ class Account extends Equatable {
     required this.streak,
     required this.maxStreak,
     this.lastActivityAt,
+    this.lastAiReviewAt,
+    this.aiReviewCount = 0,
+    this.aiReviewCoins = 0,
     required this.avatarUrl,
+    this.isPremium = false,
   });
 
   const Account.empty({
@@ -29,7 +37,11 @@ class Account extends Equatable {
     this.streak = 0,
     this.maxStreak = 0,
     this.lastActivityAt,
+    this.lastAiReviewAt,
+    this.aiReviewCount = 0,
+    this.aiReviewCoins = 0,
     this.avatarUrl = '',
+    this.isPremium = false,
   });
 
   @override
@@ -41,6 +53,10 @@ class Account extends Equatable {
     streak,
     maxStreak,
     lastActivityAt,
+    lastAiReviewAt,
+    aiReviewCount,
+    aiReviewCoins,
     avatarUrl,
+    isPremium,
   ];
 }

@@ -409,6 +409,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get enterTextToReview => 'Vui lòng nhập văn bản để review';
 
   @override
+  String get aiReviewLimitReached =>
+      'Đã đạt giới hạn AI Review hàng ngày (3/3)';
+
+  @override
+  String get getMoreTurns => 'Thêm lượt';
+
+  @override
+  String get watchAdToGetTurn => 'Xem quảng cáo để nhận thêm 1 lượt AI review';
+
+  @override
+  String aiReviewTurnsLeft(int count) {
+    return 'Số lượt AI Review còn lại: $count';
+  }
+
+  @override
   String get english => 'Tiếng Anh';
 
   @override

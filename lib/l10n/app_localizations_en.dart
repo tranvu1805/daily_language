@@ -407,6 +407,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterTextToReview => 'Please enter some text to review';
 
   @override
+  String get aiReviewLimitReached => 'Daily AI Review limit reached (3/3)';
+
+  @override
+  String get getMoreTurns => 'Get More';
+
+  @override
+  String get watchAdToGetTurn => 'Watch an ad to get 1 more AI review turn';
+
+  @override
+  String aiReviewTurnsLeft(int count) {
+    return 'AI Review turns left: $count';
+  }
+
+  @override
   String get english => 'English';
 
   @override

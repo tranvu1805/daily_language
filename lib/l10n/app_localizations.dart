@@ -860,6 +860,30 @@ abstract class AppLocalizations {
   /// **'Please enter some text to review'**
   String get enterTextToReview;
 
+  /// No description provided for @aiReviewLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily AI Review limit reached (3/3)'**
+  String get aiReviewLimitReached;
+
+  /// No description provided for @getMoreTurns.
+  ///
+  /// In en, this message translates to:
+  /// **'Get More'**
+  String get getMoreTurns;
+
+  /// No description provided for @watchAdToGetTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad to get 1 more AI review turn'**
+  String get watchAdToGetTurn;
+
+  /// No description provided for @aiReviewTurnsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Review turns left: {count}'**
+  String aiReviewTurnsLeft(int count);
+
   /// No description provided for @english.
   ///
   /// In en, this message translates to:
