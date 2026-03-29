@@ -70,4 +70,387 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateSuccess => 'Updated successfully';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get currentStreak => 'Current Streak';
+
+  @override
+  String get highestStreak => 'Highest Streak';
+
+  @override
+  String get recentDiary => 'Recent Diary';
+
+  @override
+  String get myVocabulary => 'My Vocabulary';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String get days => 'days';
+
+  @override
+  String get reviewWords => 'Review Words';
+
+  @override
+  String get chooseLanguage => 'Choose Language';
+
+  @override
+  String get appLanguage => 'App Language';
+
+  @override
+  String get learningLanguage => 'Learning Language';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get learningReminders => 'Learning Reminders';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get guidesAndFAQ => 'Guides & FAQ';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get functions => 'Functions';
+
+  @override
+  String get personalInfo => 'Personal Information';
+
+  @override
+  String get updateProfile => 'Update Profile';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to log out?';
+
+  @override
+  String get todayPrompt => 'Today\'s Prompt';
+
+  @override
+  String get dailyReview => 'Daily Review';
+
+  @override
+  String reviewReady(int count) {
+    return 'You have $count words ready to review!';
+  }
+
+  @override
+  String get noReviewToday => 'No words to review today. Keep learning!';
+
+  @override
+  String get write => 'Write';
+
+  @override
+  String get todayPromptQuestion => 'What made you happy today?';
+
+  @override
+  String get reviewCompleted => 'Review Completed! 🥳';
+
+  @override
+  String get reviewFinishedMessage =>
+      'You have finished all your reviews for now. Great job!';
+
+  @override
+  String get backToLearning => 'Back to My Learning';
+
+  @override
+  String get correctKeepItUp => 'Correct! Keep it up!';
+
+  @override
+  String get incorrectWordIsAbove => 'Oops! The correct word is above.';
+
+  @override
+  String get reviewSession => 'Review Session';
+
+  @override
+  String get emotionQuestion => 'How are you feeling?';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get saveRecord => 'Save Record';
+
+  @override
+  String get emptyError => 'Please write something';
+
+  @override
+  String get addRecord => 'Add Record';
+
+  @override
+  String get editRecord => 'Edit Record';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get aiOnlyEnglish =>
+      'AI Review only supports English, please change to English mode';
+
+  @override
+  String get enterTextReview => 'Please enter some text to review';
+
+  @override
+  String get updateRecord => 'Update Record';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get nextReview => 'Next review';
+
+  @override
+  String stage(int stage) {
+    return 'Stage $stage';
+  }
+
+  @override
+  String get myLearning => 'My Learning';
+
+  @override
+  String get oxfordWordLists => 'Oxford Word Lists';
+
+  @override
+  String wordsCount(int count) {
+    return '$count words';
+  }
+
+  @override
+  String get beginner => 'Beginner';
+
+  @override
+  String get elementary => 'Elementary';
+
+  @override
+  String get intermediate => 'Intermediate';
+
+  @override
+  String get upperIntermediate => 'Upper-Intermediate';
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get grammarChecker => 'Grammar Checker';
+
+  @override
+  String get grammarCheckDescription =>
+      'Improve your writing with AI-powered grammar check.';
+
+  @override
+  String get grammarCheckHint => 'Type or paste your English text here...';
+
+  @override
+  String get checkNow => 'Check Now';
+
+  @override
+  String get aiAnalysis => 'AI Analysis';
+
+  @override
+  String get detailedExplanation => 'Detailed Explanation';
+
+  @override
+  String get original => 'Original';
+
+  @override
+  String get improved => 'Improved';
+
+  @override
+  String get perfect => 'Perfect';
+
+  @override
+  String get wordDetails => 'Word Details';
+
+  @override
+  String get audioError => 'Could not play audio';
+
+  @override
+  String get wordAdded => 'Word added to My Words';
+
+  @override
+  String get wordNotFound => 'Word not found';
+
+  @override
+  String get englishMeaning => 'English Meaning';
+
+  @override
+  String get vietnameseMeaning => 'Vietnamese Meaning';
+
+  @override
+  String get relations => 'Relations';
+
+  @override
+  String get synonyms => 'Synonyms:';
+
+  @override
+  String get antonyms => 'Antonyms:';
+
+  @override
+  String get addToMyWords => 'Add to My Words';
+
+  @override
+  String get myWords => 'My Words';
+
+  @override
+  String get personalVocabulary => 'Your personal vocabulary';
+
+  @override
+  String oxfordTopic(String topic) {
+    return 'Oxford $topic';
+  }
+
+  @override
+  String levelWordsCount(String level, int count) {
+    return '$level · $count words';
+  }
+
+  @override
+  String addedWordToMyWords(String word) {
+    return 'Added \"$word\" to your words';
+  }
+
+  @override
+  String get tapToReview => 'Tap to review →';
+
+  @override
+  String get noWordsYet => 'No words yet';
+
+  @override
+  String get startAddingWords =>
+      'Start adding words from your diary\nor tap + to add manually.';
+
+  @override
+  String get speechUnavailable => 'Speech recognition unavailable';
+
+  @override
+  String get writeThoughts => 'Write your thoughts';
+
+  @override
+  String get englishTranslation => 'English translation';
+
+  @override
+  String get whatHappenedToday => 'What happened today?';
+
+  @override
+  String get translationHint => 'Translated content will appear here';
+
+  @override
+  String get processing => 'Processing…';
+
+  @override
+  String get listening => 'Listening…';
+
+  @override
+  String get speakNow => 'Speak now — we\'ll transcribe your words.';
+
+  @override
+  String get stopRecording => 'Stop Recording';
+
+  @override
+  String get happy => 'Happy';
+
+  @override
+  String get sad => 'Sad';
+
+  @override
+  String get angry => 'Angry';
+
+  @override
+  String get scared => 'Scared';
+
+  @override
+  String get calm => 'Calm';
+
+  @override
+  String get thinking => 'Thinking';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get study => 'Study';
+
+  @override
+  String get work => 'Work';
+
+  @override
+  String get travel => 'Travel';
+
+  @override
+  String get food => 'Food';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get aiReviewSupport =>
+      'AI Review only supports English, please change to English mode';
+
+  @override
+  String get enterTextToReview => 'Please enter some text to review';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get vietnamese => 'Vietnamese';
+
+  @override
+  String get stopReviewingQuestion =>
+      'Are you sure you want to stop reviewing?';
+
+  @override
+  String get stop => 'Stop';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get continueText => 'Continue';
+
+  @override
+  String get exitReviewQuestion =>
+      'Are you sure you want to exit? Your progress for this session will be lost.';
+
+  @override
+  String failedToLoadWords(String error) {
+    return 'Failed to load words: $error';
+  }
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String wordCountProgress(int current, int total) {
+    return 'Word $current of $total';
+  }
+
+  @override
+  String get definition => 'Definition';
+
+  @override
+  String get nextWord => 'Next Word';
+
+  @override
+  String get checkAnswer => 'Check Answer';
+
+  @override
+  String get noDiaryEntries => 'No diary entries yet. Start writing!';
 }

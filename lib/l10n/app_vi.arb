@@ -1,0 +1,205 @@
+{
+  "dailyLanguage": "Daily Language",
+  "continueWith": "Tiếp tục với",
+  "home": "Trang chủ",
+  "diary": "Nhật ký",
+  "profile": "Cá nhân",
+  "words": "Từ vựng",
+  "fullName": "Họ và tên",
+  "email": "Email",
+  "phoneNumber": "Số điện thoại",
+  "streak": "Chuỗi học tập",
+  "edit": "Chỉnh sửa",
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "confirm": "Xác nhận",
+  "cancel": "Hủy",
+  "save": "Lưu",
+  "logOut": "Đăng xuất",
+  "empty": "Không có dữ liệu",
+  "required": "Trường này là bắt buộc",
+  "invalidPhoneNumber": "Số điện thoại không hợp lệ",
+  "invalidEmail": "Email không hợp lệ",
+  "updateSuccess": "Cập nhật thành công",
+  "welcomeBack": "Chào mừng trở lại",
+  "currentStreak": "Chuỗi hiện tại",
+  "highestStreak": "Kỷ lục",
+  "recentDiary": "Nhật ký gần đây",
+  "myVocabulary": "Từ vựng của tôi",
+  "seeAll": "Xem tất cả",
+  "review": "Ôn tập",
+  "days": "ngày",
+  "reviewWords": "Ôn tập từ vựng",
+  "chooseLanguage": "Chọn ngôn ngữ",
+  "appLanguage": "Ngôn ngữ ứng dụng",
+  "learningLanguage": "Ngôn ngữ học tập",
+  "version": "Phiên bản",
+  "notifications": "Thông báo",
+  "learningReminders": "Nhắc nhở học tập",
+  "help": "Trợ giúp",
+  "guidesAndFAQ": "Hướng dẫn & FAQ",
+  "privacyPolicy": "Chính sách bảo mật",
+  "termsOfService": "Điều khoản dịch vụ",
+  "functions": "Chức năng",
+  "personalInfo": "Thông tin cá nhân",
+  "updateProfile": "Cập nhật hồ sơ",
+  "logoutConfirm": "Bạn có chắc chắn muốn đăng xuất không?",
+  "todayPrompt": "Chủ đề hôm nay",
+  "dailyReview": "Ôn tập hàng ngày",
+  "reviewReady": "Bạn có {count} từ đã sẵn sàng để ôn tập!",
+  "@reviewReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noReviewToday": "Hôm nay không có từ nào cần ôn tập. Hãy tiếp tục học nhé!",
+  "write": "Viết",
+  "todayPromptQuestion": "Điều gì đã làm bạn hạnh phúc hôm nay?",
+  "reviewCompleted": "Ôn tập hoàn tất! 🥳",
+  "reviewFinishedMessage": "Bạn đã hoàn thành tất cả các từ cần ôn tập. Tuyệt vời!",
+  "backToLearning": "Quay lại trang học tập",
+  "correctKeepItUp": "Chính xác! Tiếp tục phát huy nhé!",
+  "incorrectWordIsAbove": "Rất tiếc! Từ chính xác nằm ở trên.",
+  "reviewSession": "Phiên ôn tập",
+  "emotionQuestion": "Bạn đang cảm thấy thế nào?",
+  "category": "Danh mục",
+  "saveRecord": "Lưu nhật ký",
+  "emptyError": "Vui lòng viết nội dung nào đó",
+  "addRecord": "Thêm nhật ký",
+  "editRecord": "Sửa nhật ký",
+  "update": "Cập nhật",
+  "aiOnlyEnglish": "AI Review chỉ hỗ trợ tiếng Anh, vui lòng chuyển sang chế độ tiếng Anh",
+  "enterTextReview": "Vui lòng nhập văn bản để review",
+  "updateRecord": "Cập nhật nhật ký",
+  "unknown": "Không xác định",
+  "nextReview": "Ôn tập tiếp theo",
+  "stage": "Cấp độ {stage}",
+  "@stage": {
+    "placeholders": {
+      "stage": {
+        "type": "int"
+      }
+    }
+  },
+  "myLearning": "Học tập của tôi",
+  "oxfordWordLists": "Danh sách từ Oxford",
+  "wordsCount": "{count} từ",
+  "@wordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "beginner": "Sơ cấp",
+  "elementary": "Cơ bản",
+  "intermediate": "Trung cấp",
+  "upperIntermediate": "Trung cấp cấp cao",
+  "advanced": "Nâng cao",
+  "grammarChecker": "Kiểm tra ngữ pháp",
+  "grammarCheckDescription": "Cải thiện kỹ năng viết của bạn với công cụ kiểm tra ngữ pháp AI.",
+  "grammarCheckHint": "Nhập hoặc dán văn bản tiếng Anh của bạn tại đây...",
+  "checkNow": "Kiểm tra ngay",
+  "aiAnalysis": "Phân tích AI",
+  "detailedExplanation": "Giải thích chi tiết",
+  "original": "Bản gốc",
+  "improved": "Đã cải thiện",
+  "perfect": "Hoàn hảo",
+  "wordDetails": "Chi tiết từ vựng",
+  "audioError": "Không thể phát âm thanh",
+  "wordAdded": "Đã thêm vào từ vựng của tôi",
+  "wordNotFound": "Không tìm thấy từ",
+  "englishMeaning": "Nghĩa tiếng Anh",
+  "vietnameseMeaning": "Nghĩa tiếng Việt",
+  "relations": "Từ liên quan",
+  "synonyms": "Từ đồng nghĩa:",
+  "antonyms": "Từ trái nghĩa:",
+  "addToMyWords": "Thêm vào từ vựng",
+  "myWords": "Từ vựng của tôi",
+  "personalVocabulary": "Kho từ vựng cá nhân của bạn",
+  "oxfordTopic": "Oxford {topic}",
+  "@oxfordTopic": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "levelWordsCount": "{level} · {count} từ",
+  "@levelWordsCount": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addedWordToMyWords": "Đã thêm \"{word}\" vào từ vựng của bạn",
+  "@addedWordToMyWords": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToReview": "Nhấn để ôn tập →",
+  "noWordsYet": "Chưa có từ vựng nào",
+  "startAddingWords": "Bắt đầu thêm từ từ nhật ký của bạn\nhoặc nhấn + để thêm thủ công.",
+  "speechUnavailable": "Nhận dạng giọng nói không khả dụng",
+  "writeThoughts": "Viết suy nghĩ của bạn",
+  "englishTranslation": "Bản dịch tiếng Anh",
+  "whatHappenedToday": "Chuyện gì đã xảy ra hôm nay?",
+  "translationHint": "Nội dung dịch sẽ xuất hiện tại đây",
+  "processing": "Đang xử lý…",
+  "listening": "Đang lắng nghe…",
+  "speakNow": "Hãy nói — chúng tôi sẽ chuyển thành văn bản.",
+  "stopRecording": "Dừng ghi âm",
+  "happy": "Hạnh phúc",
+  "sad": "Buồn",
+  "angry": "Tức giận",
+  "scared": "Sợ hãi",
+  "calm": "Bình tĩnh",
+  "thinking": "Đang suy nghĩ",
+  "daily": "Hàng ngày",
+  "study": "Học tập",
+  "work": "Công việc",
+  "travel": "Du lịch",
+  "food": "Ẩm thực",
+  "other": "Khác",
+  "aiReviewSupport": "AI Review chỉ hỗ trợ tiếng Anh, vui lòng đổi sang chế độ tiếng Anh",
+  "enterTextToReview": "Vui lòng nhập văn bản để review",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "stopReviewingQuestion": "Bạn có chắc chắn muốn dừng ôn tập không?",
+  "stop": "Dừng",
+  "exit": "Thoát",
+  "continueText": "Tiếp tục",
+  "exitReviewQuestion": "Bạn có chắc chắn muốn thoát? Quá trình ôn tập trong phiên này sẽ bị mất.",
+  "failedToLoadWords": "Không thể tải từ vựng: {error}",
+  "@failedToLoadWords": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "Thử lại",
+  "wordCountProgress": "Từ {current} trên {total}",
+  "@wordCountProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "definition": "Định nghĩa",
+  "nextWord": "Từ tiếp theo",
+  "checkAnswer": "Kiểm tra đáp án",
+  "noDiaryEntries": "Chưa có nhật ký nào. Hãy viết ngay!"
+}

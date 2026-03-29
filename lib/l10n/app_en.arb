@@ -19,5 +19,187 @@
   "required": "This field is required",
   "invalidPhoneNumber": "Invalid phone number",
   "invalidEmail": "Invalid email",
-  "updateSuccess": "Updated successfully"
+  "updateSuccess": "Updated successfully",
+  "welcomeBack": "Welcome back",
+  "currentStreak": "Current Streak",
+  "highestStreak": "Highest Streak",
+  "recentDiary": "Recent Diary",
+  "myVocabulary": "My Vocabulary",
+  "seeAll": "See All",
+  "review": "Review",
+  "days": "days",
+  "reviewWords": "Review Words",
+  "chooseLanguage": "Choose Language",
+  "appLanguage": "App Language",
+  "learningLanguage": "Learning Language",
+  "version": "Version",
+  "notifications": "Notifications",
+  "learningReminders": "Learning Reminders",
+  "help": "Help",
+  "guidesAndFAQ": "Guides & FAQ",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "functions": "Functions",
+  "personalInfo": "Personal Information",
+  "updateProfile": "Update Profile",
+  "logoutConfirm": "Are you sure you want to log out?",
+  "todayPrompt": "Today's Prompt",
+  "dailyReview": "Daily Review",
+  "reviewReady": "You have {count} words ready to review!",
+  "@reviewReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noReviewToday": "No words to review today. Keep learning!",
+  "write": "Write",
+  "todayPromptQuestion": "What made you happy today?",
+  "reviewCompleted": "Review Completed! 🥳",
+  "reviewFinishedMessage": "You have finished all your reviews for now. Great job!",
+  "backToLearning": "Back to My Learning",
+  "correctKeepItUp": "Correct! Keep it up!",
+  "incorrectWordIsAbove": "Oops! The correct word is above.",
+  "reviewSession": "Review Session",
+  "emotionQuestion": "How are you feeling?",
+  "category": "Category",
+  "saveRecord": "Save Record",
+  "emptyError": "Please write something",
+  "addRecord": "Add Record",
+  "editRecord": "Edit Record",
+  "update": "Update",
+  "aiOnlyEnglish": "AI Review only supports English, please change to English mode",
+  "enterTextReview": "Please enter some text to review",
+  "updateRecord": "Update Record",
+  "unknown": "Unknown",
+  "nextReview": "Next review",
+  "stage": "Stage {stage}",
+  "@stage": {
+    "placeholders": {
+      "stage": {
+        "type": "int"
+      }
+    }
+  },
+  "myLearning": "My Learning",
+  "oxfordWordLists": "Oxford Word Lists",
+  "wordsCount": "{count} words",
+  "@wordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "beginner": "Beginner",
+  "elementary": "Elementary",
+  "intermediate": "Intermediate",
+  "upperIntermediate": "Upper-Intermediate",
+  "advanced": "Advanced",
+  "grammarChecker": "Grammar Checker",
+  "grammarCheckDescription": "Improve your writing with AI-powered grammar check.",
+  "grammarCheckHint": "Type or paste your English text here...",
+  "checkNow": "Check Now",
+  "aiAnalysis": "AI Analysis",
+  "detailedExplanation": "Detailed Explanation",
+  "original": "Original",
+  "improved": "Improved",
+  "perfect": "Perfect",
+  "wordDetails": "Word Details",
+  "audioError": "Could not play audio",
+  "wordAdded": "Word added to My Words",
+  "wordNotFound": "Word not found",
+  "englishMeaning": "English Meaning",
+  "vietnameseMeaning": "Vietnamese Meaning",
+  "relations": "Relations",
+  "synonyms": "Synonyms:",
+  "antonyms": "Antonyms:",
+  "addToMyWords": "Add to My Words",
+  "myWords": "My Words",
+  "personalVocabulary": "Your personal vocabulary",
+  "oxfordTopic": "Oxford {topic}",
+  "@oxfordTopic": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "levelWordsCount": "{level} · {count} words",
+  "@levelWordsCount": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addedWordToMyWords": "Added \"{word}\" to your words",
+  "@addedWordToMyWords": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToReview": "Tap to review →",
+  "noWordsYet": "No words yet",
+  "startAddingWords": "Start adding words from your diary\nor tap + to add manually.",
+  "speechUnavailable": "Speech recognition unavailable",
+  "writeThoughts": "Write your thoughts",
+  "englishTranslation": "English translation",
+  "whatHappenedToday": "What happened today?",
+  "translationHint": "Translated content will appear here",
+  "processing": "Processing…",
+  "listening": "Listening…",
+  "speakNow": "Speak now — we'll transcribe your words.",
+  "stopRecording": "Stop Recording",
+  "happy": "Happy",
+  "sad": "Sad",
+  "angry": "Angry",
+  "scared": "Scared",
+  "calm": "Calm",
+  "thinking": "Thinking",
+  "daily": "Daily",
+  "study": "Study",
+  "work": "Work",
+  "travel": "Travel",
+  "food": "Food",
+  "other": "Other",
+  "aiReviewSupport": "AI Review only supports English, please change to English mode",
+  "enterTextToReview": "Please enter some text to review",
+  "english": "English",
+  "vietnamese": "Vietnamese",
+  "stopReviewingQuestion": "Are you sure you want to stop reviewing?",
+  "stop": "Stop",
+  "exit": "Exit",
+  "continueText": "Continue",
+  "exitReviewQuestion": "Are you sure you want to exit? Your progress for this session will be lost.",
+  "failedToLoadWords": "Failed to load words: {error}",
+  "@failedToLoadWords": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "Retry",
+  "wordCountProgress": "Word {current} of {total}",
+  "@wordCountProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "definition": "Definition",
+  "nextWord": "Next Word",
+  "checkAnswer": "Check Answer",
+  "noDiaryEntries": "No diary entries yet. Start writing!"
 }
