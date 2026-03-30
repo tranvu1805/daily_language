@@ -37,66 +37,75 @@ class ReviewWordInput extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: [
-        Wrap(
-          spacing: 8,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: List.generate(content.length, (index) {
-            final char = content[index];
-            if (char == ' ') return const SizedBox(width: 20);
+    return GestureDetector(
+      onTap: () {
+        focusNode.unfocus();
+        Future.delayed(const Duration(milliseconds: 50), () {
+          focusNode.requestFocus();
+        });
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 12,
+            alignment: WrapAlignment.center,
+            children: List.generate(content.length, (index) {
+              final char = content[index];
+              if (char == ' ') return const SizedBox(width: 20);
 
-            String displayChar = '_';
-            if (controller.text.length > index) {
-              displayChar = controller.text[index];
-            }
+              String displayChar = '_';
+              if (controller.text.length > index) {
+                displayChar = controller.text[index];
+              }
 
-            final textTheme = Theme.of(context).textTheme;
+              final textTheme = Theme.of(context).textTheme;
 
-            return Container(
-              width: 32,
-              height: 44,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: controller.text.length == index
-                        ? ColorApp.primary
-                        : Colors.grey.shade300,
-                    width: controller.text.length == index ? 3 : 1.5,
+              return Container(
+                width: 32,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: controller.text.length == index
+                          ? ColorApp.primary
+                          : Colors.grey.shade300,
+                      width: controller.text.length == index ? 3 : 1.5,
+                    ),
                   ),
                 ),
-              ),
-              child: Text(
-                controller.text.length > index ? displayChar : '',
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: ColorApp.textPrimary,
+                child: Text(
+                  controller.text.length > index ? displayChar : '',
+                  style: textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: ColorApp.textPrimary,
+                  ),
                 ),
+              );
+            }),
+          ),
+          Opacity(
+            opacity: 0,
+            child: SizedBox(
+              height: 1,
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                autofocus: true,
+                onChanged: (val) {
+                  if (val.length > content.length) {
+                    controller.text = val.substring(0, content.length);
+                  }
+                  onTextUpdated();
+                },
+                onSubmitted: (_) => onSubmitted(),
               ),
-            );
-          }),
-        ),
-        Opacity(
-          opacity: 0,
-          child: SizedBox(
-            height: 1,
-            child: TextField(
-              controller: controller,
-              focusNode: focusNode,
-              autofocus: true,
-              onChanged: (val) {
-                if (val.length > content.length) {
-                  controller.text = val.substring(0, content.length);
-                }
-                onTextUpdated();
-              },
-              onSubmitted: (_) => onSubmitted(),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

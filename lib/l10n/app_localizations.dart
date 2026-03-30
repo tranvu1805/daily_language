@@ -1129,6 +1129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder set at {time}'**
   String reminderSetAt(String time);
+
+  /// No description provided for @pleaseEnterAnAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an answer'**
+  String get pleaseEnterAnAnswer;
 }
 
 class _AppLocalizationsDelegate

@@ -559,4 +559,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String reminderSetAt(String time) {
     return 'Đã đặt nhắc nhở lúc $time';
   }
+
+  @override
+  String get pleaseEnterAnAnswer => 'Vui lòng nhập câu trả lời';
 }

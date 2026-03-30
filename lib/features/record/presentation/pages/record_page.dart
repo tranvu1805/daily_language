@@ -93,8 +93,7 @@ class _RecordPageState extends State<RecordPage> {
               if (state.records.isEmpty) {
                 return const AppEmpty();
               }
-              return RefreshIndicator(
-                color: ColorApp.primary,
+              return AppRefreshIndicator(
                 onRefresh: () async => _refresh(),
                 child: ListView.separated(
                   controller: _scrollController,

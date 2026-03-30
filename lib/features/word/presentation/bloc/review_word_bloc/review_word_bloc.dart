@@ -21,9 +21,26 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
        _updateUserWordUseCase = updateUserWordUseCase,
        super(const ReviewWordState()) {
     on<ReviewWordLoaded>(_onReviewWordLoaded);
+    on<ReviewWordRefreshed>(_onReviewWordRefreshed);
     on<ReviewWordAnswerSubmitted>(_onAnswerSubmitted);
     on<ReviewWordNextRequested>(_onNextRequested);
     on<ReviewWordFinishedRequested>(_onFinishedRequested);
+  }
+
+  Future<void> _onReviewWordRefreshed(
+    ReviewWordRefreshed event,
+    Emitter<ReviewWordState> emit,
+  ) async {
+    // Only fetch new data without resetting status to avoid infinite loop or flickering dialogs
+    final result = await _getUserWordsUseCase(
+      GetUserWordsUseCaseParams(
+        userId: event.userId,
+        limit: 20,
+        isReview: true,
+      ),
+    );
+
+    result.fold((_) {}, (words) => emit(state.copyWith(reviewWords: words)));
   }
 
   Future<void> _onReviewWordLoaded(
@@ -210,6 +227,10 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
     final nextIndex = state.currentIndex + 1;
     if (nextIndex >= state.reviewWords.length) {
       emit(state.copyWith(status: ReviewWordStatus.finished));
+      // Silent refresh to update count for other pages (Home/WordPage)
+      if (state.reviewWords.isNotEmpty) {
+        add(ReviewWordRefreshed(userId: state.reviewWords.first.userId));
+      }
     } else {
       emit(
         state.copyWith(

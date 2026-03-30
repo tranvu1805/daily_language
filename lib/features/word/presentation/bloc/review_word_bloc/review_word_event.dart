@@ -16,6 +16,15 @@ class ReviewWordLoaded extends ReviewWordEvent {
   List<Object?> get props => [userId];
 }
 
+class ReviewWordRefreshed extends ReviewWordEvent {
+  final String userId;
+
+  const ReviewWordRefreshed({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
+
 class ReviewWordAnswerSubmitted extends ReviewWordEvent {
   final String answer;
 

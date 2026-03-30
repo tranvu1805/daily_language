@@ -260,5 +260,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "pleaseEnterAnAnswer": "Vui lòng nhập câu trả lời"
 }

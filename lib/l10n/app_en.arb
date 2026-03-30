@@ -260,5 +260,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "pleaseEnterAnAnswer": "Please enter an answer"
 }

@@ -558,4 +558,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String reminderSetAt(String time) {
     return 'Reminder set at $time';
   }
+
+  @override
+  String get pleaseEnterAnAnswer => 'Please enter an answer';
 }

@@ -95,14 +95,17 @@ class AccountModel extends Equatable {
   Map<String, dynamic> toCreateJson() {
     final map = <String, dynamic>{};
     map['uid'] = uid;
-    if (fullName != null && fullName!.isNotEmpty) map['fullName'] = fullName;
-    if (email != null && email!.isNotEmpty) map['email'] = email;
-    if (avatarUrl != null && avatarUrl!.isNotEmpty) map['avatarUrl'] = avatarUrl;
-    if (phoneNumber != null && phoneNumber!.isNotEmpty) map['phoneNumber'] = phoneNumber;
-    // Intentionally omit streak, maxStreak, aiReviewCount, aiReviewCoins,
-    // lastAiReviewAt, and isPremium. Since `ref.set(..., merge: true)` is used
-    // on every login via SplashPage, explicitly providing defaults like `0` or `null`
-    // will overwrite existing user progress.
+    map['fullName'] = fullName;
+    map['email'] = email;
+    map['avatarUrl'] = avatarUrl;
+    map['phoneNumber'] = phoneNumber;
+    map['streak'] = 0;
+    map['maxStreak'] = 0;
+    map['lastActivityAt'] = DateTime.now();
+    map['aiReviewCount'] = 0;
+    map['aiReviewCoins'] = 0;
+    map['lastAiReviewAt'] = null;
+    map['isPremium'] = false;
     return map;
   }
 
@@ -143,11 +146,11 @@ class AccountModel extends Equatable {
         phoneNumber: json['phoneNumber'] as String?,
         streak: json['streak'] as int?,
         maxStreak: json['maxStreak'] as int?,
-        lastActivityAt: json['lastActivityAt'] != null 
-            ? (json['lastActivityAt'] as dynamic).toDate() as DateTime? 
+        lastActivityAt: json['lastActivityAt'] != null
+            ? (json['lastActivityAt'] as dynamic).toDate() as DateTime?
             : null,
-        lastAiReviewAt: json['lastAiReviewAt'] != null 
-            ? (json['lastAiReviewAt'] as dynamic).toDate() as DateTime? 
+        lastAiReviewAt: json['lastAiReviewAt'] != null
+            ? (json['lastAiReviewAt'] as dynamic).toDate() as DateTime?
             : null,
         aiReviewCount: json['aiReviewCount'] as int?,
         aiReviewCoins: json['aiReviewCoins'] as int?,

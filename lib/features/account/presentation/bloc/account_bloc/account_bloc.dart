@@ -162,27 +162,28 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     Emitter<AccountState> emit,
   ) async {
     if (state is AccountSuccess) {
-       final currentAcc = (state as AccountSuccess).account;
-       final param = event.param;
-       final newAcc = Account(
-         uid: currentAcc.uid,
-         fullName: param.fullName,
-         email: currentAcc.email,
-         phoneNumber: param.phoneNumber,
-         streak: param.streak ?? currentAcc.streak,
-         maxStreak: param.maxStreak ?? currentAcc.maxStreak,
-         lastActivityAt: param.lastActivityAt ?? currentAcc.lastActivityAt,
-         lastAiReviewAt: param.lastAiReviewAt ?? currentAcc.lastAiReviewAt,
-         aiReviewCount: param.aiReviewCount ?? currentAcc.aiReviewCount,
-         aiReviewCoins: param.aiReviewCoins ?? currentAcc.aiReviewCoins,
-         avatarUrl: currentAcc.avatarUrl,
-         isPremium: param.isPremium ?? currentAcc.isPremium,
-       );
-       emit(AccountSuccess(account: newAcc));
+      final currentAcc = (state as AccountSuccess).account;
+      final param = event.param;
+      final newAcc = Account(
+        uid: currentAcc.uid,
+        fullName: param.fullName,
+        email: currentAcc.email,
+        phoneNumber: param.phoneNumber,
+        streak: param.streak ?? currentAcc.streak,
+        maxStreak: param.maxStreak ?? currentAcc.maxStreak,
+        lastActivityAt: param.lastActivityAt ?? currentAcc.lastActivityAt,
+        lastAiReviewAt: param.lastAiReviewAt ?? currentAcc.lastAiReviewAt,
+        aiReviewCount: param.aiReviewCount ?? currentAcc.aiReviewCount,
+        aiReviewCoins: param.aiReviewCoins ?? currentAcc.aiReviewCoins,
+        avatarUrl: currentAcc.avatarUrl,
+        isPremium: param.isPremium ?? currentAcc.isPremium,
+      );
+      emit(AccountSuccess(account: newAcc));
     }
-
+    emit(AccountInProgress());
     final result = await _updateAccountUseCase(event.param);
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
+      emit(AccountUpdateSuccess());
       add(AccountRequested(uid: event.param.uid));
     });
   }
@@ -205,7 +206,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     final account = event.account;
     final now = DateTime.now().toLocal();
     final lastReview = account.lastAiReviewAt?.toLocal();
-    final isNewDay = lastReview == null ||
+    final isNewDay =
+        lastReview == null ||
         lastReview.day != now.day ||
         lastReview.month != now.month ||
         lastReview.year != now.year;

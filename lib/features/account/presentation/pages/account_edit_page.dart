@@ -53,7 +53,9 @@ class _AccountEditPageState extends State<AccountEditPage> {
           }
         },
         builder: (context, state) {
-          final isLoading = state is AccountInProgress;
+          if (state is AccountInProgress) {
+            return const AppCircularProgressIndicator();
+          }
           return SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -63,7 +65,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
                   children: [
                     TextFormField(
                       controller: _fullNameController,
-                      style: textTheme.bodyLarge,
+                      style: textTheme.bodyMedium,
                       decoration: InputDecoration(
                         labelText: context.l10n.fullName,
                       ),
@@ -75,7 +77,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
-                      style: textTheme.bodyLarge,
+                      style: textTheme.bodyMedium,
                       decoration: InputDecoration(
                         labelText: context.l10n.phoneNumber,
                       ),
@@ -100,8 +102,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
                         const SizedBox(width: 24),
                         Expanded(
                           child: PrimaryButton(
-                            isLoading: isLoading,
-                            onPressed: isLoading ? null : _onConfirmed,
+                            onPressed: _onConfirmed,
                             label: context.l10n.confirm,
                           ),
                         ),

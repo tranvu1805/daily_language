@@ -36,7 +36,10 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
   }
 
   void _submit() {
-    if (_controller.text.trim().isEmpty) return;
+    if (_controller.text.trim().isEmpty) {
+      SnackBarHelper.showFailure(context, context.l10n.pleaseEnterAnAnswer);
+      return;
+    }
     context.read<ReviewWordBloc>().add(
       ReviewWordAnswerSubmitted(answer: _controller.text),
     );
@@ -69,6 +72,19 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
             builder: (context) => const ReviewCompletionDialog(),
           );
         }
+        if (state.isShowingAnswer) {
+          if (state.isCorrect) {
+            SnackBarHelper.showTopSuccess(
+              context,
+              context.l10n.correctKeepItUp,
+            );
+          } else {
+            SnackBarHelper.showTopFailure(
+              context,
+              context.l10n.incorrectWordIsAbove,
+            );
+          }
+        }
         if (state.error.isNotEmpty &&
             state.status == ReviewWordStatus.failure) {
           SnackBarHelper.showFailure(
@@ -92,6 +108,10 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
 
           if (shouldPop == true && context.mounted) {
             Navigator.of(context).pop();
+            context.read<ReviewWordBloc>().add(
+              ReviewWordRefreshed(userId: account.uid),
+            );
+            context.pop();
           }
         },
         child: Scaffold(
@@ -120,6 +140,9 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                   confirmColor: Colors.redAccent,
                 );
                 if (shouldPop == true && context.mounted) {
+                  context.read<ReviewWordBloc>().add(
+                    ReviewWordRefreshed(userId: account.uid),
+                  );
                   context.pop();
                 }
               },
@@ -155,7 +178,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
               final word = state.currentDictionaryWord!;
 
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -181,50 +204,14 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                     ),
                     const SizedBox(height: 48),
                     if (state.isShowingAnswer) ...[
-                      ReviewFeedbackWidget(isCorrect: state.isCorrect),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: _next,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorApp.primary,
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(double.infinity, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 5,
-                          shadowColor: ColorApp.primary.withValues(alpha: 0.3),
-                        ),
-                        child: Text(
-                          l10n.nextWord,
-                          style: textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      PrimaryButton(onPressed: _next, label: l10n.nextWord),
                     ] else ...[
-                      ElevatedButton(
+                      PrimaryButton(
                         onPressed: _submit,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorApp.primary,
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(double.infinity, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 5,
-                          shadowColor: ColorApp.primary.withValues(alpha: 0.3),
-                        ),
-                        child: Text(
-                          l10n.checkAnswer,
-                          style: textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
+                        label: l10n.checkAnswer,
                       ),
                     ],
+                    const SizedBox(height: 24),
                   ],
                 ),
               );

@@ -32,6 +32,7 @@ class _AppPageState extends State<AppPage> {
     ];
     return Scaffold(
       backgroundColor: ColorApp.pureWhite,
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () => context.push('${Routes.diary}/${Routes.diaryAdd}'),
