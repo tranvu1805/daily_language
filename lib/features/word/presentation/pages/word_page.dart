@@ -1,7 +1,6 @@
 import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
-import 'package:daily_language/features/account/presentation/presentation.dart';
 import 'package:daily_language/features/word/domain/domain.dart';
 import 'package:daily_language/features/word/presentation/presentation.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +23,16 @@ class WordPage extends StatelessWidget {
           onRefresh: () async {
             final account = getAccountFromState(context);
             context.read<ReviewWordBloc>().add(
-                  ReviewWordLoaded(userId: account.uid),
-                );
+              ReviewWordLoaded(userId: account.uid),
+            );
             context.read<UserWordsBloc>().add(
-                  UserWordsRequested(
-                    param: GetUserWordsUseCaseParams(
-                      userId: account.uid,
-                      limit: 20,
-                    ),
-                  ),
-                );
+              UserWordsRequested(
+                param: GetUserWordsUseCaseParams(
+                  userId: account.uid,
+                  limit: 20,
+                ),
+              ),
+            );
             await Future.delayed(const Duration(milliseconds: 500));
           },
           child: CustomScrollView(

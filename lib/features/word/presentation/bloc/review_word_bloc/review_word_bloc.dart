@@ -246,6 +246,8 @@ class ReviewWordBloc extends Bloc<ReviewWordEvent, ReviewWordState> {
     ReviewWordFinishedRequested event,
     Emitter<ReviewWordState> emit,
   ) {
-    emit(state.copyWith(status: ReviewWordStatus.finished));
+    emit(
+      state.copyWith(status: ReviewWordStatus.finished, isShowingAnswer: false),
+    );
   }
 }

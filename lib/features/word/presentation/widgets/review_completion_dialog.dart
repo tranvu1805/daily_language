@@ -1,40 +1,48 @@
-import 'package:daily_language/core/constants/colors_app.dart';
-import 'package:daily_language/core/utils/extension/extension_method.dart';
+import 'package:daily_language/core/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ReviewCompletionDialog extends StatelessWidget {
-  const ReviewCompletionDialog({super.key});
-
+  const ReviewCompletionDialog({super.key, required this.onPressed});
+  final VoidCallback onPressed;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text(l10n.reviewCompleted, textAlign: TextAlign.center),
-      content: Text(
-        l10n.reviewFinishedMessage,
-        textAlign: TextAlign.center,
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
       ),
-      actions: [
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
-              context.pop(); // Close dialog
-              context.pop(); // Go back home/pre-page
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorApp.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            l10n.reviewCompleted,
+            textAlign: TextAlign.center,
+            style: textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            child: Text(l10n.backToLearning),
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            l10n.reviewFinishedMessage,
+            textAlign: TextAlign.center,
+            style: textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: 200,
+            child: PrimaryButton(
+              onPressed: onPressed,
+              label: l10n.backToLearning,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

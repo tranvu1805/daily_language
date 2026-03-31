@@ -66,11 +66,6 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
             AccountStreakUpdated(account: account),
           );
           sl<NotificationHelper>().scheduleDailyReminder(forceTomorrow: true);
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => const ReviewCompletionDialog(),
-          );
         }
         if (state.isShowingAnswer) {
           if (state.isCorrect) {
@@ -108,10 +103,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
 
           if (shouldPop == true && context.mounted) {
             Navigator.of(context).pop();
-            context.read<ReviewWordBloc>().add(
-              ReviewWordRefreshed(userId: account.uid),
-            );
-            context.pop();
+            _refreshWord(context);
           }
         },
         child: Scaffold(
@@ -140,9 +132,7 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                   confirmColor: Colors.redAccent,
                 );
                 if (shouldPop == true && context.mounted) {
-                  context.read<ReviewWordBloc>().add(
-                    ReviewWordRefreshed(userId: account.uid),
-                  );
+                  _refreshWord(context);
                   context.pop();
                 }
               },
@@ -167,16 +157,19 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
                 );
               }
 
-              if (state.status == ReviewWordStatus.finished) {
-                return const SizedBox.shrink();
+              if (state.status == ReviewWordStatus.finished ||
+                  state.reviewWords.isEmpty) {
+                return ReviewCompletionDialog(
+                  onPressed: () {
+                    _refreshWord(context);
+                    context.pop();
+                  },
+                );
               }
-
               if (state.currentDictionaryWord == null) {
                 return const AppCircularProgressIndicator();
               }
-
               final word = state.currentDictionaryWord!;
-
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -219,6 +212,12 @@ class _ReviewWordPageState extends State<ReviewWordPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void _refreshWord(BuildContext context) {
+    context.read<ReviewWordBloc>().add(
+      ReviewWordRefreshed(userId: account.uid),
     );
   }
 }
