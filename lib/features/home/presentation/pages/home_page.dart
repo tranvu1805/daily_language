@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                 final authState = context.read<AuthenticationBloc>().state;
                 if (authState is AuthenticationSuccess) {
                   context.read<AccountBloc>().add(
-                    AccountCreated(
+                    AccountLoggedIn(
                       param: CreateAccountUseCaseParams(
                         uid: authState.user.id,
                         email: authState.user.email,
