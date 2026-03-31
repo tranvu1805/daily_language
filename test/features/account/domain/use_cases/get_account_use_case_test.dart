@@ -10,7 +10,7 @@ void main() {
   late GetAccountUseCase useCase;
 
   const tId = '1';
-  const tAccount = Account.empty();
+  final tAccount = Account.empty();
 
   setUp(() {
     repository = MockAccountRepos();
@@ -21,11 +21,11 @@ void main() {
     // arrange
     when(
       () => repository.getAccount(uid: any(named: 'id')),
-    ).thenAnswer((_) async => const Right(tAccount));
+    ).thenAnswer((_) async => Right(tAccount));
     // act
     final result = await useCase(tId);
     // assert
-    expect(result, equals(const Right(tAccount)));
+    expect(result, equals(Right(tAccount)));
     verify(() => repository.getAccount(uid: tId)).called(1);
     verifyNoMoreInteractions(repository);
   });

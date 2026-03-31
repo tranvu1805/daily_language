@@ -7,14 +7,14 @@ void main() {
 
   test('should return a valid entity when call toEntity', () {
     final result = tAccountModel.toEntity();
-    final expectedEntity = const Account(
+    final expectedEntity = Account(
       uid: '',
       fullName: '',
       email: '',
       phoneNumber: '',
       streak: 0,
       maxStreak: 0,
-      lastActivityAt: null,
+      lastActivityAt: DateTime(2024, 6, 1),
       avatarUrl: '',
     );
     expect(result, expectedEntity);

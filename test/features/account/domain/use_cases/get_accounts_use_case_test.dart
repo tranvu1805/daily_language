@@ -10,7 +10,7 @@ void main() {
   late GetAccountsUseCase useCase;
 
   const tPage = 1;
-  const tAccounts = [Account.empty()];
+  final tAccounts = [Account.empty()];
 
   setUp(() {
     repository = MockAccountRepos();
@@ -20,12 +20,12 @@ void main() {
   test('should call [AccountRepos.getAccounts]', () async {
     // arrange
     when(
-          () => repository.getAccounts(page: any(named: 'page')),
-    ).thenAnswer((_) async => const Right(tAccounts));
+      () => repository.getAccounts(page: any(named: 'page')),
+    ).thenAnswer((_) async => Right(tAccounts));
     // act
     final result = await useCase(tPage);
     // assert
-    expect(result, equals(const Right(tAccounts)));
+    expect(result, equals(Right(tAccounts)));
     verify(() => repository.getAccounts(page: tPage)).called(1);
     verifyNoMoreInteractions(repository);
   });

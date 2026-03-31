@@ -20,7 +20,7 @@ void main() {
   test('should call [AccountRepos.createAccount]', () async {
     // arrange
     when(
-          () => repository.createAccount(params: any(named: 'params')),
+      () => repository.createAccount(params: any(named: 'params')),
     ).thenAnswer((_) async => const Right(null));
     // act
     final result = await useCase(tParams);

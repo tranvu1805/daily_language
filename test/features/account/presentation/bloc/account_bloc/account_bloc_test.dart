@@ -46,12 +46,12 @@ void main() {
       setUp: () {
         when(
           () => getAccountUseCase(any()),
-        ).thenAnswer((_) async => const Right(Account.empty()));
+        ).thenAnswer((_) async => Right(Account.empty()));
       },
       act: (bloc) => bloc.add(const AccountRequested(uid: tId)),
       expect: () => [
         AccountInProgress(),
-        const AccountSuccess(account: Account.empty()),
+        AccountSuccess(account: Account.empty()),
       ],
     );
 
@@ -81,15 +81,15 @@ void main() {
         ).thenAnswer((_) async => const Right(null));
         when(
           () => getAccountUseCase(any()),
-        ).thenAnswer((_) async => const Right(Account.empty()));
+        ).thenAnswer((_) async => Right(Account.empty()));
       },
       act: (bloc) =>
-          bloc.add(const AccountCreated(param: tCreateAccountParams)),
+          bloc.add(const AccountLoggedIn(param: tCreateAccountParams)),
       expect: () => [
         AccountInProgress(),
         AccountCreateSuccess(),
         AccountInProgress(),
-        const AccountSuccess(account: Account.empty()),
+        AccountSuccess(account: Account.empty()),
       ],
     );
 
@@ -102,7 +102,7 @@ void main() {
         ).thenAnswer((_) async => const Left(tFailure));
       },
       act: (bloc) =>
-          bloc.add(const AccountCreated(param: tCreateAccountParams)),
+          bloc.add(const AccountLoggedIn(param: tCreateAccountParams)),
       expect: () => [
         AccountInProgress(),
         AccountFailure(error: tFailure.message),
@@ -120,7 +120,7 @@ void main() {
         ).thenAnswer((_) async => const Right(null));
         when(
           () => getAccountUseCase(any()),
-        ).thenAnswer((_) async => const Right(Account.empty()));
+        ).thenAnswer((_) async => Right(Account.empty()));
       },
       act: (bloc) =>
           bloc.add(const AccountUpdated(param: tUpdateAccountParams)),
@@ -128,7 +128,7 @@ void main() {
         AccountInProgress(),
         AccountUpdateSuccess(),
         AccountInProgress(),
-        const AccountSuccess(account: Account.empty()),
+        AccountSuccess(account: Account.empty()),
       ],
     );
 

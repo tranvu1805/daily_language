@@ -14,12 +14,13 @@ void main() {
   late AccountReposImpl repository;
   const tId = 'id';
   const tException = ServerException(message: 'Unknown error', statusCode: 555);
-  const tCreateAccountUseCaseParams = CreateAccountUseCaseParams.empty();
+  final tCreateAccountUseCaseParams = const CreateAccountUseCaseParams.empty();
   final tCreateAccountModel = AccountModel.toCreate(
     avatarUrl: tCreateAccountUseCaseParams.avatarUrl,
     uid: tCreateAccountUseCaseParams.uid,
     email: tCreateAccountUseCaseParams.email,
     fullName: tCreateAccountUseCaseParams.fullName,
+    lastActivityAt: null,
   );
   final tUpdateAccountModel = const AccountModel();
 
@@ -72,7 +73,7 @@ void main() {
 
         final result = await repository.getAccount(uid: tId);
 
-        expect(result, equals(const Right(Account.empty())));
+        expect(result, equals(Right(Account.empty())));
         verify(() => mockRemoteDataSource.getAccount(uid: tId)).called(1);
         verifyNoMoreInteractions(mockRemoteDataSource);
       },
