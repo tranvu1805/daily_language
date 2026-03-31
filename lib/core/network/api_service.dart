@@ -9,7 +9,7 @@ import 'package:fpdart/fpdart.dart';
 class ApiService {
   static ResultFuture<T> handle<T>(Future<T> Function() action) async {
     try {
-      final result = await action().timeout(const Duration(seconds: 10));
+      final result = await action().timeout(const Duration(seconds: 20));
       return Right(result);
     } on FirebaseException catch (e) {
       return Left(ServerFailure.fromFirebaseException(e));
