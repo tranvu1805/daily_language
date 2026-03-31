@@ -1,4 +1,3 @@
-import 'package:daily_language/core/constants/colors_app.dart';
 import 'package:daily_language/core/route/routes.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/features/account/domain/domain.dart';
@@ -45,20 +44,27 @@ class _HomeContentWidgetState extends State<HomeContentWidget> {
 
     final wordsState = context.read<UserWordsBloc>().state;
     if (wordsState.status == UserWordsStatus.initial) {
-      context.read<UserWordsBloc>().add(
-        UserWordsRequested(
-          param: GetUserWordsUseCaseParams(
-            userId: widget.account.uid,
-            limit: 20,
-          ),
-        ),
-      );
+      _loadUserWords();
     }
 
     final reviewState = context.read<ReviewWordBloc>().state;
     if (reviewState.status == ReviewWordStatus.initial) {
-      context.read<ReviewWordBloc>().add(ReviewWordLoaded(userId: widget.account.uid));
+      _loadReviewWords();
     }
+  }
+
+  void _loadUserWords() {
+    context.read<UserWordsBloc>().add(
+      UserWordsRequested(
+        param: GetUserWordsUseCaseParams(userId: widget.account.uid, limit: 20),
+      ),
+    );
+  }
+
+  void _loadReviewWords() {
+    context.read<ReviewWordBloc>().add(
+      ReviewWordLoaded(userId: widget.account.uid),
+    );
   }
 
   @override
@@ -67,21 +73,12 @@ class _HomeContentWidgetState extends State<HomeContentWidget> {
     return AppRefreshIndicator(
       onRefresh: () async {
         context.read<RecordsBloc>().add(
-              RecordsRefreshed(
-                param: GetRecordsUseCaseParams(userId: widget.account.uid),
-              ),
-            );
-        context.read<UserWordsBloc>().add(
-              UserWordsRequested(
-                param: GetUserWordsUseCaseParams(
-                  userId: widget.account.uid,
-                  limit: 20,
-                ),
-              ),
-            );
-        context.read<ReviewWordBloc>().add(
-              ReviewWordLoaded(userId: widget.account.uid),
-            );
+          RecordsRefreshed(
+            param: GetRecordsUseCaseParams(userId: widget.account.uid),
+          ),
+        );
+        _loadUserWords();
+        _loadReviewWords();
         await Future.delayed(const Duration(milliseconds: 500));
       },
       child: SingleChildScrollView(
@@ -94,6 +91,9 @@ class _HomeContentWidgetState extends State<HomeContentWidget> {
             const SizedBox(height: 8),
             BlocBuilder<ReviewWordBloc, ReviewWordState>(
               builder: (context, state) {
+                if (state.status == ReviewWordStatus.loading) {
+                  return const AppCircularProgressIndicator();
+                }
                 return ReviewCardWidget(
                   reviewCount: state.reviewWords.length,
                   onTap: () =>
