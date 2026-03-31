@@ -78,56 +78,50 @@ class _RecordPageState extends State<RecordPage> {
     return Scaffold(
       backgroundColor: ColorApp.linenWhite,
       body: SafeArea(
-        child: AppRefreshIndicator(
-          onRefresh: () async => _refresh(),
-          child: BlocBuilder<RecordsBloc, RecordsState>(
-            builder: (context, state) {
-              if (state.status == RecordsStatus.loading) {
-                return const AppCircularProgressIndicator();
+        child: BlocBuilder<RecordsBloc, RecordsState>(
+          builder: (context, state) {
+            if (state.status == RecordsStatus.loading) {
+              return const AppCircularProgressIndicator();
+            }
+            if (state.status == RecordsStatus.failure) {
+              return AppRetryWidget(
+                message: state.error.toLocalizedError(context),
+                onRetry: _refresh,
+              );
+            }
+            if (state.status == RecordsStatus.success) {
+              if (state.records.isEmpty) {
+                return const AppEmpty();
               }
-              if (state.status == RecordsStatus.failure) {
-                return AppRetryWidget(
-                  message: state.error.toLocalizedError(context),
-                  onRetry: _refresh,
-                );
-              }
-              if (state.status == RecordsStatus.success) {
-                if (state.records.isEmpty) {
-                  return const AppEmpty();
-                }
-                return AppRefreshIndicator(
-                  onRefresh: () async => _refresh(),
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    itemCount: state.hasReachedMax
-                        ? state.records.length
-                        : state.records.length + 1,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      if (index >= state.records.length) {
-                        return const AppCircularProgressIndicator();
-                      }
-                      final record = state.records[index];
-                      return RecordCard(
-                        record: record,
-                        onTap: () {
-                          context.push(
-                            '${Routes.diary}/${Routes.diaryEdit}',
-                            extra: record,
-                          );
-                        },
+              return ListView.separated(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                itemCount: state.hasReachedMax
+                    ? state.records.length
+                    : state.records.length + 1,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  if (index >= state.records.length) {
+                    return const AppCircularProgressIndicator();
+                  }
+                  final record = state.records[index];
+                  return RecordCard(
+                    record: record,
+                    onTap: () {
+                      context.push(
+                        '${Routes.diary}/${Routes.diaryEdit}',
+                        extra: record,
                       );
                     },
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
+                  );
+                },
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
