@@ -31,7 +31,7 @@ class SplashPage extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthenticationSuccess) {
                 context.read<AccountBloc>().add(
-                  AccountCreated(
+                  AccountLoggedIn(
                     param: CreateAccountUseCaseParams(
                       uid: state.user.id,
                       email: state.user.email,

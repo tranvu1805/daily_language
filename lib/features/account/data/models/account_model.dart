@@ -50,10 +50,10 @@ class AccountModel extends Equatable {
     required this.email,
     required this.fullName,
     required this.avatarUrl,
+    this.lastActivityAt,
     this.phoneNumber = '',
     this.streak = 0,
     this.maxStreak = 0,
-    this.lastActivityAt,
     this.aiReviewCount = 0,
     this.aiReviewCoins = 0,
     this.lastAiReviewAt,
@@ -101,7 +101,7 @@ class AccountModel extends Equatable {
     map['phoneNumber'] = phoneNumber;
     map['streak'] = 0;
     map['maxStreak'] = 0;
-    map['lastActivityAt'] = DateTime.now();
+    if (lastActivityAt != null) map['lastActivityAt'] = lastActivityAt;
     map['aiReviewCount'] = 0;
     map['aiReviewCoins'] = 0;
     map['lastAiReviewAt'] = null;
@@ -113,9 +113,9 @@ class AccountModel extends Equatable {
     final map = <String, dynamic>{};
     map['fullName'] = fullName;
     map['phoneNumber'] = phoneNumber;
+    if (lastActivityAt != null) map['lastActivityAt'] = lastActivityAt;
     if (streak != null) map['streak'] = streak;
     if (maxStreak != null) map['maxStreak'] = maxStreak;
-    if (lastActivityAt != null) map['lastActivityAt'] = lastActivityAt;
     if (aiReviewCount != null) map['aiReviewCount'] = aiReviewCount;
     if (aiReviewCoins != null) map['aiReviewCoins'] = aiReviewCoins;
     if (lastAiReviewAt != null) map['lastAiReviewAt'] = lastAiReviewAt;

@@ -130,6 +130,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
               uid: state.account.uid,
               fullName: fullName,
               phoneNumber: phoneNumber,
+              lastActivityAt: DateTime.now(),
             ),
           ),
         );

@@ -6,7 +6,6 @@ import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/core/utils/helper/notification_helper.dart';
 import 'package:daily_language/core/utils/utils.dart';
 import 'package:daily_language/core/utils/widgets/app_retry_widget.dart';
-import 'package:daily_language/features/account/domain/use_cases/create_account_use_case.dart';
 import 'package:daily_language/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:daily_language/features/account/presentation/widgets/widgets.dart';
 import 'package:daily_language/features/authentication/presentation/presentation.dart';
@@ -41,14 +40,7 @@ class _AccountPageState extends State<AccountPage> {
                 final authState = context.read<AuthenticationBloc>().state;
                 if (authState is AuthenticationSuccess) {
                   context.read<AccountBloc>().add(
-                    AccountCreated(
-                      param: CreateAccountUseCaseParams(
-                        uid: authState.user.id,
-                        email: authState.user.email,
-                        fullName: authState.user.username,
-                        avatarUrl: authState.user.avatarUrl,
-                      ),
-                    ),
+                    AccountRequested(uid: authState.user.id),
                   );
                 }
               },

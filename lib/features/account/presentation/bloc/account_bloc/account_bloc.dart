@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'account_event.dart';
+
 part 'account_state.dart';
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
@@ -24,7 +25,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
        _deleteAccountUseCase = deleteAccountUseCase,
        super(AccountInitial()) {
     on<AccountRequested>(_onAccountRequested);
-    on<AccountCreated>(_onCreated);
+    on<AccountLoggedIn>(_onAccountLoggedIn);
     on<AccountUpdated>(_onUpdated);
     on<AccountDeleted>(_onDeleted);
     on<AccountStreakUpdated>(_onStreakUpdated);
@@ -36,30 +37,37 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     AccountRequested event,
     Emitter<AccountState> emit,
   ) async {
-    if (state is! AccountSuccess) {
-      emit(AccountInProgress());
-    }
+    emit(AccountInProgress());
     final result = await _getAccountUseCase(event.uid);
-    result.fold((failure) => emit(AccountFailure(error: failure.message)), (
-      account,
-    ) {
-      // Check for streak reset if they missed consecutive days
-      final checkedAccount = _checkStreakReset(account);
-      if (checkedAccount != account) {
-        // If reset happened, persist it immediately
-        add(
-          AccountUpdated(
-            param: UpdateAccountUseCaseParams(
-              uid: account.uid,
-              fullName: account.fullName,
-              phoneNumber: account.phoneNumber,
-              streak: checkedAccount.streak,
-            ),
-          ),
-        );
-      }
-      emit(AccountSuccess(account: checkedAccount));
-    });
+    result.fold(
+      (failure) {
+        emit(AccountFailure(error: failure.message));
+      },
+      (account) {
+        // Check for streak reset if they missed consecutive days
+        final checkedAccount = _checkStreakReset(account);
+        emit(AccountSuccess(account: checkedAccount));
+      },
+    );
+  }
+
+  Account _checkStreakReset(Account account) {
+    final now = DateTime.now().toLocal();
+    final nowDate = DateTime(now.year, now.month, now.day);
+    if (account.lastActivityAt == null) {
+      return account;
+    }
+    final lastDate = DateTime(
+      account.lastActivityAt!.year,
+      account.lastActivityAt!.month,
+      account.lastActivityAt!.day,
+    );
+    final diff = nowDate.difference(lastDate).inDays;
+    if (diff > 1) {
+      // Missed at least one whole day, streak reset to 0
+      return account.copyWith(streak: 0);
+    }
+    return account;
   }
 
   Future<void> _onStreakUpdated(
@@ -69,11 +77,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     final account = event.account;
     final now = DateTime.now();
     final nowDate = DateTime(now.year, now.month, now.day);
-
     int newStreak = account.streak;
     int newMaxStreak = account.maxStreak;
     DateTime? lastActivity = account.lastActivityAt;
-
     if (lastActivity == null) {
       newStreak = 1;
     } else {
@@ -83,7 +89,6 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         lastActivity.day,
       );
       final daysDiff = nowDate.difference(lastDate).inDays;
-
       if (daysDiff == 0) {
         // Already updated today, skip
         return;
@@ -95,12 +100,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         newStreak = 1;
       }
     }
-
     if (newStreak > newMaxStreak) {
       newMaxStreak = newStreak;
     }
-
-    // Persist to firestore
     add(
       AccountUpdated(
         param: UpdateAccountUseCaseParams(
@@ -115,71 +117,10 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     );
   }
 
-  Account _checkStreakReset(Account account) {
-    if (account.lastActivityAt == null) return account;
-    final now = DateTime.now();
-    final nowDate = DateTime(now.year, now.month, now.day);
-    final lastDate = DateTime(
-      account.lastActivityAt!.year,
-      account.lastActivityAt!.month,
-      account.lastActivityAt!.day,
-    );
-    final diff = nowDate.difference(lastDate).inDays;
-    if (diff > 1) {
-      // Missed at least one whole day, streak reset to 0
-      return Account(
-        uid: account.uid,
-        fullName: account.fullName,
-        email: account.email,
-        phoneNumber: account.phoneNumber,
-        streak: 0,
-        maxStreak: account.maxStreak,
-        lastActivityAt: account.lastActivityAt,
-        lastAiReviewAt: account.lastAiReviewAt,
-        aiReviewCount: account.aiReviewCount,
-        aiReviewCoins: account.aiReviewCoins,
-        avatarUrl: account.avatarUrl,
-        isPremium: account.isPremium,
-      );
-    }
-    return account;
-  }
-
-  Future<void> _onCreated(
-    AccountCreated event,
-    Emitter<AccountState> emit,
-  ) async {
-    emit(AccountInProgress());
-    final result = await _createAccountUseCase(event.param);
-    result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
-      emit(AccountCreateSuccess());
-      add(AccountRequested(uid: event.param.uid));
-    });
-  }
-
   Future<void> _onUpdated(
     AccountUpdated event,
     Emitter<AccountState> emit,
   ) async {
-    if (state is AccountSuccess) {
-      final currentAcc = (state as AccountSuccess).account;
-      final param = event.param;
-      final newAcc = Account(
-        uid: currentAcc.uid,
-        fullName: param.fullName,
-        email: currentAcc.email,
-        phoneNumber: param.phoneNumber,
-        streak: param.streak ?? currentAcc.streak,
-        maxStreak: param.maxStreak ?? currentAcc.maxStreak,
-        lastActivityAt: param.lastActivityAt ?? currentAcc.lastActivityAt,
-        lastAiReviewAt: param.lastAiReviewAt ?? currentAcc.lastAiReviewAt,
-        aiReviewCount: param.aiReviewCount ?? currentAcc.aiReviewCount,
-        aiReviewCoins: param.aiReviewCoins ?? currentAcc.aiReviewCoins,
-        avatarUrl: currentAcc.avatarUrl,
-        isPremium: param.isPremium ?? currentAcc.isPremium,
-      );
-      emit(AccountSuccess(account: newAcc));
-    }
     emit(AccountInProgress());
     final result = await _updateAccountUseCase(event.param);
     result.fold((failure) => emit(AccountFailure(error: failure.message)), (_) {
@@ -252,6 +193,32 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           aiReviewCoins: account.aiReviewCoins + 1,
         ),
       ),
+    );
+  }
+
+  Future<void> _onAccountLoggedIn(
+    AccountLoggedIn event,
+    Emitter<AccountState> emit,
+  ) async {
+    emit(AccountInProgress());
+
+    final result = await _getAccountUseCase(event.param.uid);
+    await result.fold(
+      (failure) async {
+        if (failure.message == 'dataNotFound' && failure.statusCode == 404) {
+          final createResult = await _createAccountUseCase(event.param);
+          createResult.fold(
+            (f) => emit(AccountFailure(error: f.message)),
+            (_) => add(AccountRequested(uid: event.param.uid)),
+          );
+        } else {
+          emit(AccountFailure(error: failure.message));
+        }
+      },
+      (account) {
+        final checkedAccount = _checkStreakReset(account);
+        emit(AccountSuccess(account: checkedAccount));
+      },
     );
   }
 }

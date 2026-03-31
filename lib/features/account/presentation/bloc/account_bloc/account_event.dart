@@ -15,10 +15,10 @@ final class AccountRequested extends AccountEvent {
   List<Object> get props => [uid];
 }
 
-final class AccountCreated extends AccountEvent {
+final class AccountLoggedIn extends AccountEvent {
   final CreateAccountUseCaseParams param;
 
-  const AccountCreated({required this.param});
+  const AccountLoggedIn({required this.param});
 
   @override
   List<Object> get props => [param];
@@ -41,6 +41,7 @@ final class AccountDeleted extends AccountEvent {
   @override
   List<Object> get props => [id];
 }
+
 final class AccountStreakUpdated extends AccountEvent {
   final Account account;
 

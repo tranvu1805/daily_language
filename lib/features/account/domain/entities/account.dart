@@ -21,7 +21,7 @@ class Account extends Equatable {
     required this.phoneNumber,
     required this.streak,
     required this.maxStreak,
-    this.lastActivityAt,
+    required this.lastActivityAt,
     this.lastAiReviewAt,
     this.aiReviewCount = 0,
     this.aiReviewCoins = 0,
@@ -29,20 +29,50 @@ class Account extends Equatable {
     this.isPremium = false,
   });
 
-  const Account.empty({
+  Account copyWith({
+    String? uid,
+    String? fullName,
+    String? email,
+    String? phoneNumber,
+    int? streak,
+    int? maxStreak,
+    DateTime? lastActivityAt,
+    DateTime? lastAiReviewAt,
+    int? aiReviewCount,
+    int? aiReviewCoins,
+    String? avatarUrl,
+    bool? isPremium,
+  }) {
+    return Account(
+      uid: uid ?? this.uid,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      streak: streak ?? this.streak,
+      maxStreak: maxStreak ?? this.maxStreak,
+      lastActivityAt: lastActivityAt ?? this.lastActivityAt,
+      lastAiReviewAt: lastAiReviewAt ?? this.lastAiReviewAt,
+      aiReviewCount: aiReviewCount ?? this.aiReviewCount,
+      aiReviewCoins: aiReviewCoins ?? this.aiReviewCoins,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      isPremium: isPremium ?? this.isPremium,
+    );
+  }
+
+  Account.empty({
     this.uid = '',
     this.fullName = '',
     this.email = '',
     this.phoneNumber = '',
     this.streak = 0,
     this.maxStreak = 0,
-    this.lastActivityAt,
+    DateTime? lastActivityAt,
     this.lastAiReviewAt,
     this.aiReviewCount = 0,
     this.aiReviewCoins = 0,
     this.avatarUrl = '',
     this.isPremium = false,
-  });
+  }) : lastActivityAt = lastActivityAt ?? DateTime.now();
 
   @override
   List<Object?> get props => [
