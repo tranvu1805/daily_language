@@ -13,7 +13,7 @@ Account getAccountFromState(BuildContext context) {
     return state.account;
   }
   throw const ServerException(
-    message: 'User not authenticated',
+    message: 'unauthenticated',
     statusCode: 401,
   );
 }

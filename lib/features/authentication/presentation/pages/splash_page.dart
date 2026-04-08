@@ -41,10 +41,12 @@ class SplashPage extends StatelessWidget {
                   ),
                 );
               } else if (state is AuthenticationFailure) {
-                SnackBarHelper.showFailure(
-                  context,
-                  state.error.toLocalizedError(context),
-                );
+                if (!state.isSilent) {
+                  SnackBarHelper.showFailure(
+                    context,
+                    state.error.toLocalizedError(context),
+                  );
+                }
               }
             },
             builder: (context, state) {

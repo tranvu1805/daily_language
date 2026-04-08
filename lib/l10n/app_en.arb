@@ -261,5 +261,6 @@
       }
     }
   },
-  "pleaseEnterAnAnswer": "Please enter an answer"
+  "pleaseEnterAnAnswer": "Please enter an answer",
+  "unauthenticated": "You need to log in to continue"
 }

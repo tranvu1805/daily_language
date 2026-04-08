@@ -261,5 +261,6 @@
       }
     }
   },
-  "pleaseEnterAnAnswer": "Vui lòng nhập câu trả lời"
+  "pleaseEnterAnAnswer": "Vui lòng nhập câu trả lời",
+  "unauthenticated": "Bạn cần đăng nhập để tiếp tục"
 }

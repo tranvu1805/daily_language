@@ -40,6 +40,7 @@ abstract class Failure extends Equatable {
       'networkRequestFailed' => l10n.networkRequestFailed,
       'connectionTimeout' => l10n.connectionTimeout,
       'cacheError' => l10n.cacheError(message),
+      'unauthenticated' => l10n.unauthenticated,
       _ =>
         message.isEmpty
             ? l10n.unknownError('Unknown')
@@ -59,6 +60,8 @@ class ServerFailure extends Failure {
       'not found' => 'dataNotFound',
       'google sign-in failed' => 'googleSignInFailed',
       'word already exists in your collection' => 'wordAlreadyExists',
+      'user not authenticated' => 'unauthenticated',
+      'unauthenticated' => 'unauthenticated',
       _ => exception.message,
     };
     return ServerFailure(message: message, statusCode: exception.statusCode);

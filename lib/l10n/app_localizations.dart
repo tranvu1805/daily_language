@@ -1135,6 +1135,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter an answer'**
   String get pleaseEnterAnAnswer;
+
+  /// No description provided for @unauthenticated.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to log in to continue'**
+  String get unauthenticated;
 }
 
 class _AppLocalizationsDelegate

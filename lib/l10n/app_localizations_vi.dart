@@ -562,4 +562,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get pleaseEnterAnAnswer => 'Vui lòng nhập câu trả lời';
+
+  @override
+  String get unauthenticated => 'Bạn cần đăng nhập để tiếp tục';
 }

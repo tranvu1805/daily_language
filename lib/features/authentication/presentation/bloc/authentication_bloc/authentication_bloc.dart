@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:daily_language/core/utils/helper/local_storage_helper.dart';
 import 'package:daily_language/features/authentication/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,14 +13,17 @@ class AuthenticationBloc
   final GetUserUseCase _getUserUseCase;
   final LoginWithGoogleUseCase _loginWithGoogleUseCase;
   final LogoutUseCase _logoutUseCase;
+  final LocalStorageHelper _localStorageHelper;
 
   AuthenticationBloc({
     required GetUserUseCase getUserUseCase,
     required LogoutUseCase logoutUseCase,
     required LoginWithGoogleUseCase loginWithGoogleUseCase,
+    required LocalStorageHelper localStorageHelper,
   }) : _getUserUseCase = getUserUseCase,
        _logoutUseCase = logoutUseCase,
        _loginWithGoogleUseCase = loginWithGoogleUseCase,
+       _localStorageHelper = localStorageHelper,
        super(AuthenticationInitial()) {
     on<AuthenticationGoogleLoggedIn>(_onLoginWithGoogleRequested);
     on<AuthenticationRequested>(_onAuthenticationRequested);
@@ -45,9 +49,21 @@ class AuthenticationBloc
     emit(AuthenticationInProgress());
     await emit.forEach<User?>(
       _getUserUseCase(),
-      onData: (user) => user != null
-          ? AuthenticationSuccess(user: user)
-          : const AuthenticationFailure(error: 'Unauthenticated'),
+      onData: (user) {
+        if (user != null) {
+          return AuthenticationSuccess(user: user);
+        } else {
+          final isFirstTime = _localStorageHelper.isFirstTime;
+          if (isFirstTime) {
+            _localStorageHelper.setNotFirstTime();
+            return const AuthenticationFailure(
+              error: 'unauthenticated',
+              isSilent: true,
+            );
+          }
+          return const AuthenticationFailure(error: 'unauthenticated');
+        }
+      },
       onError: (e, _) => AuthenticationFailure(error: e.toString()),
     );
   }
@@ -60,7 +76,7 @@ class AuthenticationBloc
     final result = await _logoutUseCase();
     result.fold(
       (failure) => emit(AuthenticationFailure(error: failure.message)),
-      (_) => emit(const AuthenticationFailure(error: 'Unauthenticated')),
+      (_) => emit(const AuthenticationFailure(error: 'unauthenticated')),
     );
   }
 }

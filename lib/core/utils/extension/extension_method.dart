@@ -41,6 +41,7 @@ extension LocalizedString on String {
       'networkRequestFailed' => l10n.networkRequestFailed,
       'connectionTimeout' => l10n.connectionTimeout,
       'cacheError' => l10n.cacheError(this),
+      'unauthenticated' => l10n.unauthenticated,
       _ => l10n.unknownError(this),
     };
   }

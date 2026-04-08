@@ -24,9 +24,10 @@ final class AuthenticationSuccess extends AuthenticationState {
 
 final class AuthenticationFailure extends AuthenticationState {
   final String error;
+  final bool isSilent;
 
-  const AuthenticationFailure({required this.error});
+  const AuthenticationFailure({required this.error, this.isSilent = false});
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, isSilent];
 }

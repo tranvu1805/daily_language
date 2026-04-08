@@ -561,4 +561,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseEnterAnAnswer => 'Please enter an answer';
+
+  @override
+  String get unauthenticated => 'You need to log in to continue';
 }

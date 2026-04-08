@@ -75,6 +75,7 @@ class DI {
         getUserUseCase: sl(),
         logoutUseCase: sl(),
         loginWithGoogleUseCase: sl(),
+        localStorageHelper: sl(),
       ),
     );
   }
