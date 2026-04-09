@@ -3,7 +3,7 @@ name: Deploy Android Internal
 on:
   push:
     branches:
-      - main  # Hoặc branch deploy của bạn
+      - master  # Hoặc branch deploy của bạn
 
 jobs:
   deploy:
