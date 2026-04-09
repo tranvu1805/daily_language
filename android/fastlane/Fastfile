@@ -1,0 +1,76 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+# Encoding: utf-8
+default_platform(:android)
+
+platform :android do
+  # ─── Lane: chạy tests
+  desc "Chạy unit tests"
+  lane :test do
+    gradle(
+      project_dir: "android",
+      task: "test"
+    )
+  end
+  # ─── Lane: build và deploy lên Internal Testing ──────────────
+  desc "Build AAB và upload lên Play Store Internal track"
+  lane :deploy_internal do
+    # Build Flutter trước (chạy từ root project, không phải android/)
+    # Lệnh này được gọi từ GitHub Actions trước khi vào Fastlane
+
+    # Sign và upload
+    supply(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      release_status: "draft",        # draft = không tự publish
+      skip_upload_apk: true,
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+
+    # Notify Slack (optional)
+    if ENV["SLACK_WEBHOOK"]
+      slack(
+        message: "Android Internal build uploaded!",
+        webhook_url: ENV["SLACK_WEBHOOK"],
+        success: true
+      )
+    end
+  end
+  # ─── Lane: deploy lên Production
+  desc "Promote từ Internal lên Production"
+  lane :deploy_production do
+    supply(
+      track: "internal",
+      track_promote_to: "production",
+      rollout: "0.1",   # 10% rollout — tăng dần sau khi verify
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+    )
+  end
+  # ─── Error handler
+  error do |lane, exception|
+    if ENV["SLACK_WEBHOOK"]
+      slack(
+        message: "Android #{lane} FAILED: #{exception.message}",
+        webhook_url: ENV["SLACK_WEBHOOK"],
+        success: false
+      )
+    end
+  end
+end

@@ -1,0 +1,2 @@
+json_key_file(ENV["GOOGLE_APPLICATION_CREDENTIALS"]) # Environment variable from google-github-actions/auth
+package_name("com.vincent.daily.language") # e.g. com.krausefx.app
