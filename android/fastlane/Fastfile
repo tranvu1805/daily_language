@@ -63,6 +63,15 @@ platform :android do
       skip_upload_metadata: true,
     )
   end
+
+  # ─── Lane: Lấy next version code từ Play Store
+  desc "Lấy version code tiếp theo dựa trên Play Store"
+  lane :get_next_version_code do
+    current_version = google_play_track_version_codes(track: "internal").max || 0
+    # Kiểm tra cả production cho chắc chắn không trùng
+    prod_version = google_play_track_version_codes(track: "production").max || 0
+    [current_version, prod_version].max + 1
+  end
   # ─── Error handler
   error do |lane, exception|
     if ENV["SLACK_WEBHOOK"]

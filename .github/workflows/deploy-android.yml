@@ -74,8 +74,19 @@ jobs:
           echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> android/key.properties
           echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> android/key.properties
 
+      - name: Get latest version code from Play Store
+        id: version_code
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+        run: |
+          cd android
+          NEXT_VERSION=$(bundle exec fastlane get_next_version_code | grep -o 'Result: [0-9]*' | awk '{print $2}')
+          if [ -z "$NEXT_VERSION" ]; then NEXT_VERSION=1; fi
+          echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Next version code: $NEXT_VERSION"
+
       - name: Build AAB
-        run: flutter build appbundle --release --build-number=${{ github.run_number }}
+        run: flutter build appbundle --release --build-number=${{ steps.version_code.outputs.next_version }}
 
       - name: Run Fastlane
         env:
