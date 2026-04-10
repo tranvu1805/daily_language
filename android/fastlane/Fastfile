@@ -13,11 +13,19 @@ platform :android do
 
   desc "Build AAB và upload lên Play Store Internal track"
   lane :deploy_internal do
+    # Dùng begin/rescue cho từng track — track chưa có release sẽ trả về []
+    def safe_version_codes(track)
+      google_play_track_version_codes(track: track)
+    rescue => e
+      UI.message("Track '#{track}' không có release hoặc lỗi: #{e.message}")
+      []
+    end
+
     all_codes = [
-      google_play_track_version_codes(track: "internal"),
-      google_play_track_version_codes(track: "alpha"),
-      google_play_track_version_codes(track: "beta"),
-      google_play_track_version_codes(track: "production"),
+      safe_version_codes("internal"),
+      safe_version_codes("alpha"),
+      safe_version_codes("beta"),
+      safe_version_codes("production"),
     ].flatten.compact
 
     next_version_code = (all_codes.empty? ? 0 : all_codes.max) + 1
