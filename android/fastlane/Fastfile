@@ -5,19 +5,15 @@ platform :android do
 
   desc "Chạy unit tests"
   lane :test do
-    gradle(
-      project_dir: "android",
-      task: "test"
-    )
+    gradle(project_dir: "android", task: "test")
   end
 
   desc "Build AAB và upload lên Play Store Internal track"
   lane :deploy_internal do
-    # Dùng begin/rescue cho từng track — track chưa có release sẽ trả về []
     def safe_version_codes(track)
       google_play_track_version_codes(track: track)
     rescue => e
-      UI.message("Track '#{track}' không có release hoặc lỗi: #{e.message}")
+      UI.message("Track '#{track}' skip: #{e.message}")
       []
     end
 
@@ -26,9 +22,11 @@ platform :android do
       safe_version_codes("alpha"),
       safe_version_codes("beta"),
       safe_version_codes("production"),
+      safe_version_codes("draft"),      # ← thêm draft track
     ].flatten.compact
 
     next_version_code = (all_codes.empty? ? 0 : all_codes.max) + 1
+    UI.message("All known version codes: #{all_codes.sort.inspect}")
     UI.message("Using version code: #{next_version_code}")
 
     supply(
