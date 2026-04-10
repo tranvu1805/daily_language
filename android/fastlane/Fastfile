@@ -1,22 +1,8 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
 # Encoding: utf-8
 default_platform(:android)
 
 platform :android do
-  # ─── Lane: chạy tests
+
   desc "Chạy unit tests"
   lane :test do
     gradle(
@@ -24,17 +10,24 @@ platform :android do
       task: "test"
     )
   end
-  # ─── Lane: build và deploy lên Internal Testing ──────────────
+
   desc "Build AAB và upload lên Play Store Internal track"
   lane :deploy_internal do
-    # Build Flutter trước (chạy từ root project, không phải android/)
-    # Lệnh này được gọi từ GitHub Actions trước khi vào Fastlane
+    all_codes = [
+      google_play_track_version_codes(track: "internal"),
+      google_play_track_version_codes(track: "alpha"),
+      google_play_track_version_codes(track: "beta"),
+      google_play_track_version_codes(track: "production"),
+    ].flatten.compact
 
-    # Sign và upload
+    next_version_code = (all_codes.empty? ? 0 : all_codes.max) + 1
+    UI.message("Using version code: #{next_version_code}")
+
     supply(
       track: "internal",
       aab: "../build/app/outputs/bundle/release/app-release.aab",
-      release_status: "draft",        # draft = không tự publish
+      version_code: next_version_code,
+      release_status: "draft",
       skip_upload_apk: true,
       skip_upload_metadata: false,
       skip_upload_changelogs: false,
@@ -42,37 +35,27 @@ platform :android do
       skip_upload_screenshots: true,
     )
 
-    # Notify Slack (optional)
     if ENV["SLACK_WEBHOOK"]
       slack(
-        message: "Android Internal build uploaded!",
+        message: "Android build ##{next_version_code} uploaded to Internal!",
         webhook_url: ENV["SLACK_WEBHOOK"],
         success: true
       )
     end
   end
-  # ─── Lane: deploy lên Production
+
   desc "Promote từ Internal lên Production"
   lane :deploy_production do
     supply(
       track: "internal",
       track_promote_to: "production",
-      rollout: "0.1",   # 10% rollout — tăng dần sau khi verify
+      rollout: "0.1",
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: true,
     )
   end
 
-  # ─── Lane: Lấy next version code từ Play Store
-  desc "Lấy version code tiếp theo dựa trên Play Store"
-  lane :get_next_version_code do
-    current_version = google_play_track_version_codes(track: "internal").max || 0
-    # Kiểm tra cả production cho chắc chắn không trùng
-    prod_version = google_play_track_version_codes(track: "production").max || 0
-    [current_version, prod_version].max + 1
-  end
-  # ─── Error handler
   error do |lane, exception|
     if ENV["SLACK_WEBHOOK"]
       slack(
