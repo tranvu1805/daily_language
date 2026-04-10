@@ -3,14 +3,9 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Chạy unit tests"
-  lane :test do
-    gradle(project_dir: "android", task: "test")
-  end
-
-  desc "Build AAB và upload lên Play Store Internal track"
-  lane :deploy_internal do
-    def safe_version_codes(track)
+  desc "Lấy next version code từ Play Store"
+  lane :next_version_code do
+    def safe_codes(track)
       google_play_track_version_codes(track: track)
     rescue => e
       UI.message("Track '#{track}' skip: #{e.message}")
@@ -18,21 +13,22 @@ platform :android do
     end
 
     all_codes = [
-      safe_version_codes("internal"),
-      safe_version_codes("alpha"),
-      safe_version_codes("beta"),
-      safe_version_codes("production"),
-      safe_version_codes("draft"),      # ← thêm draft track
+      safe_codes("internal"),
+      safe_codes("alpha"),
+      safe_codes("beta"),
+      safe_codes("production"),
     ].flatten.compact
 
-    next_version_code = (all_codes.empty? ? 0 : all_codes.max) + 1
-    UI.message("All known version codes: #{all_codes.sort.inspect}")
-    UI.message("Using version code: #{next_version_code}")
+    next_code = (all_codes.empty? ? 0 : all_codes.max) + 1
+    UI.message("NEXT_VERSION_CODE=#{next_code}")
+    next_code
+  end
 
+  desc "Upload AAB lên Play Store Internal track"
+  lane :deploy_internal do
     supply(
       track: "internal",
       aab: "../build/app/outputs/bundle/release/app-release.aab",
-      version_code: next_version_code,
       release_status: "draft",
       skip_upload_apk: true,
       skip_upload_metadata: false,
@@ -43,7 +39,7 @@ platform :android do
 
     if ENV["SLACK_WEBHOOK"]
       slack(
-        message: "Android build ##{next_version_code} uploaded to Internal!",
+        message: "Android build uploaded to Internal!",
         webhook_url: ENV["SLACK_WEBHOOK"],
         success: true
       )
