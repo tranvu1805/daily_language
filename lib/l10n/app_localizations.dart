@@ -1141,6 +1141,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You need to log in to continue'**
   String get unauthenticated;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noData;
 }
 
 class _AppLocalizationsDelegate

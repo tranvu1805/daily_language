@@ -262,5 +262,6 @@
     }
   },
   "pleaseEnterAnAnswer": "Vui lòng nhập câu trả lời",
-  "unauthenticated": "Bạn cần đăng nhập để tiếp tục"
+  "unauthenticated": "Bạn cần đăng nhập để tiếp tục",
+  "noData": "Không có dữ liệu"
 }

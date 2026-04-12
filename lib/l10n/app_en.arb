@@ -262,5 +262,6 @@
     }
   },
   "pleaseEnterAnAnswer": "Please enter an answer",
-  "unauthenticated": "You need to log in to continue"
+  "unauthenticated": "You need to log in to continue",
+  "noData": "No data available"
 }

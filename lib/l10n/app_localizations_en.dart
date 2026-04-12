@@ -564,4 +564,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unauthenticated => 'You need to log in to continue';
+
+  @override
+  String get noData => 'No data available';
 }

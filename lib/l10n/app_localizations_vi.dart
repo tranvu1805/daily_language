@@ -565,4 +565,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get unauthenticated => 'Bạn cần đăng nhập để tiếp tục';
+
+  @override
+  String get noData => 'Không có dữ liệu';
 }

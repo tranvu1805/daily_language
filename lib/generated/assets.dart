@@ -12,6 +12,7 @@ class Assets {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  final AssetGenImage empty = const AssetGenImage('assets/icons/empty.png');
   final AssetGenImage logo = const AssetGenImage('assets/icons/logo.png');
 }
 
